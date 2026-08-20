@@ -25,7 +25,6 @@ Complete the prerequisite material so you start the main journey prepared. This 
 ### 1.3 — Set Up Your Environment
 
 - [ ] Install **VS Code**
-  ```
 ---
 
 ## Task 2 — Create Your GitHub Portfolio
@@ -36,7 +35,6 @@ Every project in this journey lives on GitHub. Set it up properly **now**, so yo
 
 - [ ] Create a **[GitHub account](https://github.com/signup)** (or use your existing one).
 - [ ] Set a real profile photo, full name, and a one-line bio.
-  ```
 
 ### 2.2 — Profile README
 
