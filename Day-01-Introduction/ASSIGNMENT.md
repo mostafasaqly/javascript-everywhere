@@ -25,17 +25,7 @@ Complete the prerequisite material so you start the main journey prepared. This 
 ### 1.3 — Set Up Your Environment
 
 - [ ] Install **VS Code**
-- [ ] Install **Node.js** (LTS version)
-- [ ] Install **Git**
-- [ ] Verify in your terminal:
-  ```bash
-  node -v
-  npm -v
-  git --version
   ```
-
-**✅ Deliverable:** a screenshot of your terminal showing all three versions, plus your Udemy course progress.
-
 ---
 
 ## Task 2 — Create Your GitHub Portfolio
@@ -46,10 +36,6 @@ Every project in this journey lives on GitHub. Set it up properly **now**, so yo
 
 - [ ] Create a **[GitHub account](https://github.com/signup)** (or use your existing one).
 - [ ] Set a real profile photo, full name, and a one-line bio.
-- [ ] Configure Git locally:
-  ```bash
-  git config --global user.name "Your Name"
-  git config --global user.email "your@email.com"
   ```
 
 ### 2.2 — Profile README
@@ -105,7 +91,7 @@ Public commitment is part of the deal. Sharing progress is literally point #1 of
 
 Before the deadline (**5/9**), make sure you have all of these:
 
-- [ ] **Task 1** — Prerequisites studied + environment screenshot (`node -v`, `npm -v`, `git --version`)
+- [ ] **Task 1** — Prerequisites studied + environment screenshot (`vscode`)
 - [ ] **Task 2** — GitHub profile link + journey repository link
 - [ ] **Task 3** — LinkedIn post link
 

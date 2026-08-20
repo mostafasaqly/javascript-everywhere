@@ -44,21 +44,6 @@ Everything below is built with **JavaScript / TypeScript** — same language, se
 
 **26 weeks × 6 hours = 156 hours** of recorded content, spread across roughly six months.
 
-### Hours by Track
-
-| Track | Hours |
-|---|---|
-| JS/TS Foundations + Web Basics | 30h |
-| Full-Stack Web Application | 42h |
-| Mobile (React Native) | 24h |
-| Desktop (Electron) | 18h |
-| Chrome Extension | 12h |
-| Automation | 12h |
-| AI Application | 18h |
-| **Total** | **156h** |
-
-> Full-Stack Web is the backbone; everything else builds on it.
-
 ---
 
 ## The Tracks — Part 1
@@ -195,6 +180,3 @@ Everyone watches. Fewer people finish the assignments — and that's exactly whe
 - [README.md](README.md) — this overview
 - [ASSIGNMENT.md](ASSIGNMENT.md) — Day 01 assignment
 
-## See Also
-
-- [Full 6-Month Timeline](../JS_Everywhere_6Month_Timeline.md)
