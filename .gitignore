@@ -7,3 +7,7 @@ Thumbs.db
 
 # Node
 node_modules/
+
+# Course materials (local only)
+JS_Everywhere_6Month_Timeline.md
+JS_Everywhere_Intro_Session.pptx
