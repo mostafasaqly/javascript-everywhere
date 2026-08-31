@@ -11,3 +11,11 @@ node_modules/
 # Course materials (local only)
 JS_Everywhere_6Month_Timeline.md
 JS_Everywhere_Intro_Session.pptx
+JS_Everywhere_Intro_Session.pdf
+
+# Video recordings (local only — too large for git)
+Videos/
+*.mp4
+*.mov
+*.mkv
+*.avi
