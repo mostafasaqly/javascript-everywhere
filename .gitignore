@@ -19,3 +19,8 @@ Videos/
 *.mov
 *.mkv
 *.avi
+
+# Student roster — personal data, kept local.
+# The app embeds it at publish time via tools/embed-roster.js
+tools/roster.json
+tools/*.csv
