@@ -316,6 +316,11 @@ pre.term{
       <label for="g-email">Email <span class="hint">— the one you registered with</span></label>
       <input type="email" id="g-email" autocomplete="email" placeholder="you@gmail.com">
     </div>
+    <div class="field">
+      <label for="g-token">Your code <span class="hint">— the 10 characters your instructor sent you</span></label>
+      <input type="text" id="g-token" autocomplete="off" spellcheck="false"
+             maxlength="10" placeholder="7f3a9c2e10" class="mono">
+    </div>
     <div class="err" id="gate-err"></div>
     <button class="btn btn-primary btn-wide" id="gate-go">Open my assignment</button>
     <p class="gate-foot">When you finish, this page gives you a submission code to send your instructor.</p>
@@ -673,8 +678,7 @@ const DAY = 1;
 /* Apps Script web-app /exec URL. Empty = code-only mode: the page still
    works, students just hand over their code instead. See
    tools/apps-script/Code.gs for how to deploy one. */
-const ENDPOINT  = "https://script.google.com/macros/s/AKfycbwqjBg7wGjLQl-edi1PQVbcfBJLN1EpStr62i3m238eDhOXQ5mlZvaP1uNl2LbR1uI/exec";
-const SHARED_KEY = "CHANGE-ME";
+const ENDPOINT = "https://script.google.com/macros/s/AKfycbwqjBg7wGjLQl-edi1PQVbcfBJLN1EpStr62i3m238eDhOXQ5mlZvaP1uNl2LbR1uI/exec";
 
 /* The Day 01 roster: [email, name]. Order IS the identity — a code
    carries the index into this array, so never reorder, only append. */
@@ -778,7 +782,7 @@ function decodeSubmission(code, checkCount){
    State + persistence
    ===================================================================== */
 const LS_KEY = "js-everywhere-day01";
-let state = { name:"", email:"", rosterIndex:-1, checks:{}, inputs:{}, submittedAt:null };
+let state = { name:"", email:"", token:"", rosterIndex:-1, checks:{}, inputs:{}, submittedAt:null };
 let active = 0;
 
 /* Flatten the model once — used everywhere for counting. */
@@ -1052,10 +1056,16 @@ document.getElementById("gate-go").addEventListener("click", () => {
                     "registered with — if you think this is a mistake, message your instructor.";
     return;
   }
+  const token = document.getElementById("g-token").value.trim().toLowerCase();
+  if (token.length < 6){
+    err.textContent = "Enter the 10-character code your instructor sent you.";
+    return;
+  }
   err.textContent = "";
   state.rosterIndex = idx;
   state.email = ROSTER[idx][0];
   state.name  = ROSTER[idx][1];
+  state.token = token;          // checked by the server, not here
   saveLocal(); queueSave(); enterShell();
 });
 ["g-email"].forEach(id => {
@@ -1104,7 +1114,7 @@ async function sendToSheet(){
       headers: { "Content-Type": "text/plain;charset=utf-8" },
       redirect: "follow",
       body: JSON.stringify({
-        key: SHARED_KEY,
+        token: state.token,
         day: DAY,
         email: state.email,
         score: p.pct,
@@ -1121,6 +1131,11 @@ async function sendToSheet(){
         ? "✓ Your grade was updated — " + out.score + "%. Nothing else to do."
         : "✓ Recorded — " + out.score + "%. Nothing else to do.";
       document.getElementById("code-fallback").hidden = true;
+    } else if (out.error === "bad_token"){
+      box.className = "send-state warn";
+      box.textContent = "That code doesn't match your email. Check the code your " +
+                        "instructor sent you, or send them the submission code below.";
+      return;
     } else {
       throw new Error(out.error || "rejected");
     }
@@ -1164,6 +1179,7 @@ if (state.email){
     state.rosterIndex = idx;
     state.name = ROSTER[idx][1];
     document.getElementById("g-email").value = state.email;
+    document.getElementById("g-token").value = state.token || "";
     enterShell();
   }
 }
