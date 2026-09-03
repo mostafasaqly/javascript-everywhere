@@ -102,6 +102,18 @@ function doPost(e) {
 
     const body = JSON.parse(e.postData.contents);
 
+    // Gate check: confirm an email/token pair before the student starts the
+    // tasks, so a wrong code is caught up front instead of after all the work.
+    // Writes nothing to the sheet.
+    if (body.action === 'verify') {
+      const vEmail = String(body.email || '').trim().toLowerCase();
+      if (!vEmail) return json({ ok: false, error: 'bad_payload' });
+      if (String(body.token || '').trim().toLowerCase() !== tokenFor(vEmail)) {
+        return json({ ok: false, error: 'bad_token' });
+      }
+      return json({ ok: true, verified: true });
+    }
+
     const day = Number(body.day);
     if (!(day >= 1 && day <= 10)) return json({ ok: false, error: 'bad_day' });
 

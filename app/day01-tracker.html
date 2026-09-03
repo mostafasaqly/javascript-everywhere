@@ -281,21 +281,6 @@ pre.term{
 
 .gate-foot{font-size:12px;color:var(--ink-3);margin:14px 0 0;text-align:center;line-height:1.45}
 
-.code-block{
-  background:var(--amber-wash);border:1px solid var(--amber-solid);
-  border-radius:var(--radius);padding:18px;margin-bottom:20px
-}
-.code-label{
-  font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.14em;
-  text-transform:uppercase;color:var(--amber);margin-bottom:10px
-}
-.code-value{
-  background:var(--surface);border:1px dashed var(--line);border-radius:8px;
-  padding:13px 12px;margin-bottom:12px;font-size:15px;font-weight:700;
-  letter-spacing:.04em;word-break:break-all;line-height:1.5;user-select:all;color:var(--ink)
-}
-.code-hint{font-size:12.5px;color:var(--ink-2);margin-top:10px;line-height:1.45}
-
 .send-state{
   border-radius:var(--radius);padding:11px 14px;margin-bottom:16px;
   font-size:13.5px;font-weight:600;line-height:1.45;text-align:left
@@ -323,7 +308,7 @@ pre.term{
     </div>
     <div class="err" id="gate-err"></div>
     <button class="btn btn-primary btn-wide" id="gate-go">Open my assignment</button>
-    <p class="gate-foot">When you finish, this page gives you a submission code to send your instructor.</p>
+    <p class="gate-foot">When you finish, this page sends your grade to your instructor automatically.</p>
   </div>
 </section>
 
@@ -381,17 +366,10 @@ pre.term{
 <section class="receipt" id="receipt">
   <div class="receipt-card">
     <div class="stamp">✓</div>
-    <h1>One last step</h1>
+    <h1>Submitted</h1>
     <p id="receipt-sub"></p>
 
     <div class="send-state" id="send-state" hidden></div>
-
-    <div class="code-block" id="code-fallback">
-      <div class="code-label">Your submission code</div>
-      <div class="code-value mono" id="code-value"></div>
-      <button class="btn btn-primary btn-wide" id="btn-copy">Copy code</button>
-      <div class="code-hint" id="copy-hint">Send this to your instructor to record your grade.</div>
-    </div>
 
     <div class="summary" id="receipt-summary"></div>
     <button class="btn" id="btn-reopen">Back to my assignment</button>
@@ -1011,11 +989,8 @@ function showReceipt(){
   const bonusDone = ALL_CHECKS.filter(c => c.optional && state.checks[c.key]).length;
   const bonusTotal = ALL_CHECKS.filter(c => c.optional).length;
 
-  const code = encodeSubmission(state.rosterIndex, checkBits());
-  document.getElementById("code-value").textContent = code;
-
   document.getElementById("receipt-sub").textContent =
-    "Well done, " + state.name.split(" ")[0] + ". Copy the code below and send it to your instructor — your grade is recorded from it.";
+    "Well done, " + state.name.split(" ")[0] + ". Your grade is being sent to your instructor now.";
 
   let rows = "";
   TASKS.forEach((t, ti) => {
@@ -1044,7 +1019,7 @@ function enterShell(){
   renderAll();
 }
 
-document.getElementById("gate-go").addEventListener("click", () => {
+document.getElementById("gate-go").addEventListener("click", async () => {
   const email = document.getElementById("g-email").value.trim();
   const err = document.getElementById("gate-err");
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
@@ -1062,11 +1037,53 @@ document.getElementById("gate-go").addEventListener("click", () => {
     return;
   }
   err.textContent = "";
-  state.rosterIndex = idx;
-  state.email = ROSTER[idx][0];
-  state.name  = ROSTER[idx][1];
-  state.token = token;          // checked by the server, not here
-  saveLocal(); queueSave(); enterShell();
+
+  const rosterEmail = ROSTER[idx][0];
+
+  // Check the code with the server BEFORE opening the tasks. Getting this
+  // wrong after five tasks of work is a miserable way to find out.
+  const go = document.getElementById("gate-go");
+  const label = go.textContent;
+  go.disabled = true;
+  go.textContent = "Checking your code…";
+
+  const accept = () => {
+    state.rosterIndex = idx;
+    state.email = rosterEmail;
+    state.name  = ROSTER[idx][1];
+    state.token = token;
+    saveLocal(); queueSave(); enterShell();
+  };
+  const restore = () => { go.disabled = false; go.textContent = label; };
+
+  if (!ENDPOINT){ accept(); restore(); return; }
+
+  try {
+    const res = await fetch(ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      redirect: "follow",
+      body: JSON.stringify({ action: "verify", email: rosterEmail, token: token })
+    });
+    const out = await res.json();
+
+    if (out.ok){
+      accept();
+    } else if (out.error === "bad_token"){
+      err.innerHTML = "That code doesn't match your email. Check the 10-character " +
+                      "code your instructor emailed you — if you can't find it, " +
+                      "ask them to resend it.";
+    } else {
+      err.textContent = "Couldn't check your code (" + (out.error || "unknown") + "). Try again.";
+    }
+  } catch (e) {
+    // Offline or the endpoint is unreachable. Don't strand the student —
+    // let them work; the code is verified again when they submit.
+    console.error("[day01] verify failed:", e);
+    accept();
+  } finally {
+    restore();
+  }
 });
 ["g-email"].forEach(id => {
   document.getElementById(id).addEventListener("keydown", e => {
@@ -1130,38 +1147,23 @@ async function sendToSheet(){
       box.textContent = out.resubmitted
         ? "✓ Your grade was updated — " + out.score + "%. Nothing else to do."
         : "✓ Recorded — " + out.score + "%. Nothing else to do.";
-      document.getElementById("code-fallback").hidden = true;
     } else if (out.error === "bad_token"){
       box.className = "send-state warn";
-      box.textContent = "That code doesn't match your email. Check the code your " +
-                        "instructor sent you, or send them the submission code below.";
+      box.textContent = "That code doesn't match your email. Go back, check the code " +
+                        "your instructor emailed you, and submit again.";
       return;
     } else {
       throw new Error(out.error || "rejected");
     }
   } catch (err) {
     box.className = "send-state warn";
-    box.textContent = "Couldn't reach the grade sheet — send your instructor the code below instead.";
+    box.textContent = "Couldn't reach the grade sheet. Check your connection and " +
+                      "press Submit again — your answers are saved.";
     // Surface the real reason; "Failed to fetch" here means the sandbox
     // blocked the request, not that the endpoint is down.
     console.error("[day01] submission POST failed:", err);
   }
 }
-document.getElementById("btn-copy").addEventListener("click", async () => {
-  const code = document.getElementById("code-value").textContent;
-  const hint = document.getElementById("copy-hint");
-  try {
-    await navigator.clipboard.writeText(code);
-    hint.textContent = "Copied. Now paste it to your instructor.";
-  } catch (e) {
-    // Clipboard blocked (insecure context, denied permission) — select it instead.
-    const r = document.createRange();
-    r.selectNodeContents(document.getElementById("code-value"));
-    const sel = window.getSelection();
-    sel.removeAllRanges(); sel.addRange(r);
-    hint.textContent = "Press Ctrl+C to copy the selected code.";
-  }
-});
 document.getElementById("btn-reopen").addEventListener("click", () => {
   document.getElementById("receipt").classList.remove("on");
   document.getElementById("shell").classList.add("on");
