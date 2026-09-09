@@ -492,3 +492,5 @@ If you got that output, your environment works **and** you've already touched ev
 - [ASSIGNMENT.md](ASSIGNMENT.md) — Day 01 assignment
 
 ← Back to [Day 00 — Introduction](../Day-00-Introduction/README.md)
+
+Next: [Day 02 — JS Fundamentals](../Day-02-JS-Fundamentals/README.md) →

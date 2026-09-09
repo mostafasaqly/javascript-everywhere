@@ -1,6 +1,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Day 01 Submission Desk</title>
+<title>Day 02 Submission Desk</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@10..48,500;10..48,700;10..48,800&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap">
@@ -296,9 +296,9 @@ pre.term{
 <!-- ================= GATE ================= -->
 <section class="gate" id="gate">
   <div class="gate-card">
-    <div class="gate-eyebrow">Track 1 · Session 1</div>
-    <h1>Day 01 — Dev Environment Setup</h1>
-    <p class="sub">Work through the five tasks, tick what you finish, drop your links in. Your progress saves in this browser as you go — close the tab and come back.</p>
+    <div class="gate-eyebrow">Track 1 · Session 2</div>
+    <h1>Day 02 — JS Fundamentals</h1>
+    <p class="sub">Work through the eight tasks, tick what you finish, drop your links in. Your progress saves in this browser as you go — close the tab and come back.</p>
     <div class="field">
       <label for="g-email">Email <span class="hint">— the one you registered with</span></label>
       <input type="email" id="g-email" autocomplete="email" placeholder="you@gmail.com">
@@ -319,7 +319,7 @@ pre.term{
   <aside class="rail">
     <div class="brand">
       <div class="kicker">JavaScript Everywhere</div>
-      <h2>Day 01 Desk</h2>
+      <h2>Day 02 Desk</h2>
     </div>
 
     <div class="who">
@@ -339,7 +339,7 @@ pre.term{
       </div>
       <div class="progress-meta">
         <div class="big" id="prog-count">0 / 0 checks</div>
-        <div class="small" id="prog-tasks">0 of 5 tasks complete</div>
+        <div class="small" id="prog-tasks">0 of 8 tasks complete</div>
       </div>
     </div>
 
@@ -380,248 +380,332 @@ pre.term{
 
 <script>
 /* =====================================================================
-   Day 01 assignment — data model
+   Day 02 assignment — data model
    Every checkbox and every input in the assignment is declared here.
    ===================================================================== */
 const TASKS = [
   {
     id: "t1",
-    title: "Prove your environment works",
-    lead: "A screenshot of an installer finishing proves nothing. Prove it from the terminal.",
-    deliverable: "3 screenshots",
+    title: "Predict, then run",
+    lead: "The fastest way to learn coercion is to be wrong about it on purpose.",
+    deliverable: "predictions.md + 1 screenshot",
     sections: [
       {
-        sid: "1.1", title: "Version check",
-        note: "Open a <strong>fresh</strong> terminal and run all four commands.",
-        term: "node --version\nnpm --version\ngit --version\ncode --version",
-        quote: "If any of them says “command not found”, that’s the assignment — fix it first.",
+        sid: "1.1", title: "Write your predictions first",
+        note: "Create <code>predictions.md</code> and write what you think each line prints — <strong>before running anything</strong>.",
+        term: 'console.log("5" + 3);\nconsole.log("5" - 3);\nconsole.log(5 + true);\nconsole.log("5" === 5);\nconsole.log("5" == 5);\nconsole.log(typeof null);\nconsole.log(typeof []);\nconsole.log(0 || "default");\nconsole.log(0 ?? "default");\nconsole.log(Boolean(""));\nconsole.log(Boolean("false"));\nconsole.log(Boolean([]));\nconsole.log(10 % 3);\nconsole.log(null + 1);\nconsole.log(undefined + 1);',
+        quote: "Getting them wrong is the assignment. Getting them wrong and not explaining why is not.",
         checks: [
-          ["t1_versions_ran", "Ran all four commands in a fresh terminal"],
-          ["t1_versions_shot", "Took <em>one</em> screenshot showing all four outputs together"]
-        ],
-        inputs: [
-          { k:"t1_node_v", type:"text", label:"Your Node version", ph:"v22.11.0", w:"half" },
-          { k:"t1_npm_v", type:"text", label:"Your npm version", ph:"10.9.0", w:"half" },
-          { k:"t1_versions_url", type:"url", label:"Screenshot link", hint:"— Drive / Imgur / GitHub", ph:"https://…" }
+          ["t1_pred_file", "Created <code>predictions.md</code>"],
+          ["t1_pred_before", "Wrote my prediction for all 15 lines <em>before</em> running anything"]
         ]
       },
       {
-        sid: "1.2", title: "Git identity",
-        note: "Confirm <code>user.name</code> and <code>user.email</code> are set, and the email matches your GitHub account.",
-        term: "git config --global --list",
+        sid: "1.2", title: "Now run them",
+        note: "Create <code>predictions.js</code>, type all 15 lines, and run it.",
+        term: "node predictions.js",
         checks: [
-          ["t1_git_name", "<code>user.name</code> is set"],
-          ["t1_git_email", "<code>user.email</code> is set and matches my GitHub account"],
-          ["t1_git_shot", "Screenshotted it"]
+          ["t1_pred_ran", "Typed all 15 lines and ran the file"],
+          ["t1_pred_actual", "Recorded the <em>actual</em> output next to each prediction"],
+          ["t1_pred_why", "For every one I got wrong, wrote one sentence explaining why JavaScript did that"],
+          ["t1_pred_shot", "Screenshotted the output"]
         ],
         inputs: [
-          { k:"t1_git_url", type:"url", label:"Screenshot link", ph:"https://…" }
-        ]
-      },
-      {
-        sid: "1.3", title: "VS Code extensions",
-        note: "All six extensions from Step 3, plus Format On Save with Prettier as the default formatter.",
-        checks: [
-          ["t1_ext_prettier", "Prettier"],
-          ["t1_ext_eslint", "ESLint"],
-          ["t1_ext_live", "Live Server"],
-          ["t1_ext_errorlens", "Error Lens"],
-          ["t1_ext_gitlens", "GitLens"],
-          ["t1_ext_path", "Path Intellisense"],
-          ["t1_ext_fos", "Format On Save is on, with Prettier as default formatter"],
-          ["t1_ext_shot", "Screenshotted the Extensions panel"]
-        ],
-        inputs: [
-          { k:"t1_ext_url", type:"url", label:"Screenshot link", ph:"https://…" }
+          { k:"t1_wrong_count", type:"text", label:"How many did you get wrong?", ph:"4", w:"half" },
+          { k:"t1_pred_url", type:"url", label:"Screenshot link", hint:"— Drive / Imgur / GitHub", ph:"https://…" },
+          { k:"t1_surprise", type:"textarea", label:"Which result surprised you most, and why?", ph:"…" }
         ]
       }
     ]
   },
   {
     id: "t2",
-    title: "Run JavaScript in both worlds",
-    lead: "The whole premise of this series is one language, many environments. Show me you’ve seen both.",
-    deliverable: "2 files pushed + 2 screenshots",
+    title: "Types and coercion drills",
+    lead: "Create <code>types.js</code>. Each part is a few lines — run after every part.",
+    deliverable: "types.js + 1 screenshot",
     sections: [
       {
-        sid: "2.1", title: "Node side — profile.js",
-        note: "Create <code>profile.js</code> and run it with <code>node profile.js</code>.",
+        sid: "2.1", title: "One of each",
         checks: [
-          ["t2_p_vars", "Stores my name, my city, and why I joined in variables"],
-          ["t2_p_fn", "Has a function that takes those values and returns one formatted sentence"],
-          ["t2_p_log", "Prints that sentence with <code>console.log</code>"],
-          ["t2_p_version", "Also prints the Node version using <code>process.version</code>"],
-          ["t2_p_shot", "Screenshotted the terminal output"]
-        ],
-        inputs: [
-          { k:"t2_profile_url", type:"url", label:"Screenshot link — terminal output", ph:"https://…" }
+          ["t2_prims", "Declared one variable of each primitive: string, number, boolean, null, undefined"],
+          ["t2_objarr", "Declared one object and one array"],
+          ["t2_format", "Printed each with its <code>typeof</code>, formatted like <code>name → \"Sara\" → string</code>"]
         ]
       },
       {
-        sid: "2.2", title: "Browser side — index.html + app.js",
-        note: "Build a small page and run it through <strong>Live Server</strong> — not by double-clicking the file.",
+        sid: "2.2", title: "The typeof traps",
         checks: [
-          ["t2_b_h1", "Shows my name in an <code>&lt;h1&gt;</code>"],
-          ["t2_b_btn1", "A button that changes the text on the page when clicked"],
-          ["t2_b_btn2", "A <em>second</em> button that logs something to the browser console"],
-          ["t2_b_live", "Runs through Live Server"],
-          ["t2_b_shot", "Screenshotted the page with DevTools console open"]
+          ["t2_trap_print", "Printed <code>typeof null</code> and <code>typeof []</code>"],
+          ["t2_trap_why", "Commented above each explaining why the answer is misleading"],
+          ["t2_trap_isarray", "Showed the correct way to detect an array"]
+        ]
+      },
+      {
+        sid: "2.3", title: "Convert on purpose",
+        checks: [
+          ["t2_conv_num", "Converted <code>\"42\"</code> to a number and proved it with <code>typeof</code>"],
+          ["t2_conv_str", "Converted <code>42</code> to a string and proved it"],
+          ["t2_conv_nan", "Showed what <code>Number(\"hello\")</code> gives, and printed <code>typeof</code> that result"],
+          ["t2_conv_parse", "Showed the difference between <code>parseInt(\"42px\")</code> and <code>Number(\"42px\")</code>"]
         ],
         inputs: [
-          { k:"t2_browser_url", type:"url", label:"Screenshot link — page + DevTools", ph:"https://…" },
-          { k:"t2_difference", type:"textarea", label:"In one sentence: why can’t profile.js use <code>document</code>, and app.js use <code>process</code>?",
-            hint:"— this is the point of the whole task", ph:"Same language, different…" }
+          { k:"t2_nan_type", type:"text", label:"What does <code>typeof NaN</code> return?", ph:"…", w:"half" }
+        ]
+      },
+      {
+        sid: "2.4", title: "Falsy roll call",
+        note: "Loop over an array holding all <strong>8</strong> falsy values plus <code>[]</code>, <code>{}</code>, <code>\"0\"</code>, and <code>\"hello\"</code>.",
+        checks: [
+          ["t2_falsy_loop", "Looped over all 12 values"],
+          ["t2_falsy_print", "Printed each value and whether it is truthy or falsy"]
+        ]
+      },
+      {
+        sid: "2.5", title: "|| vs ??",
+        checks: [
+          ["t2_nullish_zero", "Created a variable set to <code>0</code>"],
+          ["t2_nullish_both", "Printed the result of <code>||</code> with a fallback, and <code>??</code> with the same fallback"],
+          ["t2_nullish_note", "Stated in a comment which one I want when <code>0</code> is a valid value"],
+          ["t2_shot", "Screenshotted the full output"]
+        ],
+        inputs: [
+          { k:"t2_types_url", type:"url", label:"Screenshot link — types.js output", ph:"https://…" }
         ]
       }
     ]
   },
   {
     id: "t3",
-    title: "Practice the Session 2 preview",
-    lead: "Type every example by hand. Do not copy-paste — the muscle memory is the point, and you will not build it with Ctrl+V.",
-    deliverable: "2 files pushed + 2 screenshots + 4 answers",
+    title: "Conditionals — the grade engine",
+    lead: "Create <code>grade-engine.js</code>.",
+    deliverable: "grade-engine.js + 1 screenshot",
     sections: [
       {
-        sid: "3.1", title: "Type out the four topics — preview.js",
-        note: "Run it after each block with <code>node preview.js</code>. Do not wait until the end.",
+        sid: "3.1", title: "Five bands, not three",
+        note: "An <code>if / else if / else</code> chain turning a score into a letter.",
+        term: "90–100  → A\n80–89   → B\n70–79   → C\n60–69   → D\nbelow 60 → F",
         checks: [
-          ["t3_typed", "Typed out all four blocks: variables, data types, conditionals, loops"],
-          ["t3_ran_each", "Ran it after each block, not only at the end"],
-          ["t3_try_var", "<strong>Variables</strong> — reassigned a <code>const</code> on purpose and read the error"],
-          ["t3_try_types", "<strong>Data types</strong> — added my own <code>favoriteLanguage</code> key to <code>student</code> and printed it"],
-          ["t3_try_cond", "<strong>Conditionals</strong> — set <code>score</code> to <code>95</code>, then <code>50</code>, running each time"],
-          ["t3_try_loop", "<strong>Loops</strong> — printed only tracks whose name is longer than 6 characters"]
-        ],
-        inputs: [
-          { k:"t3_const_error", type:"text", label:"What error did reassigning a <code>const</code> give you?", ph:"TypeError: Assignment to constant variable." }
+          ["t3_bands", "Wrote the five-band <code>if / else if / else</code> chain"],
+          ["t3_tested", "Tested with 95, 85, 75, 65, 45 — all five print correctly"],
+          ["t3_guard", "Guarded invalid input: above 100 or below 0 prints <code>Invalid score</code>"]
         ]
       },
       {
-        sid: "3.2", title: "Run the combined program",
-        note: "Type out the final <code>students</code> program from the README and confirm your output matches exactly.",
-        term: "Sara: 92 → PASS\nOmar: 68 → FAIL\nLina: 79 → PASS\n\n2 of 3 students passed.",
+        sid: "3.2", title: "The same logic as a ternary",
         checks: [
-          ["t3_combined", "Typed out the combined program and ran it"],
-          ["t3_match", "My output matches the expected output exactly"],
-          ["t3_combined_shot", "Screenshotted the terminal output"]
-        ],
-        inputs: [
-          { k:"t3_combined_url", type:"url", label:"Screenshot link", ph:"https://…" }
+          ["t3_ternary", "Wrote a single-level ternary returning <code>\"pass\"</code> or <code>\"fail\"</code> at a pass mark of 60"],
+          ["t3_ternary_why", "Commented why I would <em>not</em> write the five-band version as a nested ternary"]
         ]
       },
       {
-        sid: "3.3", title: "Make it yours — grades.js",
-        note: "Now write your own version from scratch. Same ideas, different data.",
+        sid: "3.3", title: "switch — and breaking it on purpose",
+        note: "Take a letter grade (<code>\"A\"</code>…<code>\"F\"</code>) and print a message for each.",
+        quote: "Fall-through is a bug you will meet in real code. Meet it here first, on purpose.",
         checks: [
-          ["t3_g_array", "Array of <strong>at least 5</strong> objects, each with a <code>name</code> and a <code>score</code>"],
-          ["t3_g_letconst", "Uses <code>const</code> and <code>let</code> correctly — <code>let</code> only where the value actually changes"],
-          ["t3_g_forof", "Loops with <code>for...of</code>"],
-          ["t3_g_bands", "Three bands: 90+ Excellent · 70–89 Good · below 70 Needs work"],
-          ["t3_g_counts", "Counts how many students landed in each band"],
-          ["t3_g_summary", "Prints a summary line at the end"],
-          ["t3_g_strict", "Uses <code>===</code> everywhere — no <code>==</code> anywhere in the file"],
-          ["t3_g_shot", "Screenshotted the output"]
+          ["t3_switch", "Wrote the <code>switch</code> with a case for each letter"],
+          ["t3_switch_default", "Included a <code>default</code> case"],
+          ["t3_switch_break", "Deliberately deleted one <code>break</code>, ran it, screenshotted the wrong output — then put it back"]
         ],
         inputs: [
-          { k:"t3_grades_url", type:"url", label:"Screenshot link — grades.js output", ph:"https://…" },
-          { k:"t3_grades_summary", type:"text", label:"Paste your summary line", ph:"2 Excellent, 2 Good, 1 Needs work" }
+          { k:"t3_fallthrough", type:"textarea", label:"What did the output look like with the <code>break</code> missing?", ph:"…" }
         ]
       },
       {
-        sid: "3.4", title: "Answer these in your notes",
-        note: "Short answers, one or two sentences each — in your own words.",
+        sid: "3.4", title: "Logical operators",
+        checks: [
+          ["t3_and", "<code>\"Certificate awarded\"</code> only when score ≥ 70 <strong>and</strong> attendance ≥ 80%"],
+          ["t3_or", "<code>\"Review needed\"</code> when score &lt; 60 <strong>or</strong> attendance &lt; 50%"],
+          ["t3_and_or_test", "Tested each with at least two different sets of values"],
+          ["t3_shot", "Screenshotted the output"]
+        ],
         inputs: [
-          { k:"q_let", type:"textarea", label:"When do you use <code>let</code> instead of <code>const</code>?", ph:"…" },
-          { k:"q_typeof", type:"textarea", label:"What does <code>typeof []</code> return, and why is that surprising?", ph:"…" },
-          { k:"q_equals", type:"textarea", label:"What is the difference between <code>===</code> and <code>==</code>, and why do we only use <code>===</code>?", ph:"…" },
-          { k:"q_while", type:"textarea", label:"When would you use <code>while</code> instead of <code>for</code>?", ph:"…" }
+          { k:"t3_url", type:"url", label:"Screenshot link — grade-engine.js output", ph:"https://…" }
         ]
       }
     ]
   },
   {
     id: "t4",
-    title: "Your journey repository",
-    lead: "This repo is where all 26 weeks of your work will live. Set it up properly today.",
-    deliverable: "Repo link + git log screenshot",
+    title: "Loops — five problems",
+    lead: "Create <code>loops.js</code>. Solve each with the loop named — part of the exercise is using the right tool.",
+    deliverable: "loops.js + 1 screenshot",
     sections: [
       {
-        sid: "4.1", title: "Create and push",
-        note: "Create a <strong>public</strong> GitHub repo named <code>javascript-everywhere</code>, then connect your local folder.",
-        term: "git init\ngit add .\ngit commit -m \"Day 01: dev environment setup\"\ngit branch -M main\ngit remote add origin https://github.com/YOUR-USERNAME/javascript-everywhere.git\ngit push -u origin main",
+        sid: "4.1–4.5", title: "One problem per loop type",
         checks: [
-          ["t4_repo_public", "Repo is created, public, and named <code>javascript-everywhere</code>"],
-          ["t4_pushed", "Pushed to <code>main</code>"]
+          ["t4_for", "<strong>for</strong> — printed 1 to 20, but <code>\"Fizz\"</code> for every multiple of 3"],
+          ["t4_forof", "<strong>for...of</strong> — printed 6+ track names, each with its position"],
+          ["t4_forin", "<strong>for...in</strong> — printed every <code>key: value</code> pair of an object with 5+ keys"],
+          ["t4_while", "<strong>while</strong> — started at 100 and halved until below 1, printing each step"],
+          ["t4_dowhile", "<strong>do...while</strong> — condition false from the start, proved it still runs once"]
+        ]
+      },
+      {
+        sid: "4.6", title: "break and continue",
+        note: "Loop an array of scores. <code>continue</code> past any below 50. <code>break</code> out on the first above 95.",
+        checks: [
+          ["t4_continue", "Used <code>continue</code> to skip scores below 50"],
+          ["t4_break", "Used <code>break</code> on the first score above 95"],
+          ["t4_bc_comment", "Commented exactly which scores printed and why"]
+        ]
+      },
+      {
+        sid: "4.7", title: "Sum and max without built-ins",
+        note: "Given an array of at least 8 numbers — loops only, <strong>no</strong> <code>Math.max</code>, <code>Math.min</code> or <code>.reduce()</code>.",
+        checks: [
+          ["t4_sum", "Found the sum"],
+          ["t4_avg", "Found the average"],
+          ["t4_max", "Found the highest — with a loop, not <code>Math.max</code>"],
+          ["t4_min", "Found the lowest — with a loop, not <code>Math.min</code>"],
+          ["t4_shot", "Screenshotted the full output"]
         ],
         inputs: [
-          { k:"t4_repo_url", type:"url", label:"Repository link", hint:"— required", ph:"https://github.com/username/javascript-everywhere" }
-        ]
-      },
-      {
-        sid: "4.2", title: "Repo structure",
-        note: "Organize your files exactly like this.",
-        term: "javascript-everywhere/\n├── README.md\n└── day-01/\n    ├── NOTES.md\n    ├── profile.js\n    ├── preview.js\n    ├── grades.js\n    ├── index.html\n    └── app.js",
-        checks: [
-          ["t4_structure", "My repo matches this structure"]
-        ]
-      },
-      {
-        sid: "4.3", title: "Root README",
-        checks: [
-          ["t4_readme_who", "My name and what this repo is"],
-          ["t4_readme_tracks", "The 7 tracks of the journey"],
-          ["t4_readme_toc", "A table of contents I’ll add a row to each session"]
-        ]
-      },
-      {
-        sid: "4.4", title: "Your Day 01 notes",
-        note: "Write <code>day-01/NOTES.md</code> <strong>in your own words</strong>.",
-        quote: "The “what broke” section is not optional. If nothing broke, say that — but be specific about what you checked.",
-        checks: [
-          ["t4_notes_node", "What Node.js is, and how it’s different from a browser"],
-          ["t4_notes_npm", "What npm is for"],
-          ["t4_notes_git", "The difference between Git and GitHub"],
-          ["t4_notes_cmds", "Every command I learned, with one line explaining each"],
-          ["t4_notes_broke", "One thing that broke during setup, and how I fixed it"],
-          ["t4_notes_answers", "My four answers from Task 3.4"]
-        ],
-        inputs: [
-          { k:"t4_broke", type:"textarea", label:"What broke during setup, and how did you fix it?", hint:"— or what you checked, if nothing broke", ph:"…" }
-        ]
-      },
-      {
-        sid: "4.5", title: "Four separate commits",
-        note: "Do <strong>not</strong> dump everything in one commit. <code>update</code> and <code>changes</code> are not messages.",
-        checks: [
-          ["t4_c1", "Commit 1 — the README"],
-          ["t4_c2", "Commit 2 — the Node script (<code>profile.js</code>)"],
-          ["t4_c3", "Commit 3 — the browser files (<code>index.html</code>, <code>app.js</code>)"],
-          ["t4_c4", "Commit 4 — the fundamentals practice (<code>preview.js</code>, <code>grades.js</code>)"],
-          ["t4_log_shot", "Ran <code>git log --oneline</code> and screenshotted the four commits"]
-        ],
-        inputs: [
-          { k:"t4_log_url", type:"url", label:"Screenshot link — <code>git log --oneline</code>", ph:"https://…" }
+          { k:"t4_url", type:"url", label:"Screenshot link — loops.js output", ph:"https://…" }
         ]
       }
     ]
   },
   {
     id: "t5",
+    title: "Build — Student Report Card",
+    lead: "The main build. Your own program, not a copy of the README’s report.js.",
+    deliverable: "report-card.js + 1 screenshot",
+    sections: [
+      {
+        sid: "5.1", title: "Requirements",
+        checks: [
+          ["t5_data", "An array of <strong>at least 8</strong> students, each with <code>name</code>, <code>score</code> and <code>attendance</code>"],
+          ["t5_constlet", "<code>const</code> everywhere it belongs; <code>let</code> only where the value actually changes"],
+          ["t5_strict", "<code>===</code> and <code>!==</code> throughout — <strong>no <code>==</code> anywhere in the file</strong>"],
+          ["t5_forof", "Looped with <code>for...of</code>"],
+          ["t5_letter", "Gave each student a letter grade using my five-band logic"],
+          ["t5_atrisk", "Marked <code>\"At risk\"</code> when score &lt; 60 <strong>or</strong> attendance &lt; 70"],
+          ["t5_skip", "Included one broken record on purpose and <code>continue</code>d past it"],
+          ["t5_row", "Printed one aligned line per student: name, score, attendance, letter, status"]
+        ]
+      },
+      {
+        sid: "5.2", title: "The summary block",
+        checks: [
+          ["t5_bandcount", "How many students in each of the five bands"],
+          ["t5_average", "The class average, to one decimal place"],
+          ["t5_highlow", "The highest and lowest scoring student <em>by name</em> — found with a loop, not <code>Math.max</code>"],
+          ["t5_riskcount", "How many students are at risk"],
+          ["t5_skipcount", "How many records were skipped as invalid"]
+        ]
+      },
+      {
+        sid: "5.3", title: "Make it readable",
+        checks: [
+          ["t5_template", "Used template literals — no <code>+</code> string concatenation"],
+          ["t5_pad", "Used <code>padEnd</code> / <code>padStart</code> so the columns line up"],
+          ["t5_header", "Added a header row and a separator line"],
+          ["t5_shot", "Screenshotted the output"]
+        ],
+        inputs: [
+          { k:"t5_url", type:"url", label:"Screenshot link — report-card.js output", hint:"— required", ph:"https://…" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "t6",
+    title: "The browser side",
+    lead: "Same four concepts, different environment. Create <code>index.html</code> and <code>app.js</code>.",
+    deliverable: "2 files pushed + 1 screenshot",
+    sections: [
+      {
+        sid: "6.1", title: "Score checker",
+        checks: [
+          ["t6_input", "An input for a score and a <strong>Check</strong> button"],
+          ["t6_number", "Converted the input with <code>Number()</code> — not relying on coercion"],
+          ["t6_empty", "Empty or non-numeric input shows <code>\"Please enter a number between 0 and 100\"</code> and stops"],
+          ["t6_range", "Values above 100 or below 0 are rejected the same way"],
+          ["t6_letter", "Shows the letter grade using my five-band conditional"],
+          ["t6_list", "Every checked score appends to a <code>&lt;ul&gt;</code>, built with a loop"],
+          ["t6_clear", "A <strong>Clear</strong> button that empties the list and the array"],
+          ["t6_console", "Logs the full history array to the console on every check"],
+          ["t6_live", "Runs through Live Server"],
+          ["t6_shot", "Screenshotted the page with 4+ scores checked and DevTools console open"]
+        ],
+        inputs: [
+          { k:"t6_url", type:"url", label:"Screenshot link — page + DevTools console", ph:"https://…" },
+          { k:"t6_difference", type:"textarea", label:"In one sentence: the <code>if/else</code> in both files is identical — so why can’t <code>report-card.js</code> touch the DOM?", ph:"…" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "t7",
+    title: "Notes and repository",
+    lead: "This repo is where all 26 weeks of your work lives. Keep it organized from day two.",
+    deliverable: "Repo link + git log screenshot",
+    sections: [
+      {
+        sid: "7.1", title: "Repo structure",
+        note: "Add a <code>day-02/</code> folder to your <code>javascript-everywhere</code> repo.",
+        term: "javascript-everywhere/\n├── README.md\n├── day-01/\n└── day-02/\n    ├── NOTES.md\n    ├── predictions.md\n    ├── predictions.js\n    ├── types.js\n    ├── grade-engine.js\n    ├── loops.js\n    ├── report-card.js\n    ├── index.html\n    └── app.js",
+        checks: [
+          ["t7_structure", "My repo matches this structure"],
+          ["t7_toc", "Added a Day 02 row to my root <code>README.md</code> table of contents"]
+        ],
+        inputs: [
+          { k:"t7_repo_url", type:"url", label:"Your repository link", hint:"— required", ph:"https://github.com/…/javascript-everywhere" }
+        ]
+      },
+      {
+        sid: "7.2", title: "day-02/NOTES.md",
+        note: "<strong>In your own words</strong> — not the README’s words.",
+        quote: "The bug section is not optional. If nothing broke, you copy-pasted.",
+        checks: [
+          ["t7_n_constlet", "The difference between <code>const</code> and <code>let</code>, and why <code>const</code> still lets you <code>push</code> into an array"],
+          ["t7_n_prims", "All 7 primitive types, one line each"],
+          ["t7_n_null", "Why <code>typeof null</code> returns <code>\"object\"</code>, and how to check for <code>null</code> properly"],
+          ["t7_n_falsy", "The 8 falsy values, written from memory"],
+          ["t7_n_equals", "<code>===</code> vs <code>==</code>, with one example where <code>==</code> causes a real bug"],
+          ["t7_n_nullish", "When to use <code>??</code> instead of <code>||</code>"],
+          ["t7_n_loops", "When to use each of the five loops — one sentence each"],
+          ["t7_n_breakcont", "The difference between <code>break</code> and <code>continue</code>"],
+          ["t7_n_bug", "One bug I hit today, the exact error message, and how I fixed it"]
+        ],
+        inputs: [
+          { k:"t7_bug", type:"textarea", label:"The bug you hit — the exact error message, and how you fixed it", ph:"…" }
+        ]
+      },
+      {
+        sid: "7.3", title: "Five separate commits",
+        note: "Real commit messages. <code>update</code> is not a message.",
+        checks: [
+          ["t7_c1", "Commit 1 — <code>predictions.md</code> + <code>predictions.js</code>"],
+          ["t7_c2", "Commit 2 — <code>types.js</code>"],
+          ["t7_c3", "Commit 3 — <code>grade-engine.js</code> + <code>loops.js</code>"],
+          ["t7_c4", "Commit 4 — <code>report-card.js</code>"],
+          ["t7_c5", "Commit 5 — browser files + <code>NOTES.md</code>"],
+          ["t7_log_shot", "Ran <code>git log --oneline</code> and screenshotted it"]
+        ],
+        inputs: [
+          { k:"t7_log_url", type:"url", label:"Screenshot link — <code>git log --oneline</code>", ph:"https://…" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "t8",
     title: "Share it",
     lead: "Point #1 of the 10% Commitment: share your progress publicly.",
     deliverable: "LinkedIn post link",
     sections: [
       {
-        sid: "5.1", title: "LinkedIn post",
+        sid: "8.1", title: "LinkedIn post",
         checks: [
-          ["t5_posted", "Posted on LinkedIn about completing Session 1"],
-          ["t5_shot", "Included the screenshot of my four version checks"],
-          ["t5_repo", "Included the link to my <code>javascript-everywhere</code> repo"],
-          ["t5_learned", "Said one concrete thing I learned — not “excited to start my journey”"]
+          ["t8_posted", "Posted on LinkedIn about completing Session 2"],
+          ["t8_shot", "Included the screenshot of my <code>report-card.js</code> output"],
+          ["t8_repo", "Included the link to my repo"],
+          ["t8_learned", "Said one concrete thing that surprised me — a coercion result, a <code>typeof</code> answer, a bug I fixed"]
         ],
         inputs: [
-          { k:"t5_post_url", type:"url", label:"LinkedIn post link", hint:"— required", ph:"https://linkedin.com/posts/…" },
-          { k:"t5_learned_text", type:"text", label:"The one concrete thing you said you learned", ph:"…" }
+          { k:"t8_post_url", type:"url", label:"LinkedIn post link", hint:"— required", ph:"https://linkedin.com/posts/…" },
+          { k:"t8_learned_text", type:"text", label:"The one concrete thing that surprised you", ph:"…" }
         ]
       },
       {
@@ -629,49 +713,49 @@ const TASKS = [
         note: "Not required. Ticking these is how a submission moves from ✅ Done to 🔥 10%.",
         optional: true,
         checks: [
-          ["b_gitignore", "Added a <code>.gitignore</code> with <code>node_modules/</code> — and explained in my notes why that folder never goes on GitHub"],
-          ["b_npminit", "Ran <code>npm init -y</code>, opened <code>package.json</code>, described each field in my notes"],
-          ["b_ssh", "Configured Git to use SSH keys instead of a Personal Access Token"],
-          ["b_argv", "Made <code>profile.js</code> read a value from the command line with <code>process.argv</code>"],
-          ["b_foreach", "Replaced <code>for...of</code> in <code>grades.js</code> with <code>forEach</code>, output identical"],
-          ["b_max", "Added a second array to <code>grades.js</code> and found the highest score across both — without <code>Math.max</code>"]
+          ["b_argv", "Rewrote <code>report-card.js</code> reading the data from <code>process.argv</code>"],
+          ["b_histogram", "Added a letter-grade histogram — one <code>*</code> per student, drawn with a loop"],
+          ["b_sort", "Sorted students highest-to-lowest <strong>without</strong> <code>.sort()</code> — wrote the loop myself"],
+          ["b_weighted", "Added a weighted final score: 70% exam + 30% attendance, to one decimal"],
+          ["b_firstabove", "A <code>while</code> loop that finds the first score above the class average, then <code>break</code>s"],
+          ["b_colour", "In the browser app, coloured each list item green / orange / red by band, set from JS"],
+          ["b_table", "Printed a 1–9 multiplication table with <strong>nested</strong> <code>for</code> loops, aligned in columns"]
         ]
       },
       {
         sid: "Grading", title: "How this is graded",
         grade: [
-          ["❌ Incomplete", "Screenshots only, no repo, one giant commit, or copy-pasted code you can’t explain"],
-          ["✅ Done", "All five tasks, working code, notes in your own words"],
-          ["🔥 10%", "Done + the bonus + <code>grades.js</code> doing something beyond the spec + notes someone else could actually learn from"]
+          ["❌ Incomplete", "Copy-pasted README code, no predictions written before running, one giant commit, or code you can’t explain line by line"],
+          ["✅ Done", "All eight tasks, working code, NOTES.md in your own words, a real bug documented"],
+          ["🔥 10%", "Done + the bonus + <code>report-card.js</code> doing something beyond the spec + notes someone else could actually learn from"]
         ]
       }
     ]
   }
 ];
 
-/* Inputs that must be filled for the assignment to count as submittable. */
-const REQUIRED_INPUTS = ["t4_repo_url", "t5_post_url"];
+const REQUIRED_INPUTS = ["t5_url", "t7_repo_url", "t8_post_url"];
 
-/* Which assignment this is — picks the sheet column (Day 1 -> C). */
-const DAY = 1;
+/* Which assignment this is — picks the sheet column (Day 2 -> D). */
+const DAY = 2;
 
 /* Apps Script web-app /exec URL. Empty = code-only mode: the page still
    works, students just hand over their code instead. See
    tools/apps-script/Code.gs for how to deploy one. */
 const ENDPOINT = "https://script.google.com/macros/s/AKfycbwqjBg7wGjLQl-edi1PQVbcfBJLN1EpStr62i3m238eDhOXQ5mlZvaP1uNl2LbR1uI/exec";
 
-/* The Day 01 roster: [email, name]. Order IS the identity — a code
+/* The Day 02 roster: [email, name]. Order IS the identity — a code
    carries the index into this array, so never reorder, only append. */
 const ROSTER = [["saadmmustafa99@gmail.com","سعد محمد مصطفى"],["ahmedmohamedelroby26@gmail.com","Ahmed Mohamed Hamed Elroby"],["abobkrsayed0@gmail.com","Abobkr Sayed Mohamed Ali"],["mh.gamal855@gmail.com","Mahmoud Gamal"],["mennafathalla124@gmail.com","Menna Fathalla Esmail"],["mtahr8006@gmail.com","Omar Taher Ahmed"],["donya21creator@gmail.com","Donya El Shahat El Sadek"],["mohammedraka2030@gmail.com","محمد ركاء العنزي"],["abdallahalsabaa.pu.2021@gmail.com","Abdallah Elsaied Mohamed Alsabaa"],["nourased7@gmail.com","نورالهدى السيد حسن"],["mohammedhashmed88@gmail.com","Mohammed Hashim"],["salmazyad17@yahoo.com","سلمي زياد"],["fatmamohsenfouly@gmail.com","فاطمة محسن محمد حسن"],["abdullahmohamed752006@gmail.com","abdallah mohamed"],["mokhtaroldmoustapha@gmail.com","mokhtar moustapha"],["abdofawzy1211@gmail.com","عبدالرحمن فوزي نصر محمود"],["ahmedalaa28908@gmail.com","أحمد علاء إمبارك محمود"],["abanoubmaqqar19@gmail.com","Abanoub Maqqar Mazouz"],["mbarakat16706@gmail.com","محمد بركات مبارك محمود"],["mohamedbahaa642021@gmail.com","محمد بهاء الدين محمد الصغير"],["x1.yousef.x1.2007@gmail.com","يوسف عاطف احمد محمد"],["ww0742003@gmail.com","محمد مصطفى رمضان"],["mohammedsalah0858@gmai.com","محمد صلاح شحاته علواني"],["drnasser.khairy@gmail.com","Nasser khairy sidrak"],["a7med3oda@yahoo.com","Ahmad Mohamad Ouda"],["ahmed.m.2457@gmail.com","Ahmed Mohamed"],["engy5821@gmail.com","إنجي محمد محمود"],["mahmoudmaram002@gmail.com","Maram Mahmoud"],["emadyt0@gmail.com","Emad Ahmed Hassan"],["ismaelelnaggar69@gmail.com","Ismael Sayed El-Naggar"],["abdelhay.mahmoud.dev@gmail.com","عبدالحي محمود محمد"],["salma.eltaher1110@gmail.com","Salma Eltaher Ahmed Hamed"],["a7md.m.3bdo@gmail.com","أحمد محمد عبده محمد"],["nour.redsea@gmail.com","نورهان أشرف ناجى محمد"],["mostfashaban.soudy@gmail.com","mostafa shaban soudi"],["hemafars0@gmail.com","ابراهيم بسيونى السيد فارس محمد"],["ahmedabdo12060@gmail.com","Ahmed Abdel Aal Abdel Latif"],["reemheikal3@gmail.com","Reem Atef Heikal"],["ahmed.ibn.adell@gmail.com","احمد عادل العدل على"],["asemm9930@gmail.com","Mohamed asem ali"],["hassan20nafed@gmail.com","Hassan Mohamed Nafed"],["mahmoudaboalfadl322@gmail.com","Mahmoud Aboalfadl Mahmoud"],["mohamedmahmoudn7m@gmail.com","مروه احمد على"],["salma.abdelhares.2005@gmail.com","salma saad abd elhares"],["ahmednbg.de56@gmail.com","Ahmed Gamal ismail mahmoud"],["sameremadwasfy1@gmail.com","Samer Emad Wasfy"],["ahmedeldeeb71707@gmail.com","أحمد منتصر الديب"],["esraakhalid1977e@gmail.com","Esraa Khalid"],["georgeedwar2003@gmail.com","george edwar maher"],["gamal.elshamy.req@gmail.com","Gamal Hassan Elshamy"],["aboalnaeeb@gmail.com","Ahmed Mohamed Hassan"],["islamsaeedw@gmail.com","Islam saeed"],["moustafaelbaloty@gmail.com","moustafa ahmed"],["zmai9abd.alac@gmail.com","مى عبدالاه احمد"],["mostafasaqly1@gmail.com","mostafa saqly"]];
 </script>
 
 <script>
 /* =====================================================================
-   Day 01 submission code — shared codec.
-   The page ENCODES; tools/decode-day01.js DECODES. Keep the two in sync:
+   Day 02 submission code — shared codec.
+   The page ENCODES; tools/decode-day02.js DECODES. Keep the two in sync:
    this exact source is embedded in the artifact.
 
-   Format:  D1.<payload-b32>.<sig>
+   Format:  D2.<payload-b32>.<sig>
    payload: <rosterIndex>.<checkBits-b32>.<dayMinutes>
    sig:     4 chars of a salted hash over the payload
 
@@ -680,7 +764,7 @@ const ROSTER = [["saadmmustafa99@gmail.com","سعد محمد مصطفى"],["ahme
    is the realistic threat here.
    ===================================================================== */
 
-const SALT = "js-everywhere-day01-v1";
+const SALT = "js-everywhere-day02-v1";
 
 /* Crockford base32, minus the letters that get misread when retyped. */
 const B32 = "0123456789ABCDEFGHJKMNPQRSTVWXYZ";
@@ -738,13 +822,13 @@ function sign(payload){
 function encodeSubmission(rosterIndex, checkBools){
   const day = Math.floor(Date.now() / 60000);       // minute resolution
   const payload = toB32(rosterIndex) + "." + bitsToB32(checkBools) + "." + toB32(day);
-  return "D1." + payload + "." + sign(payload);
+  return "D2." + payload + "." + sign(payload);
 }
 
 function decodeSubmission(code, checkCount){
   const clean = String(code).trim().toUpperCase().replace(/\s+/g, "");
   const parts = clean.split(".");
-  if (parts.length !== 5 || parts[0] !== "D1") return { ok:false, error:"Not a Day 01 code." };
+  if (parts.length !== 5 || parts[0] !== "D2") return { ok:false, error:"Not a Day 02 code." };
   const payload = parts[1] + "." + parts[2] + "." + parts[3];
   if (sign(payload) !== parts[4]) return { ok:false, error:"Code was edited or mistyped." };
   const rosterIndex = fromB32(parts[1]);
@@ -761,7 +845,7 @@ function decodeSubmission(code, checkCount){
 /* =====================================================================
    State + persistence
    ===================================================================== */
-const LS_KEY = "js-everywhere-day01";
+const LS_KEY = "js-everywhere-day02";
 let state = { name:"", email:"", token:"", rosterIndex:-1, checks:{}, inputs:{}, submittedAt:null };
 let active = 0;
 
@@ -875,9 +959,14 @@ function renderProgress(){
   } else {
     const missing = [];
     if (p.done < p.total) missing.push((p.total - p.done) + " checks left");
+    const FIELD_NAMES = {
+      t5_url: "report-card screenshot",
+      t7_repo_url: "repo link",
+      t8_post_url: "LinkedIn link"
+    };
     REQUIRED_INPUTS.forEach(k => {
       if (!(state.inputs[k] || "").trim()){
-        missing.push(k === "t4_repo_url" ? "repo link" : "LinkedIn link");
+        missing.push(FIELD_NAMES[k] || k);
       }
     });
     msg.textContent = missing.join(" · ");
@@ -1029,7 +1118,7 @@ document.getElementById("gate-go").addEventListener("click", async () => {
   }
   const idx = rosterLookup(email);
   if (idx < 0){
-    err.innerHTML = "That email isn't on the Day 01 roster. Use the address you " +
+    err.innerHTML = "That email isn't on the Day 02 roster. Use the address you " +
                     "registered with — if you think this is a mistake, message your instructor.";
     return;
   }
@@ -1043,7 +1132,7 @@ document.getElementById("gate-go").addEventListener("click", async () => {
   const rosterEmail = ROSTER[idx][0];
 
   // Check the code with the server BEFORE opening the tasks. Getting this
-  // wrong after five tasks of work is a miserable way to find out.
+  // wrong after eight tasks of work is a miserable way to find out.
   const go = document.getElementById("gate-go");
   const label = go.textContent;
   go.disabled = true;
@@ -1081,7 +1170,7 @@ document.getElementById("gate-go").addEventListener("click", async () => {
   } catch (e) {
     // Offline or the endpoint is unreachable. Don't strand the student —
     // let them work; the code is verified again when they submit.
-    console.error("[day01] verify failed:", e);
+    console.error("[day02] verify failed:", e);
     accept();
   } finally {
     restore();
@@ -1163,7 +1252,7 @@ async function sendToSheet(){
                       "press Submit again — your answers are saved.";
     // Surface the real reason; "Failed to fetch" here means the sandbox
     // blocked the request, not that the endpoint is down.
-    console.error("[day01] submission POST failed:", err);
+    console.error("[day02] submission POST failed:", err);
   }
 }
 document.getElementById("btn-reopen").addEventListener("click", () => {

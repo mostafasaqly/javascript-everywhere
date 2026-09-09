@@ -1,4 +1,4 @@
-# Grading tools — Day 01
+# Grading tools
 
 Grades now land in the **Degrees JS EW** tab automatically, via the Apps
 Script web app in `apps-script/Code.gs`. The submission-code path below is
@@ -17,9 +17,30 @@ resubmission.
 
 ### Changing the day
 
-`DAY = 1` near the top of `app/day01-tracker.html` picks the column:
-Day 1 → C, Day 2 → D, and so on. Change it, republish, done. The Apps
-Script needs no edit.
+`DAY` near the top of each tracker picks the column: Day 1 → C, Day 2 → D,
+and so on. `app/day01-tracker.html` sets `DAY = 1`, `app/day02-tracker.html`
+sets `DAY = 2`. The Apps Script needs no edit.
+
+### One tracker per day
+
+Each day is a self-contained page with its own task model, salt, code
+prefix, `localStorage` key and check list — so a student can have Day 01
+and Day 02 open at once without one overwriting the other, and a Day 01
+code will not decode as Day 02.
+
+| | Day 01 | Day 02 |
+|---|---|---|
+| Page | `app/day01-tracker.html` | `app/day02-tracker.html` |
+| Tasks | 5 | 8 |
+| Checks | 61 required + 6 bonus | 95 required + 7 bonus |
+| Code prefix | `D1.` | `D2.` |
+| Salt | `js-everywhere-day01-v1` | `js-everywhere-day02-v1` |
+| Storage key | `js-everywhere-day01` | `js-everywhere-day02` |
+| Codec | `codec.js` | `codec-day02.js` |
+| Labels | `checks.json` | `checks-day02.json` |
+| Decoder | `decode-day01.js` | `decode-day02.js` |
+
+Both pages share `roster.json` and the same Apps Script endpoint.
 
 ### If a student says nothing was recorded
 
@@ -57,6 +78,9 @@ Then:
 ```bash
 node tools/decode-day01.js day01-codes.txt          # readable table
 node tools/decode-day01.js day01-codes.txt --csv    # rows for the sheet
+
+node tools/decode-day02.js day02-codes.txt          # same, for Day 02
+node tools/decode-day02.js day02-codes.txt --csv
 ```
 
 The table shows each student's percentage, level, bonus count, and which
@@ -85,10 +109,13 @@ have students paste them alongside the code.
 
 | File | What it is |
 |---|---|
-| `roster.json` | The 52 students — `row` is their sheet row. **Order matters:** codes reference the array index, so append, never reorder. |
-| `checks.json` | Generated from the app's task model — 61 required + 6 bonus labels, in bit order. |
-| `codec.js` | Encode/decode, shared with the page. Change it and old codes stop decoding. |
-| `decode-day01.js` | The script you run. |
+| `roster.json` | The 52 students — `row` is their sheet row. **Order matters:** codes reference the array index, so append, never reorder. Shared by every day. |
+| `checks.json` | Day 01 labels, generated from the app's task model — 61 required + 6 bonus, in bit order. |
+| `checks-day02.json` | Day 02 labels — 95 required + 7 bonus, in bit order. |
+| `codec.js` | Day 01 encode/decode, shared with the page. Change it and old codes stop decoding. |
+| `codec-day02.js` | Day 02 encode/decode. Same code, different salt and prefix. |
+| `decode-day01.js` | The Day 01 script you run. |
+| `decode-day02.js` | The Day 02 script you run. |
 
 ## Updating the roster
 
@@ -99,7 +126,7 @@ then:
 # 1. export the tab: File > Download > Comma-separated values
 node tools/build-roster.js ~/Downloads/"Saqly Courses Students (Responses) - Degrees JS EW.csv"
 node tools/embed-roster.js
-# 2. ask Claude to republish app/day01-tracker.html
+# 2. ask Claude to republish the tracker pages
 ```
 
 `build-roster.js` refuses to write if the new CSV would reorder or drop
