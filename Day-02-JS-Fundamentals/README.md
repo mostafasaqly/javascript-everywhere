@@ -637,3 +637,5 @@ Notice `band()` replaced the whole if/else chain you wrote today with one reusab
 - [ASSIGNMENT.md](ASSIGNMENT.md) — Day 02 assignment
 
 ← Back to [Day 01 — Setup](../Day-01-Setup/README.md)
+
+Next: [Day 03 — Functions, Scope & Hoisting](../Day-03-Functions-Scope/README.md) →
