@@ -513,6 +513,7 @@ const TASKS = [
       {
         sid: "3.4", title: "Merge order",
         checks: [
+          ["t3_merge_create", "Created <code>defaults</code> and <code>custom</code> objects sharing at least one key"],
           ["t3_merge_win", "Merged <code>defaults</code> and <code>custom</code> so <strong>custom wins</strong>"],
           ["t3_merge_wrong", "Merged them the wrong way round and logged that too"],
           ["t3_merge_why", "Commented which order I want and why the other is a bug"]
@@ -977,7 +978,7 @@ const ROSTER = [["saadmmustafa99@gmail.com","سعد محمد مصطفى"],["ahme
    is the realistic threat here.
    ===================================================================== */
 
-const SALT = "js-everywhere-day04-v2";
+const SALT = "js-everywhere-day04-v3";
 
 /* Crockford base32, minus the letters that get misread when retyped. */
 const B32 = "0123456789ABCDEFGHJKMNPQRSTVWXYZ";
@@ -1205,7 +1206,7 @@ function renderMain(){
     '<div class="panel-head">' +
       '<div class="eyebrow">Task ' + (active + 1) + " of " + TASKS.length + "</div>" +
       "<h1>" + esc(t.title) + "</h1>" +
-      "<p>" + esc(t.lead) + "</p>" +
+      "<p>" + t.lead + "</p>" +     // leads are trusted markup from TASKS, like notes
     "</div>";
 
   t.sections.forEach(s => {

@@ -164,6 +164,7 @@ console.log("D");
 - [ ] In `predictions.md`, record the **actual** result next to each prediction
 - [ ] For every one you got **wrong**, write one sentence explaining why JavaScript did that
 - [ ] For **#4, #7, #8, #10, #15, #18, #19 and #21** name the mechanism explicitly — these eight are the ones that cause real bugs
+- [ ] Screenshot the output
 
 > Getting them wrong is the assignment. Getting them wrong and not explaining why is not.
 
@@ -406,6 +407,7 @@ The main build. First rewrite your **own** Day 03 library in modern syntax. Then
 - [ ] `withoutField(student, field)` — returns a copy with one key removed
 - [ ] Every function that takes a student destructures on the parameter line
 - [ ] Every string built with a template literal — **zero** `+` concatenation in the file
+- [ ] No `console.log` anywhere in `grade-lib.js`
 
 ### 7.2 — `students.json`
 

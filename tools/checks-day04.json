@@ -1,7 +1,7 @@
 {
-  "required": 189,
+  "required": 190,
   "optional": 10,
-  "total": 199,
+  "total": 200,
   "labels": [
     "T1.1.1 Created predictions.md",
     "T1.1.1 Wrote my prediction for all 22 snippets before running anything",
@@ -42,6 +42,7 @@
     "T3.3.3 Logged both scores to prove the original survived",
     "T3.3.3 Added a new field (id) with spread",
     "T3.3.3 Removed a field using object rest (const { attendance, ...without } = student)",
+    "T3.3.4 Created defaults and custom objects sharing at least one key",
     "T3.3.4 Merged defaults and custom so custom wins",
     "T3.3.4 Merged them the wrong way round and logged that too",
     "T3.3.4 Commented which order I want and why the other is a bug",
