@@ -843,4 +843,4 @@ Notice `describe({ name, score })` — the function says exactly which fields it
 
 ← Back to [Day 02 — JS Fundamentals](../Day-02-JS-Fundamentals/README.md)
 
-Next: [Day 04 — ES6+: Destructuring, Spread & Rest](../Day-04-ES6-Destructuring/README.md) →
+Next: [Day 04 — ES6+ & Async JS](../Day-04-ES6-Destructuring/README.md) →

@@ -12,7 +12,7 @@
    is the realistic threat here.
    ===================================================================== */
 
-const SALT = "js-everywhere-day04-v1";
+const SALT = "js-everywhere-day04-v2";
 
 /* Crockford base32, minus the letters that get misread when retyped. */
 const B32 = "0123456789ABCDEFGHJKMNPQRSTVWXYZ";

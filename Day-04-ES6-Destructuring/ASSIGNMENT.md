@@ -1,25 +1,27 @@
 # Day 04 — Assignment
 
-**Track 1 · Session 4 · ES6+: Destructuring, Spread & Rest**
+**Track 1 · Day 4 · ES6+ & Async JS: Destructuring, Spread, Callbacks & the Event Loop**
 
-> Session 3 taught you to box logic into functions. Session 4 taught you to get data
-> in and out of those boxes without repeating yourself.
-> This assignment makes it permanent — by rewriting your own Day 03 library in modern
-> syntax and proving, line by line, that it got shorter without getting cleverer.
-> Session 5 is async. It hands you nested objects you did not build. Unpack them today.
+> Part 1 taught you to get data in and out of functions without repeating yourself.
+> Part 2 taught you that code doesn't always run in the order you wrote it.
+> This assignment makes both permanent — you'll rewrite your Day 03 library in modern syntax,
+> then feed it data that *arrives* instead of sitting in an array.
+> The next session hands you Promises. You'll only appreciate them if you've done this first.
 
-**⏱ Budget:** 6–7 hours · **📅 Duration:** 3 days · **🚩 Deadline:** before Session 5
+**⏱ Budget:** 10–12 hours · **📅 Duration:** 5 days · **🚩 Deadline:** before the next session
 
-| # | Task | Deliverable |
-|---|---|---|
-| 1 | Predict the unpacking | `predictions.md` + 1 screenshot |
-| 2 | Destructuring drills | `destructuring.js` + 1 screenshot |
-| 3 | Spread & rest lab | `spread.js` + 1 screenshot |
-| 4 | Safe access on messy data | `messy.js` + 1 screenshot |
-| 5 | Build: the Grade Library, modernised | `grade-lib.js` + `report.js` + 1 screenshot |
-| 6 | Browser: Student Dashboard | 2 files + 1 screenshot |
-| 7 | Notes + repo | `NOTES.md` + repo link + `git log` screenshot |
-| 8 | Share it | LinkedIn post link |
+| # | Task | Part | Deliverable |
+|---|---|---|---|
+| 1 | Predict, then run | 1 + 2 | `predictions.md` + 1 screenshot |
+| 2 | Destructuring drills | 1 | `destructuring.js` + 1 screenshot |
+| 3 | Spread & rest lab | 1 | `spread.js` + 1 screenshot |
+| 4 | Safe access on messy data | 1 | `messy.js` + 1 screenshot |
+| 5 | Timers & callbacks lab | 2 | `timers.js` + `callbacks.js` + 1 screenshot |
+| 6 | Callback hell — build it, then escape it | 2 | `fake-db.js` + `hell.js` + `flat.js` + 1 screenshot |
+| 7 | Build: the grade library + async report | 1 + 2 | `grade-lib.js` + `students.json` + `report.js` + 1 screenshot |
+| 8 | Browser: Student Dashboard | 1 + 2 | 2 files + 2 screenshots |
+| 9 | Notes + repo | — | `NOTES.md` + repo link + `git log` screenshot |
+| 10 | Share it | — | LinkedIn post link |
 
 > **Type every line by hand. Do not copy-paste.** You are building muscle memory, and `Ctrl+V` builds none.
 
@@ -27,12 +29,14 @@
 
 ## Task 1 — Predict, Then Run
 
-Same drill as Day 03 — this time on unpacking, where a wrong guess usually means a `TypeError` you'll meet again in Session 5.
+Twelve snippets on unpacking, where a wrong guess usually means a `TypeError`. Ten on timing, where a wrong guess means the right output in the wrong order.
 
 ### 1.1 — Write Your Predictions First
 
 - [ ] Create `predictions.md`
-- [ ] For **each** numbered snippet, write what you think happens — a value, or the **exact error name** — **before running anything**
+- [ ] For **each** numbered snippet, write what you think happens — a value, the **exact error name**, or the **exact output order** — **before running anything**
+
+#### Part 1 — Unpacking
 
 ```js
 // 1
@@ -41,88 +45,125 @@ console.log(a, typeof b);
 
 // 2
 const { x: y } = { x: 10 };
-console.log(y);
-
-// 3
-const { x: y } = { x: 10 };
 console.log(x);
 
-// 4
+// 3
 const { p = 5 } = { p: undefined };
 console.log(p);
 
-// 5
+// 4
 const { q = 5 } = { q: null };
 console.log(q);
 
-// 6
-const { r = 5 } = { r: 0 };
-console.log(r);
-
-// 7
+// 5
 const [, , third] = ["a", "b", "c", "d"];
 console.log(third);
 
-// 8
-const [m, n = "N"] = ["M"];
-console.log(m, n);
-
-// 9
-const { length } = "JavaScript";
-console.log(length);
-
-// 10
+// 6
 const arr = [1, 2];
 const copy = arr;
 copy.push(3);
 console.log(arr.length);
 
-// 11
+// 7
 const obj = { nested: { v: 1 } };
 const shallow = { ...obj };
 shallow.nested.v = 99;
 console.log(obj.nested.v);
 
-// 12
-console.log({ ...{ a: 1, b: 2 }, ...{ b: 3 } });
-
-// 13
+// 8
 console.log({ ...{ b: 3 }, ...{ a: 1, b: 2 } });
 
-// 14
+// 9
 function f({ a } = {}) { return a; }
 console.log(f(), f({ a: 7 }));
 
-// 15
+// 10
 function g({ a }) { return a; }
 console.log(g());
 
-// 16
+// 11
 const s = { name: "Sara" };
-console.log(s.address?.city);
+console.log(s.address.city);
+
+// 12
+console.log(0 || "fallback", 0 ?? "fallback");
+```
+
+#### Part 2 — Order
+
+```js
+// 13
+console.log("a");
+setTimeout(() => console.log("b"), 0);
+console.log("c");
+
+// 14
+setTimeout(() => console.log("timeout"), 0);
+queueMicrotask(() => console.log("micro"));
+console.log("sync");
+
+// 15
+for (var i = 0; i < 3; i++) {
+  setTimeout(() => console.log(i), 0);
+}
+
+// 16
+function later() {
+  setTimeout(() => { return 42; }, 0);
+}
+console.log(later());
 
 // 17
-const s2 = { name: "Sara" };
-console.log(s2.address.city);
+setTimeout(() => console.log("timer"), 0);
+const start = Date.now();
+while (Date.now() - start < 500) {}
+console.log("loop finished");
 
 // 18
-console.log(0 || "fallback", 0 ?? "fallback");
+setTimeout(() => console.log("outer"), 0);
+setTimeout(() => {
+  console.log("first");
+  setTimeout(() => console.log("nested"), 0);
+}, 0);
+setTimeout(() => console.log("second"), 0);
 
 // 19
-const k = "score";
-console.log({ [k]: 90 }, { k: 90 });
+setTimeout(() => {
+  console.log("timer");
+  queueMicrotask(() => console.log("micro inside timer"));
+}, 0);
+setTimeout(() => console.log("timer 2"), 0);
 
 // 20
-const nums = [3, 1, 2];
-console.log(Math.max(nums), Math.max(...nums));
+try {
+  setTimeout(() => { throw new Error("late"); }, 0);
+} catch (e) {
+  console.log("caught", e.message);
+}
+console.log("after try");
+
+// 21
+function load(cb) {
+  cb("sync call");
+  setTimeout(() => cb("async call"), 0);
+}
+load((msg) => console.log(msg));
+console.log("after load");
+
+// 22
+setTimeout(() => console.log("A"), 20);
+setTimeout(() => console.log("B"), 10);
+queueMicrotask(() => console.log("C"));
+console.log("D");
 ```
 
 ### 1.2 — Now Run Them
 
-- [ ] Create `predictions.js` and run each snippet — **one at a time**, since several throw and would stop the file
-- [ ] In `predictions.md`, record **actual** next to each prediction
+- [ ] Create `predictions.js` and run each snippet — **one at a time**, since #2, #10, #11 and #20 throw and would hide the rest
+- [ ] In `predictions.md`, record the **actual** result next to each prediction
 - [ ] For every one you got **wrong**, write one sentence explaining why JavaScript did that
-- [ ] For **#5, #11, #13 and #15** name the mechanism explicitly — these four are the ones that cause real bugs
+- [ ] For **#4, #7, #8, #10, #15, #18, #19 and #21** name the mechanism explicitly — these eight are the ones that cause real bugs
 
 > Getting them wrong is the assignment. Getting them wrong and not explaining why is not.
 
@@ -214,7 +255,7 @@ Create `spread.js`. This task is about **not mutating things**, which is the hab
 - [ ] Screenshot the original being wrong
 - [ ] Fix it by spreading the nested level too, and prove the original is now safe
 
-> This is the single most expensive bug in this session. Make it happen on purpose, once, here.
+> This is the single most expensive bug in Part 1. Make it happen on purpose, once, here.
 
 ### 3.6 — Rest in Functions
 
@@ -235,7 +276,7 @@ Create `spread.js`. This task is about **not mutating things**, which is the hab
 
 ## Task 4 — Safe Access on Messy Data
 
-Create `messy.js`. Real data has holes in it. This task is practice for Session 5.
+Create `messy.js`. Real data has holes in it — and data that arrives from a server (Part 2) has the most.
 
 - [ ] Build an array of at least **five** student objects where:
   - two are missing an `address` entirely
@@ -254,11 +295,102 @@ Create `messy.js`. Real data has holes in it. This task is practice for Session 
 
 ---
 
-## Task 5 — Build: The Grade Library, Modernised
+## Task 5 — Timers & Callbacks Lab
 
-This is the main build. Take your **own** Day 03 `grade-lib.js` and `report.js` and rewrite them using this session's syntax. Same behaviour — different shape.
+Two files. Run after every part.
 
-### 5.1 — `grade-lib.js` — Pure Functions Only
+### 5.1 — `timers.js`: `setTimeout`
+
+- [ ] Schedule three messages at 300ms, 100ms and 200ms, and predict the order in a comment before running
+- [ ] Pass **two extra arguments** through `setTimeout(fn, ms, a, b)` into your callback
+- [ ] Schedule a message, save its ID, cancel it with `clearTimeout`, and prove it never prints
+- [ ] Write `setTimeout(sayHi(), 1000)` on purpose — record what happens and comment why
+
+### 5.2 — `timers.js`: `setInterval`
+
+- [ ] Build a countdown from 5 to 1 that prints `Lift off 🚀` and **stops itself** with `clearInterval`
+- [ ] Prove the script **exits** on its own when the countdown ends
+- [ ] Remove the `clearInterval`, run it, and note what happens (`Ctrl+C` to stop it) — then put it back
+
+### 5.3 — `timers.js`: The Delay Is a Minimum
+
+- [ ] Write `blockFor(ms)` — a busy-wait loop using `Date.now()`
+- [ ] Schedule a `setTimeout` for 100ms, then call `blockFor(1000)` right after it
+- [ ] Measure and print how long the timer **actually** took
+- [ ] Comment one sentence explaining the difference between the delay you asked for and the one you got
+
+### 5.4 — `callbacks.js`: Sync vs Async
+
+- [ ] Write `repeat(times, callback)` calling `callback(i)` synchronously, and show `"done"` prints **after** every callback
+- [ ] Write `repeatLater(times, callback)` calling each `callback(i)` through `setTimeout`, and show `"done"` prints **before** every callback
+- [ ] Comment one sentence: how could you tell these apart without running them?
+
+### 5.5 — `callbacks.js`: You Can't Return From the Future
+
+- [ ] Write `getScoreLater()` that tries to `return` a score from inside a `setTimeout` — log what it gives you
+- [ ] Rewrite it as `getScoreLater(callback)` and compute a letter grade **inside** the callback
+
+### 5.6 — `callbacks.js`: Error-First
+
+- [ ] Write `findStudent(id, callback)` that calls back with an `Error` for unknown ids, and `(null, student)` for known ones — **destructure** the student in the callback's parameter list
+- [ ] Call it once with a good id and once with a bad one — both paths print something sensible
+- [ ] Every error path uses `return callback(err)` — the `return` is not optional
+- [ ] Delete one `return`, show the callback firing **twice**, screenshot it, then put it back
+
+### 5.7 — `callbacks.js`: `try`/`catch` Can't Save You
+
+- [ ] Wrap a `setTimeout` that throws in a `try`/`catch` and screenshot the crash
+- [ ] Comment one sentence on why `catch` never ran
+- [ ] Rewrite it so the error is passed to a callback instead, and handled without crashing
+
+**✅ Deliverable:** `timers.js` + `callbacks.js` + screenshot of both outputs.
+
+---
+
+## Task 6 — Callback Hell: Build It, Then Escape It
+
+### 6.1 — `fake-db.js`
+
+Build your **own** fake database, not the README's. Different data, same idea.
+
+- [ ] At least **three** lookup tables — for example `STUDENTS`, `SCORES` and `COURSES` — linked by ids
+- [ ] Add a **fourth** level that the README didn't have — `TEACHERS`, `ROOMS`, `CITIES`, anything linked from the previous level
+- [ ] One error-first function per table (`getStudent`, `getScores`, `getCourse`, `getTeacher`…), each answering through `setTimeout`
+- [ ] Every function calls back with an `Error` when the id doesn't exist
+- [ ] At least one function uses a **different delay per id**, so answers can come back out of order
+
+> Modules get their own session later. Paste `fake-db.js` at the top of each file that uses it.
+
+### 6.2 — `hell.js` — The Pyramid
+
+- [ ] Chain **all four** lookups for one student, nesting each inside the previous callback
+- [ ] Print one line using data from **every** level, built with a template literal
+- [ ] Handle the error at **every** level
+- [ ] Break it on purpose three ways — bad student id, bad course id, bad teacher id — and confirm each one reports a clear error
+- [ ] Count the levels of indentation at the deepest line and write it in a comment
+
+### 6.3 — `flat.js` — The Escape
+
+- [ ] Rewrite the same chain as **named functions**, one per step, none nested more than one level deep
+- [ ] One `done` callback threaded through every step — errors are handled in **one** place
+- [ ] Each step builds a **new** object with spread (`{ ...student, scores }`) — no mutation
+- [ ] Wrap it as `buildReport(id, done)` — a function that is itself error-first and async
+- [ ] Call `buildReport` for a good id and a bad id **at the same time**, and explain in a comment why they finish in the order they do
+
+### 6.4 — Defend Yourself
+
+- [ ] Write a `once(fn)` helper — a closure plus `...args` — so a callback can only ever run once
+- [ ] Write a deliberately broken function that calls its callback twice, and prove `once` stops the second call
+
+**✅ Deliverable:** `fake-db.js` + `hell.js` + `flat.js` + screenshot of both outputs.
+
+---
+
+## Task 7 — Build: The Grade Library + Async Report
+
+The main build. First rewrite your **own** Day 03 library in modern syntax. Then feed it data that **arrives** instead of sitting in an array.
+
+### 7.1 — `grade-lib.js` — Pure Functions Only
 
 **No `console.log` anywhere in this file.** Every function takes input and returns output.
 
@@ -275,56 +407,91 @@ This is the main build. Take your **own** Day 03 `grade-lib.js` and `report.js` 
 - [ ] Every function that takes a student destructures on the parameter line
 - [ ] Every string built with a template literal — **zero** `+` concatenation in the file
 
-### 5.2 — `report.js` — The Program
+### 7.2 — `students.json`
 
-- [ ] An array of **at least 10** student objects with `name`, `score`, `attendance`
-- [ ] At least **three** must have holes: a missing `attendance`, a missing nested `address`, and one deliberately invalid score
+- [ ] A JSON file with **at least 10** students, each with `id`, `name`, `score` and `attendance`
+- [ ] At least **three** with holes — a missing `attendance`, a missing nested `address`, and one invalid score
+- [ ] Valid JSON: double quotes, no trailing commas, no comments
+
+### 7.3 — `report.js` — The Program
+
+Paste `grade-lib.js`'s functions at the top — modules get their own session later.
+
+**Loading the data (Part 2):**
+
+- [ ] Read `students.json` with `fs.readFile` — **not** `readFileSync`
+- [ ] Handle the read error error-first — rename the file, run it, and prove a clear message prints instead of a crash
+- [ ] Handle a `JSON.parse` error without crashing (break the JSON on purpose to test this one — `try`/`catch` **does** work here, because `JSON.parse` is synchronous)
+- [ ] Print `Loading…` **before** the file arrives, proving the read doesn't block
+- [ ] For each student, simulate a slow "attendance service" with `getAttendance(id, callback)` — a `setTimeout` with a **different delay per student**
+- [ ] Load every student's attendance **in parallel**, storing results by **index** and counting completions
+- [ ] Log each arrival as it happens, then print the report in the **original** order
+- [ ] Measure the total time with `Date.now()`, and comment what it **would** have been one-after-another, and why it isn't
+
+**Printing the report (Part 1):**
+
 - [ ] Loop with `for (const { name, score } of students)` — destructure in the loop header
 - [ ] Skip invalid records with `continue`, counting them
 - [ ] Print a header, one `formatRow` line per valid student, and a separator
 - [ ] Print the summary using `const [lowest, highest] = minMaxStudent(...)`
 - [ ] Print the grade tally with `Object.entries` and `[grade, count]` destructuring
 - [ ] Apply `withBonus` to one student and print **both** the original and the boosted score, proving no mutation
-- [ ] All grading logic lives in `grade-lib.js` — `report.js` holds **none**
+- [ ] All grading logic lives in the `grade-lib.js` functions — `report.js`'s own code holds **none**
 
-### 5.3 — Prove It's Better
+### 7.4 — Prove It's Better
 
-- [ ] In `NOTES.md`, paste your Day 03 line count and your Day 04 line count
+- [ ] In `NOTES.md`, paste your Day 03 line count and your Day 04 line count for the library
 - [ ] Pick **one** function and paste the Day 03 version next to the Day 04 version
 - [ ] Write two sentences: what the new signature tells a reader that the old one didn't
 
-**✅ Deliverable:** `grade-lib.js` + `report.js` + screenshot of the output.
+**✅ Deliverable:** `grade-lib.js` + `students.json` + `report.js` + screenshot of the output — the one showing arrival order **and** printed order.
 
 ---
 
-## Task 6 — The Browser Side
+## Task 8 — The Browser Side
 
-Create `index.html` and `app.js`. Same functions, different environment — and this time, **nothing mutates**.
+Create `index.html` and `app.js`: **one** Student Dashboard that uses both parts. Nothing mutates, and nothing freezes.
+
+**The dashboard (Part 1):**
 
 - [ ] Inputs for **name**, **score**, and an **optional city**, plus **Add** and **Clear** buttons
 - [ ] `app.js` split into two clearly commented sections: **pure logic** at the top, **DOM handling** below
-- [ ] The pure section reuses `isValidScore`, `letterGrade`, and `average` — identical to `grade-lib.js`, no DOM inside them
 - [ ] A `describe({ name, score, city = "Unknown" })` function using a destructured parameter and a template literal
 - [ ] Adding a student uses `students = [...students, newStudent]` — **no `.push`**
 - [ ] The optional city adds **no key at all** when the field is left blank
-- [ ] Named `handleAdd` / `handleClear` wired with `addEventListener` — pass the function, don't call it
 - [ ] Guard clauses for empty name, empty score, non-number, and out of `0–100`
-- [ ] A `render()` rebuilding the list, called after every change
-- [ ] A summary line with the count and the average to one decimal
-- [ ] Log the students array on every add
+- [ ] A `render()` rebuilding the list, and a summary line with the count and the average to one decimal
+
+**Loading from a server (Part 2):**
+
+- [ ] A **Load from server** button that calls a fake `fetchStudents(callback)` with a delay of at least one second
+- [ ] `fetchStudents` fails randomly about 1 time in 4 — with an error-first callback
+- [ ] While loading: the button is **disabled** and a `Loading…` message shows
+- [ ] On success: the loaded students are **merged** into the list with spread — added students are kept
+- [ ] On failure: a clear error message shows, **and the button is re-enabled**
+- [ ] `console.log` a line right after sending the request, proving the page carries on
+
+**Freeze vs don't (Part 2):**
+
+- [ ] A **Freeze** button that runs `blockFor(3000)` — prove you can't type in the name input while it runs
+- [ ] A **Chunked** button that does the same 3 seconds of work in slices with `setTimeout(step, 0)`, updating a progress message
+
+**Wiring:**
+
+- [ ] Named handlers wired with `addEventListener` — pass the function, don't call it
 - [ ] Runs through **Live Server**
+- [ ] Screenshot the page with at least 5 students — some added by hand, some loaded — and DevTools console open
+- [ ] Screenshot the error state after a failed load
 
-- [ ] Screenshot the page with at least 5 students added — including one with no city — and DevTools console open.
+> **The point of this task:** replacing the array instead of mutating it is the entire reason React can tell that something changed. And "the page froze" is the most common complaint about bad web apps. You now know what causes both — and what fixes both.
 
-> **The point of this task:** replacing the array instead of mutating it feels pointless with 5 students on one page. It is the entire reason React can tell that something changed. Build the habit now, understand the payoff in Track 2.
-
-**✅ Deliverable:** `index.html` + `app.js` pushed + 1 screenshot.
+**✅ Deliverable:** `index.html` + `app.js` pushed + 2 screenshots.
 
 ---
 
-## Task 7 — Notes and Repository
+## Task 9 — Notes and Repository
 
-### 7.1 — Repo Structure
+### 9.1 — Repo Structure
 
 - [ ] Add a `day-04/` folder to your `javascript-everywhere` repo:
 
@@ -341,7 +508,13 @@ javascript-everywhere/
     ├── destructuring.js
     ├── spread.js
     ├── messy.js
+    ├── timers.js
+    ├── callbacks.js
+    ├── fake-db.js
+    ├── hell.js
+    ├── flat.js
     ├── grade-lib.js
+    ├── students.json
     ├── report.js
     ├── index.html
     └── app.js
@@ -349,33 +522,47 @@ javascript-everywhere/
 
 - [ ] Add a Day 04 row to your root `README.md` table of contents
 
-### 7.2 — `day-04/NOTES.md`
+### 9.2 — `day-04/NOTES.md`
 
-**In your own words** — not the README's words:
+**In your own words** — not the README's words.
 
-- [ ] What destructuring actually does, in one sentence
-- [ ] How object destructuring and array destructuring differ in what they match on
-- [ ] What `const { a: b } = obj` creates, and what it does **not** create
+**Part 1:**
+
+- [ ] What destructuring actually does, and how object and array destructuring differ in what they match on
+- [ ] What `const { a: b } = obj` creates — and what it does **not** create
 - [ ] When a destructuring default fires — and the three values that do **not** trigger it
-- [ ] Why `const { x } = undefined` throws, and the one-character-ish fix
+- [ ] Why `const { x } = undefined` throws, and the fix
 - [ ] Rest vs spread — the rule you use to tell them apart at a glance
 - [ ] What "shallow copy" means, and the exact bug it caused you in Task 3.5
 - [ ] Why spread order matters when merging defaults
 - [ ] The difference between `||` and `??`, with the `0` example from Task 4
-- [ ] What `?.` does when the left side is `null`
-- [ ] Why `{ [key]: value }` needs the brackets
-- [ ] Your Task 5.3 answer — the line counts and the before/after function
-- [ ] **One bug you hit today**, the exact error message, and how you fixed it
+- [ ] Your Task 7.4 answer — the line counts and the before/after function
+
+**Part 2:**
+
+- [ ] What "single-threaded" means, and what blocking costs in the browser
+- [ ] Draw the event loop — ASCII is fine — with the stack, the APIs, both queues, and the loop
+- [ ] Why `setTimeout(fn, 0)` doesn't run immediately, and which queue goes first
+- [ ] Why you can't `return` a value out of an async callback, and what you do instead
+- [ ] The error-first convention, and why the `return` in `return callback(err)` matters
+- [ ] Why `try`/`catch` can't catch an error thrown inside a `setTimeout`
+- [ ] The three problems with callbacks, in one sentence each
+- [ ] Parallel vs sequential — the time difference from Task 7, and why results go in by index
+
+**Both:**
+
+- [ ] **One bug you hit**, the exact error message or wrong output, and how you fixed it
 
 > The bug section is not optional. If nothing broke, you copy-pasted.
 
-### 7.3 — Five Separate Commits
+### 9.3 — Six Separate Commits
 
 - [ ] Commit 1 — `predictions.md` + `predictions.js`
-- [ ] Commit 2 — `destructuring.js`
-- [ ] Commit 3 — `spread.js` + `messy.js`
-- [ ] Commit 4 — `grade-lib.js` + `report.js`
-- [ ] Commit 5 — browser files + `NOTES.md`
+- [ ] Commit 2 — `destructuring.js` + `spread.js` + `messy.js`
+- [ ] Commit 3 — `timers.js` + `callbacks.js`
+- [ ] Commit 4 — `fake-db.js` + `hell.js` + `flat.js`
+- [ ] Commit 5 — `grade-lib.js` + `students.json` + `report.js`
+- [ ] Commit 6 — browser files + `NOTES.md`
 
 Real commit messages. `update` is not a message.
 
@@ -385,13 +572,13 @@ Real commit messages. `update` is not a message.
 
 ---
 
-## Task 8 — Share It
+## Task 10 — Share It
 
-- [ ] Post on **LinkedIn** about completing Session 4
+- [ ] Post on **LinkedIn** about completing Day 4
 - [ ] Include the screenshot of your `report.js` output
 - [ ] Include the link to your repo
-- [ ] Show the **before and after** of one function — Day 03's signature next to Day 04's. It's the most visual thing you've produced so far; use it.
-- [ ] Say one concrete thing you understood today that you didn't before — the shallow copy bug, `??` vs `||` on a zero, why `{ ...defaults, ...custom }` has to be in that order. Not "excited to continue my journey".
+- [ ] Show **one** before-and-after: Day 03's function signature next to Day 04's, **or** your `hell.js` pyramid next to your `flat.js`
+- [ ] Say one concrete thing you understood that you didn't before — the shallow copy bug, `??` vs `||` on a zero, why `setTimeout(fn, 0)` isn't instant, why the page froze. Not "excited to continue my journey".
 
 **✅ Deliverable:** the link to your post.
 
@@ -399,15 +586,16 @@ Real commit messages. `update` is not a message.
 
 ## Bonus (Optional)
 
-- [ ] Write `pick(object, keys)` returning a new object with only the listed keys
-- [ ] Write `omit(object, keys)` — the opposite — using object rest
-- [ ] Write `deepMerge(a, b)` that merges nested objects one level deeper than spread does
+- [ ] Write `pick(object, keys)` and `omit(object, keys)` — the second one using object rest
 - [ ] Write `groupBy(students, key)` returning `{ Cairo: [...], Alexandria: [...] }` using computed keys
-- [ ] Rebuild Day 03's `myMap` / `myFilter` so the callback receives `({ item, index })` as a destructured object
-- [ ] Write `swapKeys(object)` turning `{ a: 1 }` into `{ 1: "a" }` with `Object.entries` and computed keys
-- [ ] Add a **Remove** button per row in the browser app that filters the student out into a **new** array
-- [ ] Add an **Undo** button holding the previous `students` array — one line, thanks to immutability
+- [ ] Write `deepMerge(a, b)` that merges nested objects one level deeper than spread does
 - [ ] Use `structuredClone` on the nested object from Task 3.5 and compare it to the manual nested spread
+- [ ] Add a **Remove** button per row and an **Undo** button holding the previous `students` array — one line, thanks to immutability
+- [ ] Write `series(tasks, done)` that runs callback-style functions **one after another**, stopping at the first error
+- [ ] Write `withTimeout(fn, ms)` that calls back with a `"Timed out"` error if `fn` doesn't answer in time — and ignores the late answer
+- [ ] Write `retry(fn, times, done)` that retries a randomly failing function up to `times` attempts
+- [ ] Write `debounce(fn, ms)` and use it on a search input in the dashboard
+- [ ] Rewrite `getAttendance` from Task 7 with `new Promise` (peek at the README's teaser) and compare the two versions in `NOTES.md`
 
 ---
 
@@ -415,14 +603,16 @@ Real commit messages. `update` is not a message.
 
 - [ ] **Task 1** — `predictions.md` with wrong answers explained + screenshot
 - [ ] **Task 2** — `destructuring.js` + screenshot
-- [ ] **Task 3** — `spread.js` + screenshot (include the shallow-copy error screenshot)
+- [ ] **Task 3** — `spread.js` + screenshot (include the shallow-copy screenshot)
 - [ ] **Task 4** — `messy.js` + screenshot
-- [ ] **Task 5** — `grade-lib.js` + `report.js` + screenshot
-- [ ] **Task 6** — `index.html` + `app.js` + screenshot with console open
-- [ ] **Task 7** — repo link, correct structure, `NOTES.md`, 5 commits, `git log` screenshot
-- [ ] **Task 8** — LinkedIn post link
+- [ ] **Task 5** — `timers.js` + `callbacks.js` + screenshot (include the called-twice screenshot)
+- [ ] **Task 6** — `fake-db.js` + `hell.js` + `flat.js` + screenshot
+- [ ] **Task 7** — `grade-lib.js` + `students.json` + `report.js` + screenshot
+- [ ] **Task 8** — `index.html` + `app.js` + 2 screenshots
+- [ ] **Task 9** — repo link, correct structure, `NOTES.md`, 6 commits, `git log` screenshot
+- [ ] **Task 10** — LinkedIn post link
 
-Submit all links together before Session 5.
+Submit all links together before the next session.
 
 ---
 
@@ -430,9 +620,9 @@ Submit all links together before Session 5.
 
 | Level | What it looks like |
 |---|---|
-| ❌ **Incomplete** | Copy-pasted README code, predictions written after running, `.push` and `student.score` still everywhere, string concatenation with `+`, one giant commit, or destructuring you can't explain line by line |
-| ✅ **Done** | All eight tasks, working code, a genuinely non-mutating `grade-lib.js`, every student-taking function destructured on its parameter line, `NOTES.md` in your own words, a real bug documented |
-| 🔥 **10%** | Done + the bonus + a `grade-lib.js` that does something beyond the spec + notes someone else could actually learn from |
+| ❌ **Incomplete** | Copy-pasted README code, predictions written after running, `.push` and `student.score` still everywhere, `readFileSync` in the report, results printed in arrival order, a button that stays disabled after an error, one giant commit, or code you can't explain line by line |
+| ✅ **Done** | All ten tasks, working code, a genuinely non-mutating `grade-lib.js`, a four-level pyramid **and** its flat rewrite, a genuinely parallel report printed in the original order, every error path handled, `NOTES.md` in your own words, a real bug documented |
+| 🔥 **10%** | Done + the bonus + a `report.js` that does something beyond the spec + notes someone else could actually learn from |
 
 ---
 
@@ -443,7 +633,7 @@ Submit all links together before Session 5.
 >
 > **If you show up for the 10%, I show up for you.**
 
-Session 5 is **Async JS — Callbacks and their problems, the Event Loop** — where your code stops running in the order you wrote it. Come with `report.js` running.
+The next session is **Promises and Async/Await** — the fix for everything that hurt in Part 2. Come with `report.js` running.
 
 ---
 

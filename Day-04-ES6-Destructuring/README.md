@@ -1,16 +1,23 @@
-# Day 04 — ES6+: Destructuring, Spread & Rest
+# Day 04 — ES6+ & Async JS: Destructuring, Spread, Callbacks & the Event Loop
 
-**Track 1: JS/TS Foundations + Web Basics · Session 4 of 52 · 3 hours**
+**Track 1: JS/TS Foundations + Web Basics · Day 4 · two parts**
 
-> Session 3 gave you the box: a function with a name, parameters, and a return.
-> Today we make getting data *into* that box — and back *out* of it — stop hurting.
-> Every feature in this session exists for one reason: **less ceremony, more meaning.**
+> Day 03 gave you the box: a function with a name, parameters, and a return.
+> Part 1 makes getting data *into* that box — and back *out* of it — stop hurting.
+> Part 2 breaks the one rule you've relied on since Day 01: that code runs in the order you wrote it.
 
-**Why this session matters:** Session 5 is **Async JS — Callbacks and the Event Loop**. Async code is drowning in objects you have to unpack (`response`, `data`, `error`) and callbacks you have to pass around. Destructuring is how you read that code without going cross-eyed.
+**Why this day matters:** the next session is **Promises and Async/Await**. Async code is drowning in objects you have to unpack (`response`, `data`, `error`) — that's Part 1. And Promises exist to fix the problems you'll create by hand in Part 2. If you skip the pain, `async`/`await` looks like magic syntax. If you feel it first, it looks like the obvious fix — which is what it is.
+
+| Part | Topic | Concept | Build |
+|---|---|---|---|
+| **1** | ES6+ — Destructuring, Spread & Rest | Sections 1.1–1.8 | Steps 1–4 |
+| **2** | Async JS — Callbacks & the Event Loop | Sections 2.1–2.9 | Steps 5–9 |
 
 ---
 
 ## What You'll Have by the End
+
+**Part 1 — ES6+**
 
 - [ ] Template literals — and why you'll never concatenate with `+` again
 - [ ] Object destructuring: rename, default, nest
@@ -23,9 +30,24 @@
 - [ ] Object shorthand, computed keys, and `Object.entries`
 - [ ] Your Day 03 grade library, rewritten in modern JavaScript
 
+**Part 2 — Async**
+
+- [ ] Why JavaScript has only **one** thread, and what "blocking" really costs
+- [ ] The call stack — what it is and how to read a stack trace
+- [ ] `setTimeout`, `setInterval`, and how to cancel both
+- [ ] The event loop: stack, APIs, task queue, microtask queue
+- [ ] Why `setTimeout(fn, 0)` doesn't mean "now"
+- [ ] Sync callbacks vs async callbacks — and why you can't `return` from the second kind
+- [ ] Error-first callbacks, the Node convention
+- [ ] The three problems with callbacks: the pyramid, inversion of control, and scattered errors
+- [ ] Running requests **in parallel** and knowing when they're all back
+- [ ] Reading a real file with `fs.readFile`
+
 ---
 
-## Part 1 — Concept (65 min)
+# Part 1 — ES6+: Destructuring, Spread & Rest
+
+## 1 — Concept (65 min)
 
 ### 1.1 Template Literals — Strings That Read Like Sentences
 
@@ -524,9 +546,529 @@ function countByGrade(students) {
 
 ---
 
-## Part 2 — Build (Follow Along, ~85 min)
 
-Create a folder `day-04` and build these as we go.
+---
+
+# Part 2 — Async JS: Callbacks & the Event Loop
+
+> For three days, your code has run top to bottom, one line after another, in the order you typed it.
+> Now it stops doing that.
+> Nothing in this part is hard once you can see **where each line waits** — so that's what we're going to draw.
+
+## 2 — Concept (70 min)
+
+### 2.1 Synchronous — The Way You've Written Everything So Far
+
+```js
+console.log("1");
+console.log("2");
+console.log("3");
+// 1, 2, 3 — always, forever
+```
+
+Each line waits for the previous one to finish. That's **synchronous** code. Easy to reason about — and it has a cost you haven't noticed yet, because nothing you've written has been slow.
+
+Here's something slow:
+
+```js
+function blockFor(ms) {
+  const start = Date.now();
+  while (Date.now() - start < ms) {
+    // do nothing, very busily
+  }
+}
+
+console.log("Before");
+blockFor(3000);          // 3 seconds of doing nothing
+console.log("After");    // waits the full 3 seconds
+```
+
+In Node, the terminal just sits there. In the browser it's worse: **the whole tab freezes.** Buttons don't click, text doesn't select, the page can't even repaint. You'll try this yourself in Step 9.
+
+> **The one fact this session is built on:** JavaScript runs your code on **one thread**. It can only do one thing at a time. While it's stuck in `blockFor`, it cannot do *anything* else — not respond to a click, not run a timer, nothing.
+
+So how does a web page load data from a server — which can take seconds — without freezing? It doesn't wait. It **asks**, carries on, and gets **called back** later. That's the whole session.
+
+---
+
+### 2.2 The Call Stack — Where JavaScript Keeps Its Place
+
+When a function calls another function, JavaScript has to remember where to come back to. It keeps a **stack** of the functions that are currently running.
+
+```js
+function letterGrade(score) {
+  return score >= 90 ? "A" : "B";
+}
+
+function describe(name, score) {
+  return `${name}: ${letterGrade(score)}`;
+}
+
+console.log(describe("Sara", 92));
+```
+
+The stack, step by step:
+
+```
+                                     letterGrade(92)
+                    describe(...)    describe(...)    describe(...)
+  console.log(...)  console.log(...) console.log(...) console.log(...)  console.log(...)   (empty)
+  ───────────────── ──────────────── ──────────────── ────────────────  ────────────────   ───────
+     1. push           2. push          3. push         4. pop "A"         5. pop           6. done
+```
+
+**Last in, first out.** The function on top is the one running right now. When it returns, it's popped, and the one below carries on from exactly where it stopped.
+
+You've already been reading stacks — every error you've seen prints one:
+
+```
+TypeError: Cannot read properties of undefined (reading 'score')
+    at letterGrade (report.js:3:15)      ← where it broke
+    at describe (report.js:7:23)         ← who called that
+    at Object.<anonymous> (report.js:10:13) ← who called THAT
+```
+
+Read it **top down**: the first line is where it broke; each line below is who called it.
+
+#### Stack overflow
+
+A function that calls itself forever never pops:
+
+```js
+function forever() {
+  forever();
+}
+forever(); // RangeError: Maximum call stack size exceeded
+```
+
+That's the actual error behind the website's name.
+
+---
+
+### 2.3 Timers — Your First Asynchronous Code
+
+#### `setTimeout` — run once, later
+
+```js
+console.log("Ordering coffee");
+
+setTimeout(() => {
+  console.log("☕ Coffee is ready");
+}, 2000);
+
+console.log("Reading a book while I wait");
+```
+
+Output:
+
+```
+Ordering coffee
+Reading a book while I wait
+☕ Coffee is ready        ← two seconds later
+```
+
+The line that prints last was written in the middle. `setTimeout` doesn't pause anything — it **registers** a function to be called later and returns **immediately**.
+
+You pass a function, not a call. Same rule as `addEventListener` on Day 03:
+
+```js
+setTimeout(sayHi, 1000);    // ✅ "call sayHi in a second"
+setTimeout(sayHi(), 1000);  // ❌ calls sayHi NOW, passes its return value (undefined)
+```
+
+Extra arguments after the delay are passed to your function:
+
+```js
+setTimeout((name, score) => console.log(`${name}: ${score}`), 500, "Sara", 92);
+```
+
+#### `setInterval` — run repeatedly
+
+```js
+let seconds = 5;
+
+const timerId = setInterval(() => {
+  console.log(seconds);
+  seconds--;
+
+  if (seconds === 0) {
+    clearInterval(timerId);
+    console.log("Lift off 🚀");
+  }
+}, 1000);
+```
+
+Both functions return an **ID**. Hand that ID to `clearTimeout` / `clearInterval` to cancel:
+
+```js
+const reminderId = setTimeout(() => console.log("Don't forget!"), 5000);
+clearTimeout(reminderId); // never prints
+```
+
+> **Forget to clear an interval and it runs forever.** In Node, your script never exits. In the browser, it keeps running after you've "left" that part of the page. Every `setInterval` needs a matching `clearInterval` somewhere.
+
+#### The delay is a **minimum**, not a promise
+
+```js
+const start = Date.now();
+
+setTimeout(() => {
+  console.log(`Asked for 100ms, got ${Date.now() - start}ms`);
+}, 100);
+
+blockFor(1000); // from 1.1
+```
+
+```
+Asked for 100ms, got 1001ms
+```
+
+The timer was *ready* at 100ms. But JavaScript was busy — one thread, remember — so it couldn't run the callback until `blockFor` finished. **`setTimeout(fn, 100)` means "not before 100ms". It never means "at exactly 100ms".**
+
+To see why, we need the event loop.
+
+---
+
+### 2.4 The Event Loop — The Picture That Explains Everything
+
+There are four pieces. Learn this diagram; it answers every "why did this print in that order?" question for the rest of the course.
+
+```
+ ┌──────────────────────┐        ┌───────────────────────────────┐
+ │      CALL STACK      │        │  BROWSER / NODE APIs          │
+ │  (your code runs     │ ─────▶ │  timers, network, disk, clicks│
+ │   here, one at a     │  hand  │  (these run OUTSIDE your one  │
+ │   time)              │  off   │   JavaScript thread)          │
+ └──────────▲───────────┘        └──────────────┬────────────────┘
+            │                                   │ when done, the callback
+            │                                   ▼ is put in a queue
+            │                    ┌───────────────────────────────┐
+            │                    │  MICROTASK QUEUE  (VIP lane)  │
+            │                    │  queueMicrotask, Promises     │
+            │                    ├───────────────────────────────┤
+            │                    │  TASK QUEUE  (normal lane)    │
+            │                    │  setTimeout, setInterval, I/O │
+            │                    └──────────────┬────────────────┘
+            │                                   │
+            └───────────  EVENT LOOP  ◀─────────┘
+          "Is the stack empty? Then take the next callback:
+           ALL microtasks first, then ONE task. Repeat forever."
+```
+
+1. **Call stack** — your code runs here. One thing at a time.
+2. **APIs** — `setTimeout`, `fs.readFile`, `fetch`, click listeners. JavaScript *hands off* the waiting to the browser or Node, which do it outside your thread.
+3. **Queues** — when the wait is over, the callback doesn't run immediately. It gets in line.
+4. **The event loop** — a tiny loop that only ever asks one question: *"Is the call stack empty?"* If yes, it moves the next queued callback onto the stack.
+
+#### Walk through the classic
+
+```js
+console.log("1 — first");
+
+setTimeout(() => {
+  console.log("2 — timeout");
+}, 0);
+
+console.log("3 — last line");
+```
+
+| Step | Stack | API | Task queue | Printed |
+|---|---|---|---|---|
+| 1 | `console.log("1…")` | | | `1 — first` |
+| 2 | `setTimeout(…)` | timer (0ms) | | |
+| 3 | | timer done | `() => log("2…")` | |
+| 4 | `console.log("3…")` | | `() => log("2…")` | `3 — last line` |
+| 5 | *empty* → loop moves callback | | | |
+| 6 | `() => log("2…")` | | | `2 — timeout` |
+
+The timer finished almost instantly — but the callback **had to wait in the queue until the stack was empty**, and the stack wasn't empty until the whole script had run.
+
+> **The rule:** a queued callback never interrupts running code. It waits until *everything* synchronous has finished. `setTimeout(fn, 0)` means "run this as soon as you're free" — and you aren't free until the script ends.
+
+#### The VIP lane — microtasks
+
+There are two queues, and one of them always goes first:
+
+```js
+setTimeout(() => console.log("task"), 0);
+queueMicrotask(() => console.log("microtask"));
+console.log("sync");
+
+// sync, microtask, task
+```
+
+After every piece of synchronous code, the loop empties the **entire microtask queue** before it takes even **one** task. `queueMicrotask` is rare in real code — but **Promises use this lane**, which is why it matters next session. For today: *sync first, then microtasks, then tasks.*
+
+---
+
+### 2.5 Callbacks — Sync and Async
+
+You've been writing callbacks since Day 03 — `myMap(numbers, double)` took a function and called it. That was a **synchronous** callback: called right away, before `myMap` returned.
+
+```js
+// SYNC callback — runs during forEach, before the next line
+[1, 2, 3].forEach((n) => console.log(n));
+console.log("done");
+// 1, 2, 3, done
+```
+
+```js
+// ASYNC callback — runs after the current script, whenever the wait ends
+setTimeout(() => console.log("timer"), 0);
+console.log("done");
+// done, timer
+```
+
+Same syntax. Completely different timing. **You can't tell which one you're dealing with by looking at the arrow** — you have to know what the function you're passing it to does.
+
+#### The problem: you can't `return` your way out
+
+```js
+function getScoreSync() {
+  return 92;
+}
+
+function getScoreLater() {
+  setTimeout(() => {
+    return 92;             // returns to... whoever called the arrow. Not you.
+  }, 100);
+}                          // getScoreLater itself returns undefined, immediately
+
+console.log(getScoreSync());  // 92
+console.log(getScoreLater()); // undefined
+```
+
+By the time the `92` exists, `getScoreLater` finished long ago. There's nobody left to return it to.
+
+**The callback solution:** don't return the value — *pass in a function*, and call it with the value when it's ready.
+
+```js
+function getScoreLater(callback) {
+  setTimeout(() => {
+    callback(92);
+  }, 100);
+}
+
+getScoreLater((score) => {
+  console.log(`Got it: ${score}`);   // everything that needs the score lives in here
+});
+```
+
+That last comment is the catch. **Anything that depends on the result has to go inside the callback.** Hold that thought — it's where every problem in 1.7 comes from.
+
+---
+
+### 2.6 Error-First Callbacks — The Node Convention
+
+Async operations fail: the file isn't there, the server is down, the student ID doesn't exist. How does a callback say "it went wrong"?
+
+Node settled this years ago. **The first argument is always the error.** `null` if it worked.
+
+```js
+function getStudent(id, callback) {
+  setTimeout(() => {
+    if (id !== 1) {
+      return callback(new Error(`No student with id ${id}`));
+    }
+    callback(null, { id: 1, name: "Sara", score: 92 });
+  }, 300);
+}
+
+getStudent(1, (err, student) => {
+  if (err) return console.log(`Failed: ${err.message}`);   // ← always check first
+  console.log(`Found ${student.name}`);
+});
+
+getStudent(7, (err, student) => {
+  if (err) return console.log(`Failed: ${err.message}`);
+  console.log(`Found ${student.name}`);
+});
+```
+
+```
+Found Sara
+Failed: No student with id 7
+```
+
+Two habits, every time:
+
+1. **`if (err) return …` on the first line.** The `return` matters — without it, the code carries on and reads `student.name` from `undefined`.
+2. **`return callback(...)`** inside your own functions when you report an error — otherwise you'll call the callback *twice*.
+
+#### Why not `try`/`catch`?
+
+```js
+try {
+  setTimeout(() => {
+    throw new Error("boom");
+  }, 0);
+} catch (e) {
+  console.log("Caught:", e.message);   // never runs
+}
+console.log("after try");
+```
+
+```
+after try
+Error: boom      ← crashes the program
+```
+
+By the time the callback throws, the `try` block finished long ago — it's not on the stack any more, so nothing catches it. **`try`/`catch` only catches errors from code on the stack *right now*.** That's why async errors travel as arguments instead.
+
+---
+
+### 2.7 The Three Problems With Callbacks
+
+Callbacks work. Node ran on them for years. But they have three problems, and every one of them is why Promises exist.
+
+#### Problem 1 — The pyramid of doom
+
+Real work is steps that depend on each other: get the student, *then* their scores, *then* their course. Each step needs the previous result — and results only exist inside callbacks — so each step nests one level deeper:
+
+```js
+getStudent(1, (err, student) => {
+  if (err) return console.log(`Failed: ${err.message}`);
+
+  getScores(student.id, (err, scores) => {
+    if (err) return console.log(`Failed: ${err.message}`);
+
+    getCourse(student.courseId, (err, course) => {
+      if (err) return console.log(`Failed: ${err.message}`);
+
+      getTeacher(course.teacherId, (err, teacher) => {
+        if (err) return console.log(`Failed: ${err.message}`);
+
+        console.log(`${student.name} — ${course.title} with ${teacher.name}`);
+      });
+    });
+  });
+});
+```
+
+Four steps and the real code is pushed halfway across the screen. Add a loop or an `if` in the middle and it becomes unreadable. This is called **callback hell**, or the **pyramid of doom** — look at its shape.
+
+#### Problem 2 — Scattered error handling
+
+Count the `if (err)` lines above: four, identical. Forget one and a failure disappears silently, or crashes three levels deeper with a confusing message. There's no single place that says "if *anything* in here fails, do this."
+
+#### Problem 3 — Inversion of control
+
+When you pass a callback to someone else's function, **you're trusting them to call it correctly.** You have no control over whether they:
+
+- call it **never** (your program just… stops, silently)
+- call it **twice** (charge the card twice, send the email twice)
+- call it **synchronously sometimes and asynchronously other times** (order bugs that only appear sometimes)
+- swallow the error instead of passing it on
+
+```js
+// A badly written library function
+function saveGrade(grade, callback) {
+  if (grade > 100) {
+    callback(new Error("Too high"));   // ❌ forgot `return`...
+  }
+  setTimeout(() => callback(null, "saved"), 100);   // ...so this runs as well
+}
+
+saveGrade(150, (err, result) => {
+  console.log(err ? `Error: ${err.message}` : `OK: ${result}`);
+});
+// Error: Too high
+// OK: saved          ← the same callback, called twice
+```
+
+You handed control of *your* code to *their* function. That's the "inversion". You can defend against it:
+
+```js
+function once(fn) {
+  let called = false;
+  return (...args) => {
+    if (called) return;
+    called = true;
+    fn(...args);
+  };
+}
+
+saveGrade(150, once((err, result) => {
+  console.log(err ? `Error: ${err.message}` : `OK: ${result}`);
+}));
+// Error: Too high   ← only once now
+```
+
+> `once` is a **closure** (Day 03) wrapping a **rest/spread** function (Part 1). Every tool you've learned so far is in that five-line function.
+
+Defending against every library, everywhere, forever, is exhausting. Promises (next session) fix this at the source: a Promise can only settle **once**, and always asynchronously. That's the whole pitch.
+
+---
+
+### 2.8 Taming Callbacks — Before Promises Arrive
+
+You can't fix inversion of control by hand, but you can fix the pyramid and the scattered errors.
+
+**1. Name your steps.** Pull each nested callback out into a function with one job. The nesting disappears from the page even though it still exists at runtime.
+
+**2. Pass one `done` callback all the way through.** Every step reports errors to the same place, so the caller handles them once.
+
+**3. Return early on errors.** `if (err) return done(err);` — one line, first line, every time.
+
+You'll do exactly this in Step 6.
+
+#### Parallel vs sequential
+
+The pyramid is **sequential**: step 2 can't start until step 1 finishes. That's necessary when step 2 *needs* step 1's result.
+
+But loading three *unrelated* students doesn't need that. Start all three at once, and count them back in:
+
+```js
+const results = [];
+let finished = 0;
+
+ids.forEach((id, index) => {
+  getStudent(id, (err, student) => {
+    results[index] = err ? { id, error: err.message } : student;  // by index, NOT push
+    finished++;
+    if (finished === ids.length) {
+      console.log("All back:", results);
+    }
+  });
+});
+```
+
+Two details that are easy to get wrong:
+
+- **`results[index] = …`, not `results.push(…)`.** Answers come back in the order they *finish*, not the order you asked. Storing by index keeps them in the order you asked.
+- **Count, don't check `results.length`.** Setting `results[2]` first makes `results.length` equal `3` while slots 0 and 1 are still empty.
+
+Sequential: 3 requests × 300ms = ~900ms. Parallel: ~300ms. That difference is the reason async exists.
+
+---
+
+### 2.9 Node's Real Async — Reading a File
+
+Timers are practice. Here's the real thing — Node's `fs` module gives you both versions:
+
+```js
+const fs = require("fs");
+
+// Synchronous: the program stops until the disk answers
+const text = fs.readFileSync("students.json", "utf8");
+
+// Asynchronous: ask, carry on, get an error-first callback
+fs.readFile("students.json", "utf8", (err, text) => {
+  if (err) return console.log(`Failed: ${err.code}`);
+  const students = JSON.parse(text);
+});
+```
+
+`require` is how Node loads a built-in module — modules get their own session soon. For today, treat that first line as "give me the file tools".
+
+> **When is sync OK?** In a short script that reads one config file at startup and then does its work, `readFileSync` is fine and simpler. In a **server** handling hundreds of users, a sync read makes every other user wait while one file loads. That's the Track 2 reason to care.
+
+---
+
+
+## Build — Follow Along
+
+Create a folder `day-04` and build these as we go. Steps 1–4 are Part 1, Steps 5–9 are Part 2.
 
 ### Step 1 — `es6-basics.js`
 
@@ -673,7 +1215,7 @@ Nour: 55 → 65 (original untouched)
 
 ### Step 3 — `unpack.js` — Destructuring Real Nested Data
 
-The shape below is roughly what an API hands you in Session 5. Practise on it now, while it's sitting in a variable and can't fail on you.
+The shape below is roughly what an API hands you in Part 2. Practise on it now, while it's sitting in a variable and can't fail on you.
 
 ```js
 // unpack.js
@@ -852,7 +1394,501 @@ Right-click `index.html` → **Open with Live Server**.
 
 ---
 
-## Part 3 — The Cheat Sheet
+
+---
+
+### Step 5 — `event-loop.js` — Predict, Then Run
+
+Before running this, **write down** the order you think the letters will print. Then run it.
+
+```js
+// event-loop.js — predict each line's order BEFORE you run it
+
+console.log("A — script starts");
+
+setTimeout(() => console.log("B — timeout 0"), 0);
+setTimeout(() => console.log("C — timeout 100"), 100);
+setTimeout(() => console.log("D — timeout 50"), 50);
+
+queueMicrotask(() => console.log("E — microtask"));
+
+for (let i = 1; i <= 3; i++) {
+  setTimeout(() => console.log(`F — loop timeout ${i}`), 0);
+}
+
+console.log("G — script ends");
+
+// Block the thread for 200ms — every timer above is now "late"
+const start = Date.now();
+while (Date.now() - start < 200) {}
+console.log("H — finished blocking");
+```
+
+```bash
+node event-loop.js
+```
+
+<details>
+<summary>Expected output — check your prediction first</summary>
+
+```
+A — script starts
+G — script ends
+H — finished blocking
+E — microtask
+B — timeout 0
+F — loop timeout 1
+F — loop timeout 2
+F — loop timeout 3
+D — timeout 50
+C — timeout 100
+```
+
+- **A, G, H** — all synchronous, so they run first, in order. The blocking loop is synchronous too.
+- **E** — microtasks run as soon as the script finishes, before any timer.
+- **B, F1, F2, F3** — all 0ms timers, in the order they were registered.
+- **D before C** — by the time the blocking ends, *both* are overdue. They still run in order of their deadlines: 50 before 100.
+- **`let i` gives 1, 2, 3.** With `var i` all three would print `4` — the Day 03 closure bug, now with a timer.
+
+</details>
+
+---
+
+### Step 6 — `fake-db.js` + `callback-hell.js` + `flat.js`
+
+We need something slow to wait on. This file pretends to be a database on a server far away — every function answers later, through an error-first callback.
+
+```js
+// fake-db.js — pretend this data lives on a server far away
+
+const STUDENTS = {
+  1: { id: 1, name: "Sara", courseId: 10 },
+  2: { id: 2, name: "Omar", courseId: 10 },
+  3: { id: 3, name: "Lina", courseId: 20 },
+};
+const SCORES = { 1: [92, 88, 95], 2: [68, 71], 3: [79] };
+const COURSES = {
+  10: { id: 10, title: "JS Everywhere" },
+  20: { id: 20, title: "TypeScript Basics" },
+};
+
+// How long each student's "network request" takes, in ms
+const LATENCY = { 1: 300, 2: 100, 3: 200 };
+
+function getStudent(id, callback) {
+  setTimeout(() => {
+    const student = STUDENTS[id];
+    if (!student) return callback(new Error(`No student with id ${id}`));
+    callback(null, student);
+  }, LATENCY[id] ?? 50);
+}
+
+function getScores(studentId, callback) {
+  setTimeout(() => {
+    const scores = SCORES[studentId];
+    if (!scores) return callback(new Error(`No scores for student ${studentId}`));
+    callback(null, scores);
+  }, 100);
+}
+
+function getCourse(courseId, callback) {
+  setTimeout(() => {
+    const course = COURSES[courseId];
+    if (!course) return callback(new Error(`No course with id ${courseId}`));
+    callback(null, course);
+  }, 100);
+}
+
+function average(numbers) {
+  if (numbers.length === 0) return 0;
+  let total = 0;
+  for (const n of numbers) total += n;
+  return total / numbers.length;
+}
+```
+
+> **Modules get their own session later.** Paste `fake-db.js` at the top of each file that uses it, the same way you did with `grade-lib.js`. It's clumsy on purpose — you'll feel why `import` exists.
+
+#### `callback-hell.js` — the pyramid, on purpose
+
+```js
+// callback-hell.js — paste fake-db.js above this line first
+
+getStudent(1, (err, student) => {
+  if (err) return console.log(`Failed: ${err.message}`);
+
+  getScores(student.id, (err, scores) => {
+    if (err) return console.log(`Failed: ${err.message}`);
+
+    getCourse(student.courseId, (err, course) => {
+      if (err) return console.log(`Failed: ${err.message}`);
+
+      console.log(`[pyramid] ${student.name} — ${course.title} — avg ${average(scores).toFixed(1)}`);
+    });
+  });
+});
+```
+
+```
+[pyramid] Sara — JS Everywhere — avg 91.7
+```
+
+Change the `1` to `99` and run it again. Then change `getScores(student.id` to `getScores(123` and run it again. Notice you had to *think* about which `if (err)` caught it.
+
+#### `flat.js` — same work, no pyramid
+
+```js
+// flat.js — paste fake-db.js above this line first
+
+// Each step is a named function with ONE job, and ONE `done` for the whole chain
+function buildReport(id, done) {
+  getStudent(id, (err, student) => {
+    if (err) return done(err);
+    addScores(student, done);
+  });
+}
+
+function addScores(student, done) {
+  getScores(student.id, (err, scores) => {
+    if (err) return done(err);
+    addCourse({ ...student, scores }, done);
+  });
+}
+
+function addCourse(student, done) {
+  getCourse(student.courseId, (err, course) => {
+    if (err) return done(err);
+    done(null, { ...student, course: course.title });
+  });
+}
+
+// ONE place that handles success AND failure
+function printReport(err, report) {
+  if (err) return console.log(`✗ ${err.message}`);
+  const { name, course, scores } = report;
+  console.log(`✓ ${name} — ${course} — avg ${average(scores).toFixed(1)}`);
+}
+
+console.log("Requesting 1 and 99...");
+buildReport(1, printReport);
+buildReport(99, printReport);
+console.log("...both requests sent. Nothing has come back yet.");
+```
+
+```bash
+node flat.js
+```
+
+```
+Requesting 1 and 99...
+...both requests sent. Nothing has come back yet.
+✗ No student with id 99
+✓ Sara — JS Everywhere — avg 91.7
+```
+
+> **Three things to notice.** First, 99 was requested *second* but answered *first* — it failed fast (50ms) while Sara took three round trips (500ms). **Order of asking ≠ order of answering.** Second, `{ ...student, scores }` is Part 1's spread building a new object at each step instead of mutating. Third, `buildReport` is itself an async function with an error-first callback — you've built the same kind of thing you've been calling.
+
+---
+
+### Step 7 — `parallel.js` — Load Everyone at Once
+
+Paste `fake-db.js` and the four functions from `flat.js` (not the three calls at the bottom) above this:
+
+```js
+// parallel.js
+
+function loadAll(ids, done) {
+  const results = [];
+  let finished = 0;
+
+  if (ids.length === 0) return done([]);
+
+  ids.forEach((id, index) => {
+    buildReport(id, (err, report) => {
+      console.log(`  arrived: id ${id}`);
+      results[index] = err ? { id, error: err.message } : report;
+      finished++;
+      if (finished === ids.length) done(results);
+    });
+  });
+}
+
+const started = Date.now();
+
+loadAll([1, 2, 3, 42], (results) => {
+  console.log(`All ${results.length} back in ${Date.now() - started}ms:`);
+  for (const result of results) {
+    if (result.error) {
+      console.log(`  ✗ ${result.id}: ${result.error}`);
+    } else {
+      console.log(`  ✓ ${result.name.padEnd(5)} ${average(result.scores).toFixed(1)}  ${result.course}`);
+    }
+  }
+});
+```
+
+```bash
+node parallel.js
+```
+
+```
+  arrived: id 42
+  arrived: id 2
+  arrived: id 3
+  arrived: id 1
+All 4 back in 510ms:
+  ✓ Sara  91.7  JS Everywhere
+  ✓ Omar  69.5  JS Everywhere
+  ✓ Lina  79.0  TypeScript Basics
+  ✗ 42: No student with id 42
+```
+
+Your millisecond number will differ slightly — it's never exactly 500.
+
+> **Look at the two orders.** They *arrived* 42, 2, 3, 1. They're *printed* 1, 2, 3, 42 — the order you asked for — because each one was stored at its `index`. And the total is ~500ms: the time of the **slowest** request, not the sum of all four (~1,250ms). One failing request didn't stop the other three.
+
+Try it: change `results[index] = …` to `results.push(…)`. Run it. The printed order is now the arrival order.
+
+---
+
+### Step 8 — `files.js` — A Real File, Read Asynchronously
+
+Create `students.json` next to it:
+
+```json
+[
+  { "name": "Sara", "score": 92 },
+  { "name": "Omar", "score": 68 },
+  { "name": "Lina", "score": 79 }
+]
+```
+
+```js
+// files.js — Node's real async I/O
+const fs = require("fs");
+
+// 1. Synchronous — the whole program waits on the disk
+console.log("sync: before");
+const text = fs.readFileSync("students.json", "utf8");
+console.log(`sync: read ${text.length} characters`);
+console.log("sync: after");
+
+// 2. Asynchronous — ask, carry on, get called back
+console.log("async: before");
+fs.readFile("students.json", "utf8", (err, text) => {
+  if (err) return console.log(`async: failed — ${err.code}`);
+
+  const students = JSON.parse(text);
+  console.log(`async: loaded ${students.length} students`);
+  for (const { name, score } of students) {
+    console.log(`  ${name.padEnd(5)} ${score}`);
+  }
+});
+console.log("async: after — the file hasn't arrived yet");
+
+// 3. A file that doesn't exist — the error comes back as the FIRST argument
+fs.readFile("missing.json", "utf8", (err, text) => {
+  if (err) return console.log(`missing: ${err.code}`);
+  console.log(text);
+});
+```
+
+```bash
+node files.js
+```
+
+```
+sync: before
+sync: read 108 characters
+sync: after
+async: before
+async: after — the file hasn't arrived yet
+missing: ENOENT
+async: loaded 3 students
+  Sara  92
+  Omar  68
+  Lina  79
+```
+
+> **Run it from the `day-05` folder.** The path `"students.json"` is relative to where you *run* `node`, not where the file lives. Run it from the wrong folder and you'll see `ENOENT` twice.
+
+`ENOENT` is Node for *"Error: NO ENTry"* — file not found. Your character count may differ by a few if your editor saves different line endings. The `missing` line may print before or after the student list: **two I/O operations started together can finish in either order**, exactly like Step 7.
+
+---
+
+### Step 9 — `loader.html` + `loader.js` — Async in the Browser
+
+A second page, next to Step 4's — so the two don't overwrite each other.
+
+Now make the freeze visible, then fix it.
+
+`loader.html`:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JavaScript Everywhere — Day 04 Loader</title>
+  </head>
+  <body>
+    <h1>Async Student Loader</h1>
+
+    <section>
+      <h2>1. Load students</h2>
+      <button id="load">Load students</button>
+      <p id="status"></p>
+      <ul id="list"></ul>
+    </section>
+
+    <section>
+      <h2>2. Freeze vs don't</h2>
+      <input type="text" placeholder="Try typing here during each test" />
+      <button id="freeze">Freeze for 3s</button>
+      <button id="chunked">Same work, in chunks</button>
+      <p id="work"></p>
+    </section>
+
+    <section>
+      <h2>3. Countdown</h2>
+      <button id="start">Start 10s</button>
+      <button id="stop">Stop</button>
+      <p id="countdown"></p>
+    </section>
+
+    <script src="loader.js"></script>
+  </body>
+</html>
+```
+
+`loader.js`:
+
+```js
+// loader.js — pure async logic on top, DOM below
+
+// --- Fake server ---
+const SERVER_STUDENTS = [
+  { name: "Sara", score: 92 },
+  { name: "Omar", score: 68 },
+  { name: "Lina", score: 79 },
+];
+
+// Error-first callback, fails 1 time in 4 — like a real network
+function fetchStudents(callback) {
+  setTimeout(() => {
+    if (Math.random() < 0.25) return callback(new Error("Server did not respond"));
+    callback(null, [...SERVER_STUDENTS]);
+  }, 1200);
+}
+
+function blockFor(ms) {
+  const start = Date.now();
+  while (Date.now() - start < ms) {}
+}
+
+// --- DOM ---
+const loadBtn = document.getElementById("load");
+const status = document.getElementById("status");
+const list = document.getElementById("list");
+const work = document.getElementById("work");
+const countdown = document.getElementById("countdown");
+
+// 1. Loading state: disable, show "Loading…", then success OR error
+function handleLoad() {
+  loadBtn.disabled = true;
+  status.textContent = "Loading…";
+  list.innerHTML = "";
+
+  fetchStudents((err, students) => {
+    loadBtn.disabled = false;
+
+    if (err) {
+      status.textContent = `❌ ${err.message} — try again.`;
+      return;
+    }
+
+    status.textContent = `✓ Loaded ${students.length} students`;
+    for (const { name, score } of students) {
+      const li = document.createElement("li");
+      li.textContent = `${name} — ${score}`;
+      list.appendChild(li);
+    }
+  });
+
+  console.log("Request sent — the page is still responsive");
+}
+
+// 2a. Blocks the one thread: nothing on the page works for 3 seconds
+function handleFreeze() {
+  work.textContent = "Working… (try typing!)";
+  blockFor(3000);
+  work.textContent = "Done — did you see 'Working…'? You shouldn't have.";
+}
+
+// 2b. The same 3 seconds, split into 30 slices of 100ms with a break between
+function handleChunked() {
+  let slice = 0;
+
+  function doSlice() {
+    blockFor(100);
+    slice++;
+    work.textContent = `Working… ${slice}/30`;
+    if (slice < 30) {
+      setTimeout(doSlice, 0);   // give the event loop a turn, then continue
+    } else {
+      work.textContent = "Done — and the page stayed usable the whole time.";
+    }
+  }
+
+  doSlice();
+}
+
+// 3. setInterval + clearInterval, with a guard against double-starting
+let timerId = null;
+
+function handleStart() {
+  if (timerId !== null) return;     // already running
+  let seconds = 10;
+  countdown.textContent = seconds;
+
+  timerId = setInterval(() => {
+    seconds--;
+    countdown.textContent = seconds;
+    if (seconds === 0) {
+      handleStop();
+      countdown.textContent = "⏰ Time's up";
+    }
+  }, 1000);
+}
+
+function handleStop() {
+  clearInterval(timerId);
+  timerId = null;
+}
+
+loadBtn.addEventListener("click", handleLoad);
+document.getElementById("freeze").addEventListener("click", handleFreeze);
+document.getElementById("chunked").addEventListener("click", handleChunked);
+document.getElementById("start").addEventListener("click", handleStart);
+document.getElementById("stop").addEventListener("click", handleStop);
+```
+
+Right-click `loader.html` → **Open with Live Server**. Then try all of these:
+
+1. **Load students** several times. Sometimes it fails — the error path is part of the feature, not a bug.
+2. Click **Freeze for 3s**, then immediately try to type in the input box. Nothing happens until the freeze ends — and you never see "Working…", because the page can't repaint while the thread is busy.
+3. Click **Same work, in chunks** and type. The counter moves *and* your typing appears. Same total work, but every `setTimeout(doSlice, 0)` lets the event loop handle your keystrokes and repaint the page.
+4. Click **Start 10s** twice quickly. Only one countdown runs — thanks to the `timerId !== null` guard. Remove the guard and try again: two intervals, counting down at double speed, and **Stop** can only cancel one of them.
+
+> **Why the button gets disabled.** Without it, an impatient user clicks Load five times and fires five requests. Disable on start, re-enable in the callback — on success **and** on failure. Forgetting the failure path leaves the button disabled forever the first time the network blips.
+
+---
+
+
+## The Cheat Sheet
+
+### Part 1 — ES6+
 
 | Idea | Write this | Not this |
 |---|---|---|
@@ -873,14 +1909,14 @@ Right-click `index.html` → **Open with Live Server**.
 | Key from a variable | `{ [key]: value }` | impossible without it |
 | Key matches variable | `{ name }` | `{ name: name }` |
 
-### Rest or Spread?
+#### Rest or Spread?
 
 ```
 LEFT of =, or in a parameter list   ->  REST    collects many into one
 RIGHT of =, or in a call / literal  ->  SPREAD  scatters one into many
 ```
 
-### Destructuring Shapes
+#### Destructuring Shapes
 
 ```js
 const { a } = obj;                  // by name
@@ -897,6 +1933,51 @@ const [head, ...tail] = arr;        // first and the rest
 [a, b] = [b, a];                    // swap
 
 function f({ a, b = 2 } = {}) {}    // parameter + default + safe no-arg call
+```
+
+### Part 2 — Async
+
+| Idea | Write this | Not this |
+|---|---|---|
+| Run later, once | `setTimeout(fn, ms)` | `setTimeout(fn(), ms)` |
+| Run repeatedly | `const id = setInterval(fn, ms)` | a `while` loop with `Date.now()` |
+| Cancel | `clearTimeout(id)` / `clearInterval(id)` | forgetting the ID |
+| Get an async result | pass a callback | `return` from inside it |
+| Report an async error | `return callback(err)` | `throw` inside a timer |
+| Handle an async error | `if (err) return …` first line | `try`/`catch` around the call |
+| Signal success | `callback(null, value)` | `callback(value)` |
+| Several steps in a row | named functions + one `done` | four levels of nesting |
+| Several independent loads | start all, count them back | wait for each one in turn |
+| Keep results in order | `results[index] = x` | `results.push(x)` |
+| Know when all are done | `if (++finished === total)` | `results.length === total` |
+| Read a file | `fs.readFile(path, "utf8", cb)` | `readFileSync` in a server |
+| Long work in the browser | chunk it with `setTimeout(step, 0)` | one giant loop |
+| Guard a callback | `once(callback)` | trusting the library |
+
+#### Execution Order, Every Time
+
+```
+1. All synchronous code, top to bottom — to the very end of the script
+2. ALL microtasks        (queueMicrotask, and next session: Promises)
+3. ONE task              (the oldest ready timer, I/O callback, or click)
+4. ALL microtasks again
+5. Back to 3, forever
+```
+
+#### The Error-First Callback Shape
+
+```js
+function doSomething(input, callback) {
+  setTimeout(() => {
+    if (/* failed */) return callback(new Error("what went wrong"));
+    callback(null, result);
+  }, ms);
+}
+
+doSomething(input, (err, result) => {
+  if (err) return console.log(err.message);
+  // use result
+});
 ```
 
 ---
@@ -919,6 +2000,20 @@ function f({ a, b = 2 } = {}) {}    // parameter + default + safe no-arg call
 | `{ key: value }` where key is a variable | Key is literally `"key"` | `{ [key]: value }` |
 | Destructuring an array with `{ }` | `undefined` — arrays match by position | Use `[ ]` |
 | Using `?.` everywhere | Hides real bugs behind `undefined` | Only where a value is legitimately optional |
+| `setTimeout(fn(), 1000)` | `fn` runs immediately; nothing runs later | Pass `fn`, don't call it |
+| `return` a value from inside a callback | The outer function already returned `undefined` | Pass the value to a callback |
+| Using an async result on the next line | `undefined` — it hasn't arrived yet | Put the code **inside** the callback |
+| `if (err) console.log(...)` without `return` | Carries on and crashes on `undefined` | `if (err) return …` |
+| `callback(err)` without `return` | Callback runs twice — error, then success | `return callback(err)` |
+| `callback(value)` instead of `callback(null, value)` | Caller treats your data as an error | Error first, always |
+| `try`/`catch` around async code | Error escapes and crashes | Pass errors as the first argument |
+| `setInterval` with no `clearInterval` | Runs forever; Node never exits | Save the ID and clear it |
+| Starting an interval twice | Double speed, and Stop only stops one | Guard with `if (timerId !== null) return` |
+| `results.push` for parallel loads | Results in arrival order, not request order | `results[index] = …` |
+| Checking `results.length` for "all done" | Fires early when a later index lands first | Keep a separate counter |
+| `var i` in a loop with `setTimeout` | Every callback sees the final value | `let i` |
+| Disabling a button and only re-enabling on success | Button is stuck after the first failure | Re-enable before checking `err` |
+| Expecting `setTimeout(fn, 100)` to fire at 100ms | Fires later if the thread is busy | It's a minimum, not a schedule |
 
 ---
 
@@ -936,47 +2031,65 @@ function f({ a, b = 2 } = {}) {}    // parameter + default + safe no-arg call
 | Swap line throws `SyntaxError` | A previous line has no semicolon; `[a, b] = [b, a]` needs one before it. |
 | Merged object missing the caller's values | Spread order is backwards — defaults go first. |
 | `?.` returns `undefined` and you expected data | The path really is missing. Log each level to find where it stops. |
+| Output prints in a "random" order | It isn't random — sync first, then microtasks, then tasks. Redraw the event loop table for it. |
+| `undefined` where the data should be | You used the result outside the callback. Move that code in. |
+| Node script never exits | A `setInterval` is still running. Find it and `clearInterval` it. |
+| Callback runs twice | Somewhere, a `callback(err)` is missing its `return`. |
+| Program crashes with an error you "caught" | The throw happened inside a callback, after `try` finished. Use error-first instead. |
+| `TypeError: Cannot read properties of undefined` in a callback | You skipped the `if (err) return` check, so the data argument is `undefined`. |
+| `TypeError [ERR_INVALID_ARG_TYPE]: The "callback" argument must be of type function` | You passed `fn()` instead of `fn`, or forgot the callback entirely. |
+| `ENOENT: no such file or directory` | Wrong path, or you ran `node` from a different folder. `cd` into `day-05` first. |
+| `SyntaxError: Unexpected token` from `JSON.parse` | The JSON file has a trailing comma or single quotes. JSON is stricter than JavaScript. |
+| Browser page freezes | Something synchronous is running too long. Chunk it with `setTimeout`. |
+| "Working…" never appears before the freeze | Expected — the page can't repaint while the thread is blocked. That's the demo. |
+| `RangeError: Maximum call stack size exceeded` | A function calls itself with no way to stop. |
 
 ---
 
 ## Before the Next Session
 
-Session 5 is **Async JS — Callbacks and their problems, the Event Loop**. Everything so far has run top to bottom, in order. Next session, it stops doing that.
+The next session is **Promises and Async/Await** — the fix for every problem in section 2.7.
 
-Come having finished [ASSIGNMENT.md](ASSIGNMENT.md). If `grade-lib.js` doesn't run, ask **before** Session 5.
+Come having finished [ASSIGNMENT.md](ASSIGNMENT.md). If `grade-lib.js` doesn't run or `parallel.js` doesn't print in the right order, ask **before** the next session.
 
-### A Taste of Session 5
+### A Taste of the Next Session
 
-Type these out — we cover every line next session.
-
-```js
-console.log("1 — first");
-
-setTimeout(() => {
-  console.log("2 — after 0ms... but not really");
-}, 0);
-
-console.log("3 — last line, prints second");
-
-// Output: 1, 3, 2  ← run it. That order is Session 5's entire subject.
-```
-
-And the callback shape you'll be unpacking — note how much destructuring is already in it:
+Here's `getStudent` from Step 6, rewritten to return a **Promise** instead of taking a callback. Type it and run it — we cover every line next session.
 
 ```js
-function fetchStudent(id, callback) {
-  setTimeout(() => {
-    callback(null, { id, name: "Sara", scores: [92, 88] });
-  }, 500);
+function getStudent(id) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (id !== 1) return reject(new Error(`No student with id ${id}`));
+      resolve({ id: 1, name: "Sara", score: 92 });
+    }, 300);
+  });
 }
 
-fetchStudent(1, (error, { name, scores: [firstScore] } = {}) => {
-  if (error) return console.log("Failed:", error);
-  console.log(`${name} scored ${firstScore} first`);
-});
+// Callback-free, pyramid-free, one catch for everything:
+async function main() {
+  try {
+    const student = await getStudent(1);
+    console.log(`Found ${student.name}`);
+
+    const missing = await getStudent(7);
+    console.log(missing.name);          // never runs
+  } catch (err) {
+    console.log(`Failed: ${err.message}`);
+  }
+}
+
+main();
 ```
 
-That `(error, data)` shape is called an **error-first callback**, and it's everywhere in Node. Notice you already know how to read the second parameter.
+```
+Found Sara
+Failed: No student with id 7
+```
+
+Look at what's gone: no nesting, no `if (err)` at every step, and **`try`/`catch` works again**. The `resolve` / `reject` pair can only be settled once, which kills the "called twice" problem at the source.
+
+The code *reads* synchronously — but underneath, it's exactly the event loop you drew today.
 
 ---
 

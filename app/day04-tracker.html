@@ -296,9 +296,9 @@ pre.term{
 <!-- ================= GATE ================= -->
 <section class="gate" id="gate">
   <div class="gate-card">
-    <div class="gate-eyebrow">Track 1 · Session 3</div>
-    <h1>Day 04 — ES6+: Destructuring, Spread &amp; Rest</h1>
-    <p class="sub">Work through the eight tasks, tick what you finish, drop your links in. Your progress saves in this browser as you go — close the tab and come back.</p>
+    <div class="gate-eyebrow">Track 1 · Day 4 · Parts 1 + 2</div>
+    <h1>Day 04 — ES6+ &amp; Async JS</h1>
+    <p class="sub">Work through the ten tasks, tick what you finish, drop your links in. Your progress saves in this browser as you go — close the tab and come back.</p>
     <div class="field">
       <label for="g-email">Email <span class="hint">— the one you registered with</span></label>
       <input type="email" id="g-email" autocomplete="email" placeholder="you@gmail.com">
@@ -339,7 +339,7 @@ pre.term{
       </div>
       <div class="progress-meta">
         <div class="big" id="prog-count">0 / 0 checks</div>
-        <div class="small" id="prog-tasks">0 of 8 tasks complete</div>
+        <div class="small" id="prog-tasks">0 of 10 tasks complete</div>
       </div>
     </div>
 
@@ -387,32 +387,32 @@ const TASKS = [
   {
     id: "t1",
     title: "Predict, then run",
-    lead: "Same drill as Day 03 — this time on unpacking, where a wrong guess usually means a <code>TypeError</code> you'll meet again in Session 5.",
+    lead: "Twelve snippets on unpacking, where a wrong guess usually means a <code>TypeError</code>. Ten on timing, where a wrong guess means the right output in the wrong order.",
     deliverable: "predictions.md + 1 screenshot",
     sections: [
       {
         sid: "1.1", title: "Write your predictions first",
-        note: "Create <code>predictions.md</code>. For each snippet write what you think happens — a value, or the <strong>exact error name</strong> — <strong>before running anything</strong>.",
-        term: '// 1\nconst { a } = { a: 1, b: 2 };\nconsole.log(a, typeof b);\n\n// 2\nconst { x: y } = { x: 10 };\nconsole.log(y);\n\n// 3\nconst { x: y } = { x: 10 };\nconsole.log(x);\n\n// 4\nconst { p = 5 } = { p: undefined };\nconsole.log(p);\n\n// 5\nconst { q = 5 } = { q: null };\nconsole.log(q);\n\n// 6\nconst { r = 5 } = { r: 0 };\nconsole.log(r);\n\n// 7\nconst [, , third] = ["a", "b", "c", "d"];\nconsole.log(third);\n\n// 8\nconst [m, n = "N"] = ["M"];\nconsole.log(m, n);\n\n// 9\nconst { length } = "JavaScript";\nconsole.log(length);\n\n// 10\nconst arr = [1, 2];\nconst copy = arr;\ncopy.push(3);\nconsole.log(arr.length);\n\n// 11\nconst obj = { nested: { v: 1 } };\nconst shallow = { ...obj };\nshallow.nested.v = 99;\nconsole.log(obj.nested.v);\n\n// 12\nconsole.log({ ...{ a: 1, b: 2 }, ...{ b: 3 } });\n\n// 13\nconsole.log({ ...{ b: 3 }, ...{ a: 1, b: 2 } });\n\n// 14\nfunction f({ a } = {}) { return a; }\nconsole.log(f(), f({ a: 7 }));\n\n// 15\nfunction g({ a }) { return a; }\nconsole.log(g());\n\n// 16\nconst s = { name: "Sara" };\nconsole.log(s.address?.city);\n\n// 17\nconst s2 = { name: "Sara" };\nconsole.log(s2.address.city);\n\n// 18\nconsole.log(0 || "fallback", 0 ?? "fallback");\n\n// 19\nconst k = "score";\nconsole.log({ [k]: 90 }, { k: 90 });\n\n// 20\nconst nums = [3, 1, 2];\nconsole.log(Math.max(nums), Math.max(...nums));',
-        quote: "Getting them wrong is the assignment. Getting them wrong and not explaining why is not.",
+        note: "Create <code>predictions.md</code>. For each snippet write what you think happens — a value, the <strong>exact error name</strong>, or the <strong>exact output order</strong> — <strong>before running anything</strong>.",
+        term: "// ---- Part 1: unpacking ----\n\n// 1\nconst { a } = { a: 1, b: 2 };\nconsole.log(a, typeof b);\n\n// 2\nconst { x: y } = { x: 10 };\nconsole.log(x);\n\n// 3\nconst { p = 5 } = { p: undefined };\nconsole.log(p);\n\n// 4\nconst { q = 5 } = { q: null };\nconsole.log(q);\n\n// 5\nconst [, , third] = [\"a\", \"b\", \"c\", \"d\"];\nconsole.log(third);\n\n// 6\nconst arr = [1, 2];\nconst copy = arr;\ncopy.push(3);\nconsole.log(arr.length);\n\n// 7\nconst obj = { nested: { v: 1 } };\nconst shallow = { ...obj };\nshallow.nested.v = 99;\nconsole.log(obj.nested.v);\n\n// 8\nconsole.log({ ...{ b: 3 }, ...{ a: 1, b: 2 } });\n\n// 9\nfunction f({ a } = {}) { return a; }\nconsole.log(f(), f({ a: 7 }));\n\n// 10\nfunction g({ a }) { return a; }\nconsole.log(g());\n\n// 11\nconst s = { name: \"Sara\" };\nconsole.log(s.address.city);\n\n// 12\nconsole.log(0 || \"fallback\", 0 ?? \"fallback\");\n\n// ---- Part 2: order ----\n\n// 13\nconsole.log(\"a\");\nsetTimeout(() => console.log(\"b\"), 0);\nconsole.log(\"c\");\n\n// 14\nsetTimeout(() => console.log(\"timeout\"), 0);\nqueueMicrotask(() => console.log(\"micro\"));\nconsole.log(\"sync\");\n\n// 15\nfor (var i = 0; i < 3; i++) {\n  setTimeout(() => console.log(i), 0);\n}\n\n// 16\nfunction later() {\n  setTimeout(() => { return 42; }, 0);\n}\nconsole.log(later());\n\n// 17\nsetTimeout(() => console.log(\"timer\"), 0);\nconst start = Date.now();\nwhile (Date.now() - start < 500) {}\nconsole.log(\"loop finished\");\n\n// 18\nsetTimeout(() => console.log(\"outer\"), 0);\nsetTimeout(() => {\n  console.log(\"first\");\n  setTimeout(() => console.log(\"nested\"), 0);\n}, 0);\nsetTimeout(() => console.log(\"second\"), 0);\n\n// 19\nsetTimeout(() => {\n  console.log(\"timer\");\n  queueMicrotask(() => console.log(\"micro inside timer\"));\n}, 0);\nsetTimeout(() => console.log(\"timer 2\"), 0);\n\n// 20\ntry {\n  setTimeout(() => { throw new Error(\"late\"); }, 0);\n} catch (e) {\n  console.log(\"caught\", e.message);\n}\nconsole.log(\"after try\");\n\n// 21\nfunction load(cb) {\n  cb(\"sync call\");\n  setTimeout(() => cb(\"async call\"), 0);\n}\nload((msg) => console.log(msg));\nconsole.log(\"after load\");\n\n// 22\nsetTimeout(() => console.log(\"A\"), 20);\nsetTimeout(() => console.log(\"B\"), 10);\nqueueMicrotask(() => console.log(\"C\"));\nconsole.log(\"D\");",
         checks: [
           ["t1_pred_file", "Created <code>predictions.md</code>"],
-          ["t1_pred_before", "Wrote my prediction for all 20 snippets <em>before</em> running anything"]
-        ]
+          ["t1_pred_before22", "Wrote my prediction for all 22 snippets <em>before</em> running anything"]
+        ],
+        quote: "Getting them wrong is the assignment. Getting them wrong and not explaining why is not."
       },
       {
         sid: "1.2", title: "Now run them",
-        note: "Create <code>predictions.js</code> and run each snippet — <strong>one at a time</strong>, since several throw and would stop the file.",
+        note: "Create <code>predictions.js</code> and run each snippet — <strong>one at a time</strong>, since #2, #10, #11 and #20 throw and would hide the rest.",
         term: "node predictions.js",
         checks: [
-          ["t1_pred_ran", "Ran every snippet — one at a time, so the throwing ones didn't hide the rest"],
+          ["t1_pred_ran22", "Ran every snippet — one at a time, so the throwing ones didn't hide the rest"],
           ["t1_pred_actual", "Recorded the <em>actual</em> result next to each prediction"],
           ["t1_pred_why", "For every one I got wrong, wrote one sentence explaining why JavaScript did that"],
-          ["t1_pred_four", "For <strong>#5, #11, #13 and #15</strong> named the mechanism explicitly — the four that cause real bugs"],
+          ["t1_pred_eight", "For <strong>#4, #7, #8, #10, #15, #18, #19 and #21</strong> named the mechanism explicitly — the eight that cause real bugs"],
           ["t1_pred_shot", "Screenshotted the output"]
         ],
         inputs: [
-          { k:"t1_wrong_count", type:"text", label:"How many did you get wrong?", ph:"6", w:"half" },
+          { k:"t1_wrong_count", type:"text", label:"How many did you get wrong?", ph:"7", w:"half" },
           { k:"t1_pred_url", type:"url", label:"Screenshot link", hint:"— Drive / Imgur / GitHub", ph:"https://…" },
           { k:"t1_surprise", type:"textarea", label:"Which result surprised you most, and why?", ph:"…" }
         ]
@@ -520,7 +520,7 @@ const TASKS = [
       },
       {
         sid: "3.5", title: "The shallow copy trap",
-        note: "This is the single most expensive bug in this session. Make it happen on purpose, once, here.",
+        note: "This is the single most expensive bug in Part 1. Make it happen on purpose, once, here.",
         checks: [
           ["t3_shallow_build", "Built an object with a <strong>nested</strong> object inside it"],
           ["t3_shallow_break", "Spread-copied it, changed a <strong>nested</strong> field on the copy, and logged the original"],
@@ -555,7 +555,7 @@ const TASKS = [
   {
     id: "t4",
     title: "Safe access on messy data",
-    lead: "Create <code>messy.js</code>. Real data has holes in it — this is practice for Session 5.",
+    lead: "Create <code>messy.js</code>. Real data has holes in it — and data that arrives from a server (Part 2) has the most.",
     deliverable: "messy.js + 1 screenshot",
     sections: [
       {
@@ -593,12 +593,133 @@ const TASKS = [
   },
   {
     id: "t5",
-    title: "Build: the grade library, modernised",
-    lead: "Take your <strong>own</strong> Day 03 <code>grade-lib.js</code> and <code>report.js</code> and rewrite them in this session's syntax. Same behaviour — different shape.",
-    deliverable: "grade-lib.js + report.js + 1 screenshot",
+    title: "Timers & callbacks lab",
+    lead: "Two files: <code>timers.js</code> and <code>callbacks.js</code>. Same arrow syntax, completely different timing — run after every part.",
+    deliverable: "timers.js + callbacks.js + 1 screenshot",
     sections: [
       {
-        sid: "5.1", title: "grade-lib.js — pure functions only",
+        sid: "5.1", title: "timers.js — setTimeout",
+        checks: [
+          ["tm_three", "Scheduled messages at 300ms, 100ms and 200ms, predicting the order in a comment first"],
+          ["tm_args", "Passed <strong>two extra arguments</strong> through <code>setTimeout(fn, ms, a, b)</code> into my callback"],
+          ["tm_clear", "Saved a timeout's ID, cancelled it with <code>clearTimeout</code>, and proved it never prints"],
+          ["tm_called", "Wrote <code>setTimeout(sayHi(), 1000)</code> on purpose, recorded what happened, and commented why"]
+        ]
+      },
+      {
+        sid: "5.2", title: "timers.js — setInterval",
+        checks: [
+          ["tm_countdown", "Built a 5→1 countdown that prints <code>Lift off 🚀</code> and <strong>stops itself</strong> with <code>clearInterval</code>"],
+          ["tm_exits", "Proved the script <strong>exits</strong> on its own when the countdown ends"],
+          ["tm_forever", "Removed the <code>clearInterval</code>, ran it, noted what happened — then put it back"]
+        ]
+      },
+      {
+        sid: "5.3", title: "timers.js — the delay is a minimum",
+        checks: [
+          ["tm_blockfor", "Wrote <code>blockFor(ms)</code> — a busy-wait loop using <code>Date.now()</code>"],
+          ["tm_late", "Scheduled a 100ms timeout, then called <code>blockFor(1000)</code> right after it"],
+          ["tm_measure", "Measured and printed how long the timer <strong>actually</strong> took"],
+          ["tm_why", "Commented one sentence on the difference between the delay I asked for and the one I got"]
+        ]
+      },
+      {
+        sid: "5.4", title: "callbacks.js — sync vs async",
+        checks: [
+          ["cb_repeat", "Wrote <code>repeat(times, callback)</code> and showed <code>\"done\"</code> prints <strong>after</strong> every callback"],
+          ["cb_later", "Wrote <code>repeatLater(times, callback)</code> with <code>setTimeout</code> and showed <code>\"done\"</code> prints <strong>before</strong> every callback"],
+          ["cb_tell", "Commented how to tell the two apart without running them"]
+        ]
+      },
+      {
+        sid: "5.5", title: "callbacks.js — you can't return from the future",
+        checks: [
+          ["cb_return", "Wrote <code>getScoreLater()</code> trying to <code>return</code> from inside a <code>setTimeout</code> and logged what it gave me"],
+          ["cb_callback", "Rewrote it as <code>getScoreLater(callback)</code> and computed a letter grade <strong>inside</strong> the callback"]
+        ]
+      },
+      {
+        sid: "5.6", title: "callbacks.js — error-first",
+        checks: [
+          ["cb_find", "Wrote <code>findStudent(id, callback)</code> calling back with an <code>Error</code> or <code>(null, student)</code>, destructuring the student in the callback's parameters"],
+          ["cb_both", "Called it with a good id and a bad id — both paths print something sensible"],
+          ["cb_return_err", "Every error path uses <code>return callback(err)</code>"],
+          ["cb_twice", "Deleted one <code>return</code>, showed the callback firing <strong>twice</strong>, screenshotted it, then put it back"]
+        ]
+      },
+      {
+        sid: "5.7", title: "callbacks.js — try/catch can't save you",
+        checks: [
+          ["cb_crash", "Wrapped a throwing <code>setTimeout</code> in <code>try</code>/<code>catch</code> and screenshotted the crash"],
+          ["cb_crash_why", "Commented one sentence on why <code>catch</code> never ran"],
+          ["cb_crash_fix", "Rewrote it to pass the error to a callback, handled without crashing"]
+        ],
+        inputs: [
+          { k:"tm_url", type:"url", label:"Screenshot link", hint:"— both outputs", ph:"https://…" },
+          { k:"tm_actual_ms", type:"text", label:"Asked for 100ms — how many did you actually get?", ph:"1001", w:"half" },
+          { k:"cb_return_text", type:"textarea", label:"In one sentence: why can't getScoreLater() return the score?", ph:"…" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "t6",
+    title: "Callback hell — build it, then escape it",
+    lead: "Build the pyramid on purpose, feel it, then flatten it by hand. This is exactly the problem Session 6 solves.",
+    deliverable: "fake-db.js + hell.js + flat.js + 1 screenshot",
+    sections: [
+      {
+        sid: "6.1", title: "fake-db.js",
+        note: "Build your <strong>own</strong> fake database, not the README's. Modules get their own session later — paste it at the top of each file that uses it.",
+        checks: [
+          ["h_tables", "At least <strong>three</strong> lookup tables linked by ids"],
+          ["h_fourth", "A <strong>fourth</strong> level the README didn't have — teachers, rooms, cities…"],
+          ["h_fns", "One error-first function per table, each answering through <code>setTimeout</code>"],
+          ["h_errors", "Every function calls back with an <code>Error</code> when the id doesn't exist"],
+          ["h_latency", "At least one function uses a <strong>different delay per id</strong>"]
+        ]
+      },
+      {
+        sid: "6.2", title: "hell.js — the pyramid",
+        checks: [
+          ["h_nest", "Chained <strong>all four</strong> lookups, each nested inside the previous callback"],
+          ["h_print", "Printed one line using data from <strong>every</strong> level, built with a template literal"],
+          ["h_err_each", "Handled the error at <strong>every</strong> level"],
+          ["h_break", "Broke it three ways — bad student, course and teacher id — and each reported a clear error"],
+          ["h_depth", "Wrote the indentation depth of the deepest line in a comment"]
+        ]
+      },
+      {
+        sid: "6.3", title: "flat.js — the escape",
+        checks: [
+          ["h_named", "Rewrote the chain as <strong>named functions</strong>, none nested more than one level deep"],
+          ["h_done", "One <code>done</code> callback through every step — errors handled in <strong>one</strong> place"],
+          ["h_spread", "Each step builds a <strong>new</strong> object with spread — no mutation"],
+          ["h_build", "Wrapped it as <code>buildReport(id, done)</code> — itself error-first and async"],
+          ["h_race", "Called it for a good id and a bad id at the same time, and explained the finishing order in a comment"]
+        ]
+      },
+      {
+        sid: "6.4", title: "Defend yourself",
+        checks: [
+          ["h_once", "Wrote a <code>once(fn)</code> helper — a closure plus <code>...args</code> — so a callback can only run once"],
+          ["h_once_proof", "Wrote a function that calls back twice, and proved <code>once</code> stops the second call"]
+        ],
+        inputs: [
+          { k:"h_url", type:"url", label:"Screenshot link", hint:"— hell.js and flat.js output", ph:"https://…" },
+          { k:"h_depth_text", type:"text", label:"How many levels deep was your pyramid?", ph:"5", w:"half" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "t7",
+    title: "Build: grade library + async report",
+    lead: "Rewrite your <strong>own</strong> Day 03 library in modern syntax — then feed it data that <strong>arrives</strong> instead of sitting in an array.",
+    deliverable: "grade-lib.js + students.json + report.js + 1 screenshot",
+    sections: [
+      {
+        sid: "7.1", title: "grade-lib.js — pure functions only",
         note: "<strong>No <code>console.log</code> anywhere in this file.</strong> Every function takes input and returns output.",
         checks: [
           ["t5_valid", "<code>isValidScore(score)</code> — unchanged from Day 03"],
@@ -617,135 +738,184 @@ const TASKS = [
         ]
       },
       {
-        sid: "5.2", title: "report.js — the program",
-        note: "This file prints and calls the library. Keep both in one folder — <strong>Session 7 covers <code>import</code>/<code>export</code></strong>, don't fight modules yet.",
+        sid: "7.2", title: "students.json",
         checks: [
-          ["t5_ten", "An array of <strong>at least 10</strong> students with <code>name</code>, <code>score</code>, <code>attendance</code>"],
-          ["t5_holes", "At least <strong>three</strong> with holes: a missing <code>attendance</code>, a missing nested <code>address</code>, one invalid score"],
+          ["r_json_ten", "At least <strong>10</strong> students with <code>id</code>, <code>name</code>, <code>score</code> and <code>attendance</code>"],
+          ["r_json_holes", "At least <strong>three</strong> with holes — a missing <code>attendance</code>, a missing nested <code>address</code>, one invalid score"],
+          ["r_json_valid", "Valid JSON — double quotes, no trailing commas, no comments"]
+        ]
+      },
+      {
+        sid: "7.3", title: "report.js — loading the data (Part 2)",
+        note: "Paste <code>grade-lib.js</code>'s functions at the top — modules get their own session later.",
+        checks: [
+          ["r_readfile", "Read <code>students.json</code> with <code>fs.readFile</code> — <strong>not</strong> <code>readFileSync</code>"],
+          ["r_read_err", "Handled the read error error-first — renamed the file and proved a clear message prints"],
+          ["r_parse_err", "Handled a <code>JSON.parse</code> error without crashing — tested by breaking the JSON"],
+          ["r_loading", "Printed <code>Loading…</code> <strong>before</strong> the file arrives"],
+          ["r_service", "Simulated <code>getAttendance(id, callback)</code> with a <strong>different delay per student</strong>"],
+          ["r_parallel", "Loaded every student's attendance <strong>in parallel</strong>, stored by <strong>index</strong>, counting completions"],
+          ["r_order", "Logged each arrival, then printed the report in the <strong>original</strong> order"],
+          ["r_timing", "Measured the total with <code>Date.now()</code> and commented what one-after-another would have taken"]
+        ]
+      },
+      {
+        sid: "7.4", title: "report.js — printing the report (Part 1)",
+        checks: [
           ["t5_loop_destructure", "Looped with <code>for (const { name, score } of students)</code> — destructured in the loop header"],
           ["t5_skip", "Skipped invalid records with <code>continue</code>, counting them"],
           ["t5_rows", "Printed a header, one <code>formatRow</code> line per valid student, and a separator"],
           ["t5_minmax_use", "Printed the summary using <code>const [lowest, highest] = minMaxStudent(…)</code>"],
           ["t5_entries", "Printed the grade tally with <code>Object.entries</code> and <code>[grade, count]</code> destructuring"],
           ["t5_immutable", "Applied <code>withBonus</code> and printed <strong>both</strong> the original and boosted score, proving no mutation"],
-          ["t5_nologic", "All grading logic lives in <code>grade-lib.js</code> — <code>report.js</code> holds none"]
+          ["t5_nologic", "All grading logic lives in the <code>grade-lib.js</code> functions — <code>report.js</code>'s own code holds none"]
         ]
       },
       {
-        sid: "5.3", title: "Prove it's better",
+        sid: "7.5", title: "Prove it's better",
         checks: [
-          ["t5_lines", "Put my Day 03 line count and my Day 04 total in <code>NOTES.md</code>"],
+          ["t5_lines", "Put my Day 03 line count and my Day 04 library line count in <code>NOTES.md</code>"],
           ["t5_sidebyside", "Pasted one function's Day 03 version next to its Day 04 version"],
           ["t5_two_sentences", "Wrote two sentences on what the new signature tells a reader that the old one didn't"]
         ],
         inputs: [
           { k:"t5_url", type:"url", label:"Screenshot of the report output", hint:"— required", ph:"https://…" },
+          { k:"r_times_text", type:"text", label:"Parallel total vs what one-after-another would have taken", ph:"e.g. 820ms vs ~4,300ms" },
           { k:"t5_signature_text", type:"text", label:"The function you rewrote, and what its new signature reveals", ph:"e.g. formatRow — you can see it only reads name, score, attendance" }
         ]
       }
     ]
   },
   {
-    id: "t6",
+    id: "t8",
     title: "The browser side",
-    lead: "Create <code>index.html</code> and <code>app.js</code>. Same functions, different environment — and this time, <strong>nothing mutates</strong>.",
-    deliverable: "index.html + app.js + 1 screenshot",
+    lead: "Create <code>index.html</code> and <code>app.js</code>: <strong>one</strong> Student Dashboard that uses both parts. Nothing mutates, and nothing freezes.",
+    deliverable: "index.html + app.js + 2 screenshots",
     sections: [
       {
-        sid: "6.1", title: "Build it",
+        sid: "8.1", title: "The dashboard (Part 1)",
         checks: [
           ["t6_inputs", "Inputs for <strong>name</strong>, <strong>score</strong> and an <strong>optional city</strong>, plus <strong>Add</strong> and <strong>Clear</strong>"],
           ["t6_split", "<code>app.js</code> split into two commented sections: <strong>pure logic</strong> on top, <strong>DOM handling</strong> below"],
-          ["t6_reuse", "The pure section reuses <code>isValidScore</code>, <code>letterGrade</code> and <code>average</code> — identical to <code>grade-lib.js</code>, no DOM inside them"],
           ["t6_describe", "A <code>describe({ name, score, city = \"Unknown\" })</code> using a destructured parameter and a template literal"],
           ["t6_no_push", "Adding a student uses <code>students = [...students, newStudent]</code> — <strong>no <code>.push</code></strong>"],
           ["t6_optional_city", "A blank city field adds <strong>no key at all</strong> to the object"],
-          ["t6_handler", "Named <code>handleAdd</code>/<code>handleClear</code> wired with <code>addEventListener</code> — passed the function, didn't call it"],
           ["t6_validate", "Guard clauses for empty name, empty score, non-number and out-of-range"],
-          ["t6_render", "A <code>render()</code> rebuilding the list, called after every change"],
-          ["t6_summary", "A summary line with the count and the average to one decimal"],
-          ["t6_console", "Logs the students array on every add"],
+          ["t6_render", "A <code>render()</code> rebuilding the list, plus a summary line with the count and the average to one decimal"]
+        ]
+      },
+      {
+        sid: "8.2", title: "Loading from a server (Part 2)",
+        checks: [
+          ["w_load", "A <strong>Load from server</strong> button calling a fake <code>fetchStudents(callback)</code> with a delay of at least a second"],
+          ["w_random", "<code>fetchStudents</code> fails randomly about 1 time in 4, error-first"],
+          ["w_loading", "While loading: the button is <strong>disabled</strong> and <code>Loading…</code> shows"],
+          ["w_merge", "On success: loaded students are <strong>merged</strong> in with spread — added students are kept"],
+          ["w_failure", "On failure: a clear error shows <strong>and the button is re-enabled</strong>"],
+          ["w_console", "A <code>console.log</code> right after sending the request, proving the page carries on"]
+        ]
+      },
+      {
+        sid: "8.3", title: "Freeze vs don't (Part 2)",
+        checks: [
+          ["w_freeze", "A <strong>Freeze</strong> button running <code>blockFor(3000)</code> — proved I can't type in the name input during it"],
+          ["w_chunked", "A <strong>Chunked</strong> button doing the same work in slices with <code>setTimeout(step, 0)</code>, showing progress"]
+        ]
+      },
+      {
+        sid: "8.4", title: "Wiring and proof",
+        checks: [
+          ["t6_handler", "Named handlers wired with <code>addEventListener</code> — passed the function, didn't call it"],
           ["t6_liveserver", "Runs through <strong>Live Server</strong>"],
-          ["t6_shot", "Screenshotted the page with at least 5 students — one with no city — and DevTools console open"]
+          ["w_shot_ok", "Screenshotted the page with at least 5 students — some added, some loaded — and DevTools console open"],
+          ["w_shot_err", "Screenshotted the error state after a failed load"]
         ],
         inputs: [
-          { k:"t6_url", type:"url", label:"Screenshot link", hint:"— page + console", ph:"https://…" },
-          { k:"t6_why_immutable", type:"textarea", label:"In one sentence: why replace the array instead of pushing to it?", ph:"…" }
+          { k:"t6_url", type:"url", label:"Screenshot link — dashboard", hint:"— page + console", ph:"https://…" },
+          { k:"w_err_url", type:"url", label:"Screenshot link — error state", ph:"https://…" },
+          { k:"t6_why_immutable", type:"textarea", label:"In one sentence: why replace the array instead of pushing to it?", ph:"…" },
+          { k:"w_why_freeze", type:"textarea", label:"In one sentence: why could you type during Chunked but not during Freeze?", ph:"…" }
         ]
       }
     ]
   },
   {
-    id: "t7",
+    id: "t9",
     title: "Notes and repository",
     lead: "Your repo is the record of the whole 26 weeks. Keep it tidy from the start.",
     deliverable: "NOTES.md + repo link + git log screenshot",
     sections: [
       {
-        sid: "7.1", title: "Repo structure",
-        term: "javascript-everywhere/\n├── README.md\n├── day-01/\n├── day-02/\n├── day-03/\n└── day-04/\n    ├── NOTES.md\n    ├── predictions.md\n    ├── predictions.js\n    ├── destructuring.js\n    ├── spread.js\n    ├── messy.js\n    ├── grade-lib.js\n    ├── report.js\n    ├── index.html\n    └── app.js",
+        sid: "9.1", title: "Repo structure",
+        term: "javascript-everywhere/\n├── README.md\n├── day-01/\n├── day-02/\n├── day-03/\n└── day-04/\n    ├── NOTES.md\n    ├── predictions.md\n    ├── predictions.js\n    ├── destructuring.js\n    ├── spread.js\n    ├── messy.js\n    ├── timers.js\n    ├── callbacks.js\n    ├── fake-db.js\n    ├── hell.js\n    ├── flat.js\n    ├── grade-lib.js\n    ├── students.json\n    ├── report.js\n    ├── index.html\n    └── app.js",
         checks: [
-          ["t7_folder", "Added a <code>day-04/</code> folder with all ten files"],
+          ["t7_folder16", "Added a <code>day-04/</code> folder with all sixteen files"],
           ["t7_toc", "Added a Day 04 row to my root <code>README.md</code>"]
         ]
       },
       {
-        sid: "7.2", title: "day-04/NOTES.md",
+        sid: "9.2", title: "day-04/NOTES.md",
         note: "<strong>In your own words</strong> — not the README's words.",
         checks: [
-          ["t7_what", "What destructuring actually does, in one sentence"],
-          ["t7_obj_vs_arr", "How object and array destructuring differ in what they match on"],
-          ["t7_rename", "What <code>const { a: b } = obj</code> creates — and what it does <strong>not</strong> create"],
-          ["t7_defaults", "When a destructuring default fires, and the three values that do <strong>not</strong> trigger it"],
-          ["t7_undefined", "Why <code>const { x } = undefined</code> throws, and the fix"],
-          ["t7_rest_spread", "Rest vs spread — the rule I use to tell them apart at a glance"],
-          ["t7_shallow", "What \"shallow copy\" means, and the exact bug it caused me in Task 3.5"],
-          ["t7_merge", "Why spread order matters when merging defaults"],
-          ["t7_nullish", "The difference between <code>||</code> and <code>??</code>, with the <code>0</code> example from Task 4"],
-          ["t7_optional", "What <code>?.</code> does when the left side is <code>null</code>"],
-          ["t7_computed", "Why <code>{ [key]: value }</code> needs the brackets"],
-          ["t7_counts", "My Task 5.3 answer — the line counts and the before/after function"],
-          ["t7_bug", "<strong>One bug I hit today</strong>, the exact error message, and how I fixed it"]
+          ["t7_what", "Part 1 — What destructuring does, and how object and array destructuring differ in what they match on"],
+          ["t7_rename", "Part 1 — What <code>const { a: b } = obj</code> creates — and what it does <strong>not</strong> create"],
+          ["t7_defaults", "Part 1 — When a destructuring default fires, and the three values that do <strong>not</strong> trigger it"],
+          ["t7_undefined", "Part 1 — Why <code>const { x } = undefined</code> throws, and the fix"],
+          ["t7_rest_spread", "Part 1 — Rest vs spread — the rule I use to tell them apart at a glance"],
+          ["t7_shallow", "Part 1 — What \"shallow copy\" means, and the exact bug it caused me in Task 3.5"],
+          ["t7_merge", "Part 1 — Why spread order matters when merging defaults"],
+          ["t7_nullish", "Part 1 — The difference between <code>||</code> and <code>??</code>, with the <code>0</code> example from Task 4"],
+          ["t7_counts", "Part 1 — My Task 7.5 answer — the line counts and the before/after function"],
+          ["n_thread", "Part 2 — What \"single-threaded\" means, and what blocking costs in the browser"],
+          ["n_loop", "Part 2 — A drawing of the event loop — stack, APIs, both queues, the loop"],
+          ["n_zero", "Part 2 — Why <code>setTimeout(fn, 0)</code> doesn't run immediately, and which queue goes first"],
+          ["n_return", "Part 2 — Why you can't <code>return</code> out of an async callback, and what you do instead"],
+          ["n_errorfirst", "Part 2 — The error-first convention, and why the <code>return</code> in <code>return callback(err)</code> matters"],
+          ["n_trycatch", "Part 2 — Why <code>try</code>/<code>catch</code> can't catch an error thrown inside a <code>setTimeout</code>"],
+          ["n_three", "Part 2 — The three problems with callbacks, in one sentence each"],
+          ["n_parallel", "Part 2 — Parallel vs sequential — the time difference from Task 7, and why results go in by index"],
+          ["t7_bug", "<strong>One bug I hit</strong>, the exact error or wrong output, and how I fixed it"]
         ],
         quote: "The bug section is not optional. If nothing broke, you copy-pasted."
       },
       {
-        sid: "7.3", title: "Five separate commits",
+        sid: "9.3", title: "Six separate commits",
         note: "Real commit messages. <code>update</code> is not a message.",
         checks: [
-          ["t7_c1", "Commit 1 — <code>predictions.md</code> + <code>predictions.js</code>"],
-          ["t7_c2", "Commit 2 — <code>destructuring.js</code>"],
-          ["t7_c3", "Commit 3 — <code>spread.js</code> + <code>messy.js</code>"],
-          ["t7_c4", "Commit 4 — <code>grade-lib.js</code> + <code>report.js</code>"],
-          ["t7_c5", "Commit 5 — browser files + <code>NOTES.md</code>"],
+          ["c6_1", "Commit 1 — <code>predictions.md</code> + <code>predictions.js</code>"],
+          ["c6_2", "Commit 2 — <code>destructuring.js</code> + <code>spread.js</code> + <code>messy.js</code>"],
+          ["c6_3", "Commit 3 — <code>timers.js</code> + <code>callbacks.js</code>"],
+          ["c6_4", "Commit 4 — <code>fake-db.js</code> + <code>hell.js</code> + <code>flat.js</code>"],
+          ["c6_5", "Commit 5 — <code>grade-lib.js</code> + <code>students.json</code> + <code>report.js</code>"],
+          ["c6_6", "Commit 6 — browser files + <code>NOTES.md</code>"],
           ["t7_log", "Ran <code>git log --oneline</code> and screenshotted it"]
         ],
         inputs: [
           { k:"t7_repo_url", type:"url", label:"Repository link", hint:"— required", ph:"https://github.com/…" },
           { k:"t7_log_url", type:"url", label:"git log screenshot link", ph:"https://…" },
-          { k:"t7_bug_text", type:"textarea", label:"The bug you hit — the error message and the fix", ph:"…" }
+          { k:"t7_bug_text", type:"textarea", label:"The bug you hit — the error message or wrong output, and the fix", ph:"…" }
         ]
       }
     ]
   },
   {
-    id: "t8",
+    id: "t10",
     title: "Share it",
     lead: "Say something real. Not \"excited to continue my journey\".",
     deliverable: "LinkedIn post link",
     sections: [
       {
-        sid: "8.1", title: "Post it",
+        sid: "10.1", title: "Post it",
         checks: [
-          ["t8_posted", "Posted on LinkedIn about completing Session 4"],
+          ["t8_posted_d4", "Posted on LinkedIn about completing Day 4"],
           ["t8_shot", "Included the screenshot of my <code>report.js</code> output"],
           ["t8_repo", "Included the link to my repo"],
-          ["t8_before_after", "Showed the <strong>before and after</strong> of one function — Day 03's signature next to Day 04's"],
-          ["t8_learned", "Said one concrete thing I understood today — the shallow copy bug, <code>??</code> vs <code>||</code> on a zero, why merge order matters"]
+          ["t8_before_after2", "Showed one before-and-after — Day 03's signature next to Day 04's, <strong>or</strong> my pyramid next to <code>flat.js</code>"],
+          ["t8_learned2", "Said one concrete thing I understood — the shallow copy bug, <code>??</code> vs <code>||</code> on a zero, why <code>setTimeout(fn, 0)</code> isn't instant, why the page froze"]
         ],
         inputs: [
           { k:"t8_post_url", type:"url", label:"LinkedIn post link", hint:"— required", ph:"https://linkedin.com/posts/…" },
-          { k:"t8_learned_text", type:"text", label:"The one thing that clicked today", ph:"…" }
+          { k:"t8_learned_text", type:"text", label:"The one thing that clicked", ph:"…" }
         ]
       },
       {
@@ -753,23 +923,24 @@ const TASKS = [
         note: "Not required. Ticking these is how a submission moves from ✅ Done to 🔥 10%.",
         optional: true,
         checks: [
-          ["b_pick", "Wrote <code>pick(object, keys)</code> returning a new object with only the listed keys"],
-          ["b_omit", "Wrote <code>omit(object, keys)</code> — the opposite — using object rest"],
-          ["b_deepmerge", "Wrote <code>deepMerge(a, b)</code> merging nested objects one level deeper than spread"],
+          ["b_pickomit", "Wrote <code>pick(object, keys)</code> and <code>omit(object, keys)</code> — the second with object rest"],
           ["b_groupby", "Wrote <code>groupBy(students, key)</code> returning <code>{ Cairo: […], Alexandria: […] }</code> with computed keys"],
-          ["b_destructured_cb", "Rebuilt <code>myMap</code>/<code>myFilter</code> so the callback receives <code>({ item, index })</code>"],
-          ["b_swapkeys", "Wrote <code>swapKeys(object)</code> turning <code>{ a: 1 }</code> into <code>{ 1: \"a\" }</code>"],
-          ["b_remove", "Added a per-row <strong>Remove</strong> button filtering into a <strong>new</strong> array"],
-          ["b_undo", "Added an <strong>Undo</strong> button holding the previous <code>students</code> array"],
-          ["b_structuredclone", "Used <code>structuredClone</code> on the Task 3.5 object and compared it to the manual nested spread"]
+          ["b_deepmerge", "Wrote <code>deepMerge(a, b)</code> merging nested objects one level deeper than spread"],
+          ["b_structuredclone", "Used <code>structuredClone</code> on the Task 3.5 object and compared it to the manual nested spread"],
+          ["b_remove_undo", "Added a per-row <strong>Remove</strong> button and an <strong>Undo</strong> button holding the previous <code>students</code> array"],
+          ["b_series", "Wrote <code>series(tasks, done)</code> running callback-style functions one after another, stopping at the first error"],
+          ["b_timeout", "Wrote <code>withTimeout(fn, ms)</code> that errors with <code>\"Timed out\"</code> and ignores the late answer"],
+          ["b_retry", "Wrote <code>retry(fn, times, done)</code> for a randomly failing function"],
+          ["b_debounce", "Wrote <code>debounce(fn, ms)</code> and used it on a search input in the dashboard"],
+          ["b_promise", "Rewrote <code>getAttendance</code> with <code>new Promise</code> and compared the two in <code>NOTES.md</code>"]
         ]
       },
       {
         sid: "Grading", title: "How this is graded",
         grade: [
-          ["❌ Incomplete", "Copy-pasted README code, predictions written after running, .push and student.score still everywhere, string concatenation with +, one giant commit, or destructuring you can’t explain line by line"],
-          ["✅ Done", "All eight tasks, working code, a genuinely non-mutating grade-lib.js, every student-taking function destructured on its parameter line, NOTES.md in your own words, a real bug documented"],
-          ["🔥 10%", "Done + the bonus + a grade-lib.js that does something beyond the spec + notes someone else could actually learn from"]
+          ["❌ Incomplete", "Copy-pasted README code, predictions written after running, .push and student.score still everywhere, readFileSync in the report, results printed in arrival order, a button that stays disabled after an error, one giant commit, or code you can’t explain line by line"],
+          ["✅ Done", "All ten tasks, working code, a genuinely non-mutating grade-lib.js, a four-level pyramid and its flat rewrite, a genuinely parallel report printed in the original order, every error path handled, NOTES.md in your own words, a real bug documented"],
+          ["🔥 10%", "Done + the bonus + a report.js that does something beyond the spec + notes someone else could actually learn from"]
         ]
       }
     ]
@@ -778,7 +949,7 @@ const TASKS = [
 
 const REQUIRED_INPUTS = ["t5_url", "t7_repo_url", "t8_post_url"];
 
-/* Which assignment this is — picks the sheet column (Day 4 -> F). */
+/* Which assignment this is — picks the sheet column (Day 4 -> G). */
 const DAY = 4;
 
 /* Apps Script web-app /exec URL. Empty = code-only mode: the page still
@@ -806,7 +977,7 @@ const ROSTER = [["saadmmustafa99@gmail.com","سعد محمد مصطفى"],["ahme
    is the realistic threat here.
    ===================================================================== */
 
-const SALT = "js-everywhere-day04-v1";
+const SALT = "js-everywhere-day04-v2";
 
 /* Crockford base32, minus the letters that get misread when retyped. */
 const B32 = "0123456789ABCDEFGHJKMNPQRSTVWXYZ";
