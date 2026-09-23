@@ -842,3 +842,5 @@ Notice `describe({ name, score })` — the function says exactly which fields it
 - [ASSIGNMENT.md](ASSIGNMENT.md) — Day 03 assignment
 
 ← Back to [Day 02 — JS Fundamentals](../Day-02-JS-Fundamentals/README.md)
+
+Next: [Day 04 — ES6+: Destructuring, Spread & Rest](../Day-04-ES6-Destructuring/README.md) →
