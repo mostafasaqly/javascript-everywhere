@@ -1,0 +1,1562 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Day 06 Submission Desk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@10..48,500;10..48,700;10..48,800&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap">
+
+<style>
+:root{
+  --ground:#FAFAF7;
+  --surface:#FFFFFF;
+  --surface-2:#F1F1EC;
+  --line:#DEDED6;
+  --line-soft:#E9E9E2;
+  --ink:#1B1F27;
+  --ink-2:#4B5260;
+  --ink-3:#787F8C;
+  --amber:#B47C0A;
+  --amber-solid:#E8B437;
+  --amber-wash:#FBF1D8;
+  --teal:#1F7D71;
+  --teal-wash:#DDF0EC;
+  --rose:#B23A48;
+  --rose-wash:#FBE4E6;
+  --shadow:0 1px 2px rgba(27,31,39,.06), 0 8px 24px -12px rgba(27,31,39,.18);
+  --radius:10px;
+  --rail:300px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#12161F;
+    --surface:#191E29;
+    --surface-2:#212736;
+    --line:#2E3546;
+    --line-soft:#252C3B;
+    --ink:#E9ECF2;
+    --ink-2:#A6AEBF;
+    --ink-3:#798296;
+    --amber:#E8B437;
+    --amber-solid:#E8B437;
+    --amber-wash:#2C2618;
+    --teal:#4FC0AF;
+    --teal-wash:#152A29;
+    --rose:#F2848F;
+    --rose-wash:#2B1A1E;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 30px -14px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#12161F;
+  --surface:#191E29;
+  --surface-2:#212736;
+  --line:#2E3546;
+  --line-soft:#252C3B;
+  --ink:#E9ECF2;
+  --ink-2:#A6AEBF;
+  --ink-3:#798296;
+  --amber:#E8B437;
+  --amber-solid:#E8B437;
+  --amber-wash:#2C2618;
+  --teal:#4FC0AF;
+  --teal-wash:#152A29;
+  --rose:#F2848F;
+  --rose-wash:#2B1A1E;
+  --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 30px -14px rgba(0,0,0,.7);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--ground);
+  color:var(--ink);
+  font-family:"Public Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:15px;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{font-family:"Bricolage Grotesque","Public Sans",sans-serif;margin:0;text-wrap:balance;letter-spacing:-.02em}
+code,kbd,.mono{font-family:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace}
+button{font:inherit;color:inherit}
+a{color:var(--amber)}
+
+/* ---------- gate ---------- */
+.gate{min-height:100vh;display:grid;place-items:center;padding:32px 20px}
+.gate-card{
+  width:100%;max-width:480px;background:var(--surface);border:1px solid var(--line);
+  border-radius:14px;padding:32px;box-shadow:var(--shadow)
+}
+.gate-eyebrow{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--amber);margin-bottom:14px}
+.gate-card h1{font-size:30px;line-height:1.12;font-weight:800;margin-bottom:8px}
+.gate-card p.sub{color:var(--ink-2);margin:0 0 26px}
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.field label{font-size:12.5px;font-weight:600;color:var(--ink-2);letter-spacing:.01em}
+.field .hint{font-size:12px;color:var(--ink-3);font-weight:400}
+input[type=text],input[type=email],input[type=url],textarea,select{
+  width:100%;background:var(--ground);color:var(--ink);
+  border:1px solid var(--line);border-radius:8px;padding:9px 11px;
+  font:inherit;font-size:14px;transition:border-color .13s,box-shadow .13s
+}
+textarea{resize:vertical;min-height:78px;line-height:1.5}
+input:focus-visible,textarea:focus-visible,select:focus-visible{
+  outline:none;border-color:var(--amber-solid);box-shadow:0 0 0 3px color-mix(in srgb,var(--amber-solid) 22%,transparent)
+}
+input::placeholder,textarea::placeholder{color:var(--ink-3)}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  border:1px solid var(--line);background:var(--surface-2);
+  border-radius:8px;padding:9px 16px;font-size:14px;font-weight:600;
+  cursor:pointer;transition:transform .1s,background .13s,border-color .13s
+}
+.btn:hover{border-color:var(--ink-3)}
+.btn:active{transform:translateY(1px)}
+.btn:focus-visible{outline:2px solid var(--amber-solid);outline-offset:2px}
+.btn-primary{background:var(--amber-solid);border-color:var(--amber-solid);color:#1B1F27}
+.btn-primary:hover{background:#f0c25a;border-color:#f0c25a}
+.btn-primary:disabled{opacity:.45;cursor:not-allowed}
+.btn-wide{width:100%;padding:11px}
+.err{color:var(--rose);font-size:12.5px;min-height:17px;margin-top:-6px;margin-bottom:10px}
+
+/* ---------- shell ---------- */
+.shell{display:none;min-height:100vh}
+.shell.on{display:grid;grid-template-columns:var(--rail) 1fr}
+
+.rail{
+  border-right:1px solid var(--line);background:var(--surface);
+  padding:22px 18px;display:flex;flex-direction:column;gap:20px;
+  position:sticky;top:0;height:100vh;overflow-y:auto
+}
+.brand{display:flex;flex-direction:column;gap:3px}
+.brand .kicker{font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3)}
+.brand h2{font-size:19px;font-weight:800}
+
+.who{
+  background:var(--surface-2);border:1px solid var(--line-soft);border-radius:var(--radius);
+  padding:11px 12px;display:flex;flex-direction:column;gap:2px
+}
+.who .nm{font-weight:600;font-size:14px;line-height:1.3;overflow-wrap:anywhere}
+.who .em{font-size:11.5px;color:var(--ink-3);font-family:"JetBrains Mono",monospace;overflow-wrap:anywhere}
+
+.progress-block{display:flex;align-items:center;gap:14px}
+.ring{width:58px;height:58px;flex:none;position:relative}
+.ring svg{transform:rotate(-90deg)}
+.ring .pct{
+  position:absolute;inset:0;display:grid;place-items:center;
+  font-family:"JetBrains Mono",monospace;font-size:13px;font-weight:700;
+  font-variant-numeric:tabular-nums
+}
+.progress-meta{display:flex;flex-direction:column;gap:1px;min-width:0}
+.progress-meta .big{font-family:"JetBrains Mono",monospace;font-size:13px;font-weight:700;font-variant-numeric:tabular-nums}
+.progress-meta .small{font-size:11.5px;color:var(--ink-3)}
+
+nav.tasks{display:flex;flex-direction:column;gap:4px}
+.nav-label{font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:4px}
+.tab{
+  display:grid;grid-template-columns:22px 1fr auto;align-items:center;gap:10px;
+  padding:9px 10px;border-radius:8px;border:1px solid transparent;background:none;
+  cursor:pointer;text-align:left;width:100%;transition:background .12s,border-color .12s
+}
+.tab:hover{background:var(--surface-2)}
+.tab.active{background:var(--surface-2);border-color:var(--line)}
+.tab:focus-visible{outline:2px solid var(--amber-solid);outline-offset:1px}
+.tab .num{
+  font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:700;
+  width:22px;height:22px;border-radius:6px;display:grid;place-items:center;
+  background:var(--ground);border:1px solid var(--line);color:var(--ink-3)
+}
+.tab.done .num{background:var(--teal-wash);border-color:transparent;color:var(--teal)}
+.tab .ttl{font-size:13.5px;font-weight:500;line-height:1.3}
+.tab .cnt{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.tab.done .cnt{color:var(--teal)}
+
+.rail-foot{margin-top:auto;display:flex;flex-direction:column;gap:8px}
+.save-state{font-size:11.5px;color:var(--ink-3);display:flex;align-items:center;gap:6px;min-height:18px}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--ink-3);flex:none}
+.dot.ok{background:var(--teal)}
+.dot.bad{background:var(--rose)}
+.dot.busy{background:var(--amber-solid);animation:pulse 1s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.3}}
+@media (prefers-reduced-motion:reduce){.dot.busy{animation:none}}
+
+/* ---------- main ---------- */
+main{padding:34px 40px 90px;max-width:840px}
+.panel-head{margin-bottom:26px;padding-bottom:20px;border-bottom:1px solid var(--line)}
+.panel-head .eyebrow{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);margin-bottom:8px}
+.panel-head h1{font-size:27px;font-weight:800;line-height:1.15;margin-bottom:8px}
+.panel-head p{color:var(--ink-2);margin:0;max-width:62ch}
+
+.sec{margin-bottom:30px}
+.sec-head{display:flex;align-items:baseline;gap:10px;margin-bottom:12px}
+.sec-head h3{font-size:16px;font-weight:700}
+.sec-head .sid{font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--ink-3);font-weight:500}
+.sec-note{color:var(--ink-2);font-size:13.5px;margin:0 0 14px;max-width:62ch}
+.sec-note.quote{border-left:2px solid var(--amber-solid);padding-left:12px;color:var(--ink-2);font-style:italic}
+
+.checks{display:flex;flex-direction:column;gap:2px;margin-bottom:14px}
+.check{
+  display:flex;align-items:flex-start;gap:10px;padding:7px 9px;border-radius:7px;
+  cursor:pointer;transition:background .12s;border:1px solid transparent
+}
+.check:hover{background:var(--surface-2)}
+.check input{
+  appearance:none;-webkit-appearance:none;width:17px;height:17px;flex:none;margin-top:2px;
+  border:1.5px solid var(--line);border-radius:5px;background:var(--surface);
+  cursor:pointer;position:relative;transition:background .12s,border-color .12s
+}
+.check input:checked{background:var(--teal);border-color:var(--teal)}
+.check input:checked::after{
+  content:"";position:absolute;left:5px;top:1.5px;width:4px;height:9px;
+  border:solid #fff;border-width:0 2px 2px 0;transform:rotate(43deg)
+}
+.check input:focus-visible{outline:2px solid var(--amber-solid);outline-offset:2px}
+.check span{font-size:14px;line-height:1.45}
+.check input:checked + span{color:var(--ink-3)}
+.check code{
+  font-size:12.5px;background:var(--surface-2);border:1px solid var(--line-soft);
+  padding:1px 5px;border-radius:4px
+}
+
+pre.term{
+  background:var(--surface-2);border:1px solid var(--line-soft);border-radius:var(--radius);
+  padding:13px 15px;margin:0 0 14px;overflow-x:auto;
+  font-family:"JetBrains Mono",monospace;font-size:12.5px;line-height:1.65;color:var(--ink-2)
+}
+
+.inputs{display:flex;flex-direction:column;gap:14px;margin-top:6px}
+.inputs.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:760px){.inputs.two{grid-template-columns:1fr}}
+
+.deliverable{
+  display:flex;align-items:center;gap:9px;font-size:13px;font-weight:600;
+  background:var(--teal-wash);color:var(--teal);border-radius:8px;padding:9px 13px;margin-top:16px
+}
+.deliverable.pending{background:var(--surface-2);color:var(--ink-3)}
+
+.grade{border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin-top:8px}
+.grade-row{display:grid;grid-template-columns:112px 1fr;gap:0;border-bottom:1px solid var(--line-soft)}
+.grade-row:last-child{border-bottom:none}
+.grade-row .lvl{padding:11px 13px;font-weight:700;font-size:13px;background:var(--surface-2);border-right:1px solid var(--line-soft)}
+.grade-row .desc{padding:11px 13px;font-size:13px;color:var(--ink-2)}
+
+.footbar{
+  position:fixed;bottom:0;left:var(--rail);right:0;
+  background:color-mix(in srgb,var(--surface) 92%,transparent);
+  backdrop-filter:blur(10px);border-top:1px solid var(--line);
+  padding:11px 40px;display:flex;align-items:center;justify-content:space-between;gap:16px
+}
+.footbar .msg{font-size:13px;color:var(--ink-2)}
+.footbar .acts{display:flex;gap:9px}
+
+@media (max-width:880px){
+  .shell.on{grid-template-columns:1fr}
+  .rail{position:static;height:auto;border-right:none;border-bottom:1px solid var(--line)}
+  main{padding:26px 20px 96px}
+  .footbar{left:0;padding:11px 20px;flex-wrap:wrap}
+}
+
+/* ---------- receipt ---------- */
+.receipt{display:none;min-height:100vh;place-items:center;padding:40px 20px}
+.receipt.on{display:grid}
+.receipt-card{
+  width:100%;max-width:560px;background:var(--surface);border:1px solid var(--line);
+  border-radius:14px;padding:36px;box-shadow:var(--shadow);text-align:center
+}
+.stamp{
+  width:56px;height:56px;border-radius:50%;background:var(--teal-wash);color:var(--teal);
+  display:grid;place-items:center;margin:0 auto 18px;font-size:26px
+}
+.receipt-card h1{font-size:26px;font-weight:800;margin-bottom:8px}
+.receipt-card p{color:var(--ink-2);margin:0 0 22px}
+.summary{
+  text-align:left;background:var(--surface-2);border:1px solid var(--line-soft);
+  border-radius:var(--radius);padding:16px;margin-bottom:20px
+}
+.summary-row{
+  display:flex;justify-content:space-between;gap:12px;padding:6px 0;
+  border-bottom:1px dashed var(--line);font-size:13.5px
+}
+.summary-row:last-child{border-bottom:none}
+.summary-row .k{color:var(--ink-2)}
+.summary-row .v{font-family:"JetBrains Mono",monospace;font-weight:600;font-variant-numeric:tabular-nums}
+.v.pass{color:var(--teal)}
+.v.miss{color:var(--rose)}
+
+.gate-foot{font-size:12px;color:var(--ink-3);margin:14px 0 0;text-align:center;line-height:1.45}
+
+.send-state{
+  border-radius:var(--radius);padding:11px 14px;margin-bottom:16px;
+  font-size:13.5px;font-weight:600;line-height:1.45;text-align:left
+}
+.send-state.sending{background:var(--surface-2);color:var(--ink-2)}
+.send-state.ok{background:var(--teal-wash);color:var(--teal)}
+.send-state.warn{background:var(--rose-wash);color:var(--rose)}
+.sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+</style>
+
+<!-- ================= GATE ================= -->
+<section class="gate" id="gate">
+  <div class="gate-card">
+    <div class="gate-eyebrow">Track 1 · Day 6 · Parts 1–5</div>
+    <h1>Day 06 — TypeScript from Scratch</h1>
+    <p class="sub">Work through the fourteen tasks, tick what you finish, drop your links in. Your progress saves in this browser as you go — close the tab and come back.</p>
+    <div class="field">
+      <label for="g-email">Email <span class="hint">— the one you registered with</span></label>
+      <input type="email" id="g-email" autocomplete="email" placeholder="you@gmail.com">
+    </div>
+    <div class="field">
+      <label for="g-token">Your code <span class="hint">— the 10 characters your instructor sent you</span></label>
+      <input type="text" id="g-token" autocomplete="off" spellcheck="false"
+             maxlength="10" placeholder="7f3a9c2e10" class="mono">
+    </div>
+    <div class="err" id="gate-err"></div>
+    <button class="btn btn-primary btn-wide" id="gate-go">Open my assignment</button>
+    <p class="gate-foot">When you finish, this page sends your grade to your instructor automatically.</p>
+  </div>
+</section>
+
+<!-- ================= SHELL ================= -->
+<div class="shell" id="shell">
+  <aside class="rail">
+    <div class="brand">
+      <div class="kicker">JavaScript Everywhere</div>
+      <h2>Day 06 Desk</h2>
+    </div>
+
+    <div class="who">
+      <div class="nm" id="who-name"></div>
+      <div class="em" id="who-email"></div>
+    </div>
+
+    <div class="progress-block">
+      <div class="ring">
+        <svg width="58" height="58" viewBox="0 0 58 58" aria-hidden="true">
+          <circle cx="29" cy="29" r="25" fill="none" stroke="var(--line)" stroke-width="5"></circle>
+          <circle id="ring-fg" cx="29" cy="29" r="25" fill="none" stroke="var(--amber-solid)"
+                  stroke-width="5" stroke-linecap="round" stroke-dasharray="157" stroke-dashoffset="157"
+                  style="transition:stroke-dashoffset .35s ease"></circle>
+        </svg>
+        <div class="pct" id="ring-pct">0%</div>
+      </div>
+      <div class="progress-meta">
+        <div class="big" id="prog-count">0 / 0 checks</div>
+        <div class="small" id="prog-tasks">0 of 14 tasks complete</div>
+      </div>
+    </div>
+
+    <nav class="tasks" id="nav" aria-label="Assignment tasks">
+      <div class="nav-label">Tasks</div>
+    </nav>
+
+    <div class="rail-foot">
+      <div class="save-state"><span class="dot" id="save-dot"></span><span id="save-text">Ready</span></div>
+    </div>
+  </aside>
+
+  <main id="main"></main>
+
+  <div class="footbar">
+    <div class="msg" id="foot-msg"></div>
+    <div class="acts">
+      <button class="btn" id="btn-prev">← Previous</button>
+      <button class="btn" id="btn-next">Next →</button>
+      <button class="btn btn-primary" id="btn-submit" disabled>Submit assignment</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= RECEIPT ================= -->
+<section class="receipt" id="receipt">
+  <div class="receipt-card">
+    <div class="stamp">✓</div>
+    <h1>Submitted</h1>
+    <p id="receipt-sub"></p>
+
+    <div class="send-state" id="send-state" hidden></div>
+
+    <div class="summary" id="receipt-summary"></div>
+    <button class="btn" id="btn-reopen">Back to my assignment</button>
+  </div>
+</section>
+
+<script>
+/* =====================================================================
+   Day 06 assignment — data model
+   Every checkbox and every input in the assignment is declared here.
+   ===================================================================== */
+const TASKS = [
+  {
+    id: "t1",
+    title: "Predict, then check",
+    lead: "Twenty-eight snippets, each in its own file in <code>day-06/predictions/</code>. Every snippet gets <strong>two</strong> predictions: what <code>tsc</code> says, and what <code>node</code> prints. The full code is in <code>ASSIGNMENT.md</code>.",
+    deliverable: "predictions.md + 1 screenshot",
+    sections: [
+      {
+        sid: "1.1", title: "Write your predictions first",
+        note: "Copy your <code>tsconfig.json</code> into <code>predictions/</code>, add <code>\"predictions\"</code> to the lab config's <code>exclude</code>, and check with <code>npx tsc -p predictions</code>.",
+        checks: [
+          ["t1_pred_file", "Created <code>predictions.md</code> and the 22 files <code>p01.ts</code> … <code>p28.ts</code> with their own <code>tsconfig.json</code>"],
+          ["t1_pred_before", "Wrote prediction <strong>A</strong> (tsc) and <strong>B</strong> (node) for all 28 — <em>before</em> running anything"]
+        ]
+      },
+      {
+        sid: "1.2", title: "Now check and run them",
+        quote: "Getting them wrong is the assignment. Getting them wrong and not explaining why is not.",
+        checks: [
+          ["t1_tsc_actual", "Ran <code>npx tsc -p predictions</code> and recorded every error next to the right snippet"],
+          ["t1_node_actual", "Ran every snippet with <code>node</code> and recorded the <em>actual</em> output"],
+          ["t1_pred_why", "For every one I got wrong, wrote one sentence explaining why"],
+          ["t1_tsc_only", "Marked every snippet <code>tsc</code> rejects but <code>node</code> runs fine — and what that says about Node and types"],
+          ["t1_node_only", "Marked every snippet <code>tsc</code> accepts but <code>node</code> gets wrong — and named what let it through"],
+          ["t1_pred_mech", "For <strong>#2, #4, #9, #10, #14, #19, #20, #23, #26 and #27</strong> named the mechanism explicitly"],
+          ["t1_pred_shot", "Screenshotted the full <code>npx tsc -p predictions</code> output"]
+        ],
+        inputs: [
+          { k:"t1_wrong_count", type:"text", label:"How many predictions did you get wrong (out of 56)?", ph:"11", w:"half" },
+          { k:"t1_pred_url", type:"url", label:"Screenshot link", hint:"— Drive / Imgur / GitHub", ph:"https://…" },
+          { k:"t1_surprise", type:"textarea", label:"Which result surprised you most, and why?", ph:"…" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "t2",
+    title: "Data types lab",
+    lead: "Create <code>types-lab.ts</code>. Run it with <code>node</code> <strong>and</strong> check it with <code>npx tsc</code> after every part. Use your <strong>own</strong> data, not the README's.",
+    deliverable: "types-lab.ts + 1 screenshot",
+    sections: [
+      {
+        sid: "2.1", title: "Annotate and infer",
+        checks: [
+          ["d_infer_five", "Five variables with <strong>no</strong> annotations, and the inferred type of each in a comment"],
+          ["d_annot_noise", "One annotation TypeScript could have inferred, with a comment on why I'd normally leave it out"],
+          ["d_reassign", "Reassigned a <code>let</code> number to a string, recorded the error, then removed it"],
+          ["d_let_const", "Showed <code>let x = \"A\"</code> vs <code>const y = \"A\"</code> by hovering, and explained it"]
+        ]
+      },
+      {
+        sid: "2.2", title: "The primitives",
+        checks: [
+          ["d_string", "A template-literal <code>string</code> and three string methods on it"],
+          ["d_number", "Three <code>number</code>s, plus <code>0.1 + 0.2</code>, <code>10 / 0</code> and <code>Number(\"abc\")</code> — each commented"],
+          ["d_boolean", "A <code>boolean</code> computed from a comparison"],
+          ["d_bigint", "A <code>bigint</code> above <code>MAX_SAFE_INTEGER</code>, one correct calculation, and one rejected mix with a <code>number</code>"],
+          ["d_symbol", "Two <code>symbol</code>s with the same description, proved unequal"],
+          ["d_null_undef", "A <code>string | null</code> and a <code>string | undefined</code>, with when I'd use each"],
+          ["d_null_error", "Assigned <code>null</code> to a plain <code>string</code> and recorded the error"]
+        ]
+      },
+      {
+        sid: "2.3", title: "Arrays, tuples, objects",
+        checks: [
+          ["d_array_methods", "A <code>number[]</code> with <code>map</code>, <code>filter</code>, <code>reduce</code> — each result's inferred type commented"],
+          ["d_empty_array", "An empty array with and without an annotation, and what TypeScript infers for each"],
+          ["d_mixed", "A mixed <code>(string | number)[]</code>, and the <code>string | number[]</code> mistake with its error"],
+          ["d_readonly", "A <code>readonly</code> array and a rejected <code>push</code>"],
+          ["d_tuple", "A named tuple with an optional element, and a function returning a tuple I destructure"],
+          ["d_object", "An object type with an optional property, nested one level, with an array of objects inside"],
+          ["d_extra_prop", "Added a property that isn't in the type, and recorded the error"]
+        ]
+      },
+      {
+        sid: "2.4", title: "Conversions and typeof",
+        checks: [
+          ["d_convert_three", "Converted <code>\"68\"</code> with <code>Number()</code>, <code>parseInt</code> and <code>+</code> — and an input where they differ"],
+          ["d_to_string_bool", "A number to a string, and five values to booleans — including every falsy value"],
+          ["d_typeof_table", "A <code>typeof</code> table for each primitive and <code>null</code>, with a comment on <code>null</code>"],
+          ["d_no_convert", "Proved an annotation doesn't convert: <code>\"5\" as unknown as number</code> and its <code>typeof</code>"]
+        ],
+        inputs: [
+          { k:"d_url", type:"url", label:"Screenshot link", hint:"— node output, tsc clean", ph:"https://…" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "t3",
+    title: "Special types lab",
+    lead: "Create <code>special-lab.ts</code>.",
+    deliverable: "special-lab.ts + 1 screenshot",
+    sections: [
+      {
+        sid: "3.1", title: "any, unknown, void, never",
+        checks: [
+          ["s_any_bug", "One <code>any</code> on purpose, letting a runtime crash through — inside <code>try</code> / <code>catch</code>"],
+          ["s_unknown", "Changed it to <code>unknown</code>, recorded the error, and narrowed it until safe"],
+          ["s_void", "A <code>void</code> function, and a comment on <code>void</code> vs <code>undefined</code>"],
+          ["s_never", "A <code>never</code> function that always throws, used inside <code>try</code> / <code>catch</code>"],
+          ["s_implicit_any", "Recorded the implicit-<code>any</code> error from a parameter with no type"]
+        ]
+      },
+      {
+        sid: "3.2", title: "Literals, unions, intersections, aliases",
+        checks: [
+          ["s_literals", "Two literal unions of my own — strings and numbers — each with an invalid value recorded"],
+          ["s_union_fn", "A <code>number | string</code> union and a function that accepts it"],
+          ["s_alias_and", "A <code>type</code> alias for an object, combined with a second one using <code>&amp;</code>"],
+          ["s_intersection_missing", "A variable of the intersection type, and one missing property recorded"]
+        ]
+      },
+      {
+        sid: "3.3", title: "Enums and as const",
+        checks: [
+          ["s_enum_errors", "Wrote a real <code>enum</code>, recorded the editor error <strong>and</strong> Node's runtime error, then deleted it"],
+          ["s_as_const_obj", "Rebuilt it as an <code>as const</code> object plus a derived union type"],
+          ["s_enum_calls", "A function taking that union — called with the property, with the plain string, and one invalid call"],
+          ["s_hover_union", "Pasted the derived type TypeScript shows on hover in a comment"]
+        ]
+      },
+      {
+        sid: "3.4", title: "Assertions",
+        checks: [
+          ["s_as_json", "<code>as</code> on JSON that matches, and on JSON that doesn't — printed a property that's <code>undefined</code> despite its type"],
+          ["s_as_const_freeze", "Froze an object with <code>as const</code> and recorded the error when changing it"],
+          ["s_bang", "Used <code>!</code> once, showed it crashes when wrong, then replaced it with a proper check"],
+          ["s_when_as", "Commented when <code>as</code> is acceptable, and what to use for outside data instead"]
+        ],
+        inputs: [
+          { k:"s_url", type:"url", label:"Screenshot link", ph:"https://…" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "t4",
+    title: "Functions & narrowing lab",
+    lead: "Two files: <code>functions-lab.ts</code> and <code>narrowing-lab.ts</code>.",
+    deliverable: "functions-lab.ts + narrowing-lab.ts + 1 screenshot",
+    sections: [
+      {
+        sid: "4.1", title: "functions-lab.ts",
+        checks: [
+          ["fn_typed", "A function with typed parameters and return — as a <code>function</code> and as an arrow"],
+          ["fn_optional", "One <strong>default</strong> and one <strong>optional</strong> parameter, the missing case handled with <code>??</code>"],
+          ["fn_rest", "A <strong>rest</strong> parameter function called with zero, one and five arguments"],
+          ["fn_destructure", "A function with a destructured object parameter"],
+          ["fn_type_alias", "A function type alias, and two functions that fit it"],
+          ["fn_callback", "A function taking that callback type — hovered to show the callback is typed with no annotation"],
+          ["fn_async", "An <code>async</code> function returning <code>Promise&lt;…&gt;</code>, and the error without <code>await</code>"],
+          ["fn_overload", "An overloaded function with two signatures, with the two return types shown by hovering"],
+          ["fn_wrong_args", "Recorded a wrong-argument-count error and a wrong-type error, then fixed both"]
+        ]
+      },
+      {
+        sid: "4.2", title: "narrowing-lab.ts — literal unions",
+        checks: [
+          ["t3_lettergrade", "<code>type LetterGrade</code> and <code>letterGrade(score: number): LetterGrade</code>"],
+          ["t3_switch", "A <code>switch</code> over every <code>LetterGrade</code> — then deleted a case and recorded the error"]
+        ]
+      },
+      {
+        sid: "4.3", title: "narrowing-lab.ts — narrowing",
+        checks: [
+          ["t3_parse_score", "<code>parseScore(input: number | string | null | undefined): number | null</code> handling every member"],
+          ["t3_hover_types", "Wrote the narrowed type in a comment inside each branch"],
+          ["t3_isarray", "A <code>string | string[]</code> function narrowed with <code>Array.isArray</code>, always returning <code>string[]</code>"],
+          ["t3_instanceof", "An <code>Error | string</code> function narrowed with <code>instanceof</code>"],
+          ["t3_in", "A <code>{ name } | { title }</code> function narrowed with <code>in</code>"]
+        ]
+      },
+      {
+        sid: "4.4", title: "narrowing-lab.ts — null and undefined",
+        checks: [
+          ["t3_find_three", "Handled a <code>.find()</code> result three ways: <code>if</code>, <code>?.</code> and <code>??</code>"],
+          ["t3_index", "Handled the <code>undefined</code> that <code>noUncheckedIndexedAccess</code> adds to an index read"]
+        ],
+        inputs: [
+          { k:"t3_url", type:"url", label:"Screenshot link", ph:"https://…" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "t5",
+    title: "Type your own database",
+    lead: "Take <strong>your own</strong> Day 05 <code>promise-db.js</code> — the one with four tables, promisified.",
+    deliverable: "db-types.ts + typed-db.ts + 1 screenshot",
+    sections: [
+      {
+        sid: "5.1", title: "db-types.ts — the shapes",
+        checks: [
+          ["t4_iface_each", "An <code>interface</code> for <strong>every</strong> table — at least four"],
+          ["t4_readonly_ids", "Every id field is <code>readonly</code>"],
+          ["t4_optional", "At least <strong>two</strong> optional properties, where data genuinely might be missing"],
+          ["t4_literal", "At least one literal-union property"],
+          ["t4_extends", "At least one interface that <code>extends</code> another"],
+          ["t4_intersection", "At least one <code>type</code> built with <code>&amp;</code>"],
+          ["t4_exported", "Every shape is exported with <code>export interface</code> / <code>export type</code>"]
+        ]
+      },
+      {
+        sid: "5.2", title: "typed-db.ts — the functions",
+        checks: [
+          ["t4_import_type", "Imported the shapes with <code>import type</code> from <code>./db-types.ts</code>"],
+          ["t4_records", "My tables as <code>Record&lt;number, …&gt;</code> constants"],
+          ["t4_lookup", "A generic <code>lookup</code> helper returning <code>Promise&lt;T&gt;</code> for whatever table it's given"],
+          ["t4_getters", "Every <code>get…</code> function has typed parameters and a <code>Promise&lt;…&gt;</code> return type"],
+          ["t4_report", "<code>buildReport(id)</code> with <code>async</code> / <code>await</code>, returning a typed object with its own interface"],
+          ["t4_main", "A <code>main</code> with <code>try</code> / <code>catch</code> printing a report and an error, using <code>errorMessage(err: unknown)</code>"]
+        ]
+      },
+      {
+        sid: "5.3", title: "Break it",
+        checks: [
+          ["t4_typo", "Misspelled a property in a row — recorded the error"],
+          ["t4_missing", "Left out a required property — recorded the error"],
+          ["t4_readonly", "Reassigned a <code>readonly</code> id — recorded the error"],
+          ["t4_plain_import", "Changed <code>import type</code> to a plain <code>import</code>, ran it with <code>node</code>, recorded the runtime error"],
+          ["t4_real_mistakes", "Listed in a comment any <strong>real</strong> mistake in my Day 04/05 data the types found"]
+        ],
+        inputs: [
+          { k:"t4_url", type:"url", label:"Screenshot link", ph:"https://…" },
+          { k:"t4_found", type:"text", label:"Real mistakes the types found in your old data", ph:"e.g. two rows had 'scor' — never noticed", w:"half" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "t6",
+    title: "Discriminated unions & type guards",
+    lead: "The <code>status</code> pattern you already met in <code>Promise.allSettled</code> — and the guard that makes outside data safe.",
+    deliverable: "states.ts + guards.ts + 1 screenshot",
+    sections: [
+      {
+        sid: "6.1", title: "states.ts — the status pattern",
+        checks: [
+          ["t5_union", "A <code>LoadState</code> union with at least four members, each with a <code>status</code> literal and its own data"],
+          ["t5_describe", "<code>describe(state)</code> with <code>switch (state.status)</code>, reading each member's <strong>own</strong> data"],
+          ["t5_never", "An exhaustive <code>default</code> with <code>const unreachable: never = state</code>"],
+          ["t5_fifth", "Added a fifth member without handling it, screenshotted the <code>never</code> error, then handled it"],
+          ["t5_wrong_member", "Read a property from the wrong member inside a <code>case</code> — recorded the error"],
+          ["t5_own_union", "A second discriminated union of my own with at least three members"],
+          ["t5_settled", "Day 05's <code>allSettled</code> loop, narrowing on <code>status</code>, typed as <code>PromiseSettledResult&lt;…&gt;[]</code>"]
+        ]
+      },
+      {
+        sid: "6.2", title: "guards.ts — untrusted data",
+        checks: [
+          ["t5_guard", "<code>isStudent(value: unknown): value is Student</code> checking every required property's type"],
+          ["t5_range", "The guard also checks a <strong>range</strong> — a score between 0 and 100"],
+          ["t5_json", "A JSON string of at least six records, three or more broken in different ways"],
+          ["t5_filter", "Parsed as <code>unknown</code>, checked <code>Array.isArray</code>, filtered with <code>isStudent</code> into <code>Student[]</code>"],
+          ["t5_print", "Printed the valid names and the number rejected"],
+          ["t5_boolean", "Changed the return type to <code>boolean</code>, noted what <code>filter</code> gave me, then changed it back"],
+          ["t5_second_guard", "A guard for a second shape from my Task 5 database"],
+          ["t5_as_vs_guard", "Explained <code>raw as Student</code> vs <code>isStudent(raw)</code> in a comment"]
+        ],
+        inputs: [
+          { k:"t5_url", type:"url", label:"Screenshot link", hint:"— output + the never error", ph:"https://…" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "t7",
+    title: "Classes lab",
+    lead: "Create <code>classes-lab.ts</code>, modelling something from your <strong>own</strong> Task 5 database as a class.",
+    deliverable: "classes-lab.ts + 1 screenshot",
+    sections: [
+      {
+        sid: "7.1", title: "A class",
+        checks: [
+          ["cl_interface", "An <code>interface</code> with at least one <code>readonly</code> property and two methods"],
+          ["cl_implements", "A class that <code>implements</code> it, every field declared and typed before the constructor"],
+          ["cl_readonly_private", "A <code>readonly</code> field set in the constructor, and a <code>#private</code> field"],
+          ["cl_validate", "A method that validates its input and throws on bad data"],
+          ["cl_getter_static", "A getter, and a <code>static</code> counter"],
+          ["cl_chain", "A method returning <code>this</code>, and a chain of three calls"]
+        ]
+      },
+      {
+        sid: "7.2", title: "Inheritance",
+        checks: [
+          ["cl_extends", "A child class that <code>extends</code> it, calls <code>super(…)</code>, and adds a field"],
+          ["cl_override", "One method replaced with <code>override</code>, calling <code>super.method()</code>"],
+          ["cl_interface_array", "An array typed as the interface, holding both classes, processed in one loop"],
+          ["cl_instanceof", "Used <code>instanceof</code> to find the child-class objects"]
+        ]
+      },
+      {
+        sid: "7.3", title: "Break it",
+        checks: [
+          ["cl_break_readonly_private", "Reassigned a <code>readonly</code> field and read a <code>#private</code> one from outside — both errors recorded"],
+          ["cl_break_implements", "Deleted a required method and recorded the <code>implements</code> error"],
+          ["cl_break_param_prop", "Tried <code>constructor(private name: string)</code> and recorded the <code>erasableSyntaxOnly</code> error"],
+          ["cl_break_instanceof_iface", "Tried <code>instanceof</code> on the interface, recorded the error, and explained why"]
+        ],
+        inputs: [
+          { k:"cl_url", type:"url", label:"Screenshot link", ph:"https://…" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "t8",
+    title: "Generics lab",
+    lead: "Create <code>generics-lab.ts</code>. <strong>No <code>any</code> anywhere in it.</strong>",
+    deliverable: "generics-lab.ts + 1 screenshot",
+    sections: [
+      {
+        sid: "8.1", title: "Generic functions",
+        checks: [
+          ["t6_first_last", "<code>first&lt;T&gt;</code> and <code>last&lt;T&gt;</code>, called with three types, the inferred type commented each time"],
+          ["t6_findbyid", "<code>findById&lt;T extends { id: number }&gt;</code> on two of my tables — plus one call the constraint rejects"],
+          ["t6_pluck", "<code>pluck&lt;T, K extends keyof T&gt;</code> — valid calls, and one invalid key TypeScript rejects"],
+          ["t6_groupby", "<code>groupBy&lt;T, K extends string&gt;</code> grouping my students by letter grade"],
+          ["t6_unique", "<code>unique&lt;T&gt;</code> using a <code>Set&lt;T&gt;</code>"]
+        ]
+      },
+      {
+        sid: "8.2", title: "Generic types",
+        checks: [
+          ["t6_result", "<code>type Result&lt;T&gt;</code> as a discriminated union"],
+          ["t6_safeparse", "<code>safeParse&lt;T&gt;(json, check)</code> tested with valid, wrong-shaped and invalid JSON"],
+          ["t6_result_check", "Proved reading <code>result.value</code> without checking <code>result.ok</code> is an error"],
+          ["t6_store_iface", "A generic <code>interface Store&lt;T extends { id: number }&gt;</code> with <code>add</code>, <code>get</code>, <code>all</code> and <code>remove</code>"],
+          ["t6_store_impl", "<code>createStore&lt;T&gt;()</code> with a closure over <code>Map&lt;number, T&gt;</code> — two stores for two tables"],
+          ["t6_store_wrong", "Added the wrong shape to a store — recorded the error"]
+        ]
+      },
+      {
+        sid: "8.3", title: "Generic async",
+        checks: [
+          ["t6_timeout", "<code>withTimeout&lt;T&gt;</code> — hovered to prove the result type follows the input"],
+          ["t6_retry", "<code>retry&lt;T&gt;</code> with no missing-return error and no <code>err.message</code> on an <code>unknown</code>"],
+          ["t6_mapasync", "<code>mapAsync&lt;T, U&gt;</code> using <code>Promise.all</code>"],
+          ["t6_on_db", "Called all three on my Task 5 database functions"]
+        ],
+        inputs: [
+          { k:"t6_url", type:"url", label:"Screenshot link", ph:"https://…" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "t9",
+    title: "Utility types lab",
+    lead: "Create <code>utilities-lab.ts</code>, using one interface from your Task 5 database.",
+    deliverable: "utilities-lab.ts + 1 screenshot",
+    sections: [
+      {
+        sid: "9.1", title: "Types from types",
+        checks: [
+          ["t7_omit", "<code>New… = Omit&lt;…, \"id\"&gt;</code> and an <code>add…(input)</code> that assigns the id"],
+          ["t7_partial", "<code>…Update = Partial&lt;Omit&lt;…, \"id\"&gt;&gt;</code> and an <code>update…</code> using spread — no mutation"],
+          ["t7_reject", "Proved <code>update…</code> rejects an <code>id</code> and a wrong value type"],
+          ["t7_pick", "<code>Pick&lt;…&gt;</code> for a public card view, and a function that makes one"],
+          ["t7_readonly", "<code>Readonly&lt;…&gt;</code> on one object, and one rejected assignment"],
+          ["t7_record", "<code>Record&lt;LetterGrade, number&gt;</code> initialised with every grade at <code>0</code>"],
+          ["t7_returntype", "<code>ReturnType</code> + <code>Awaited</code> reusing an <code>async</code> function's result type"],
+          ["t7_as_const", "An <code>as const</code> array and a union derived with <code>(typeof X)[number]</code>"],
+          ["t7_ripple", "Added a property to the base interface, recorded which lines turned red, and why that's good"]
+        ],
+        inputs: [
+          { k:"t7_url", type:"url", label:"Screenshot link", ph:"https://…" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "t10",
+    title: "Build: the typed grade report",
+    lead: "Your <strong>own</strong> Day 05 <code>project/</code> — rewritten in TypeScript. Same data, same output, same <code>lib/</code> split, every value typed.",
+    deliverable: "project/ folder + 2 screenshots",
+    sections: [
+      {
+        sid: "10.1", title: "Setup",
+        term: "day-06/project/\n├── package.json\n├── package-lock.json\n├── tsconfig.json\n├── students.json\n├── index.html\n└── src/\n    ├── types.ts\n    ├── report.ts\n    ├── main.ts\n    └── lib/\n        ├── index.ts\n        ├── grade-lib.ts\n        ├── async-utils.ts\n        ├── list-utils.ts\n        └── db.ts",
+        checks: [
+          ["pj_shape", "My <code>project/</code> matches this structure"],
+          ["pj_devdeps", "<code>typescript</code> and <code>@types/node</code> are <strong>dev</strong> dependencies"],
+          ["pj_tsconfig", "<code>tsconfig.json</code> has <code>strict</code>, <code>noUncheckedIndexedAccess</code>, <code>verbatimModuleSyntax</code>, <code>erasableSyntaxOnly</code>, <code>rewriteRelativeImportExtensions</code>, <code>src</code> → <code>dist</code>"],
+          ["pj_scripts", "<code>\"type\": \"module\"</code> and the four scripts: <code>report</code>, <code>check</code>, <code>build</code>, <code>start</code>"],
+          ["pj_ignore", "<code>dist/</code> and <code>node_modules/</code> are ignored — proved with <code>git status</code>"]
+        ]
+      },
+      {
+        sid: "10.2", title: "types.ts",
+        checks: [
+          ["pj_types", "<code>Student</code>, <code>GradedStudent</code> (with <code>extends</code>), <code>LetterGrade</code> — plus any shape my own Day 05 project had"],
+          ["pj_types_mods", "At least one <code>readonly</code> and one optional property"],
+          ["pj_types_only", "Only types — no runtime code"]
+        ]
+      },
+      {
+        sid: "10.3", title: "lib/",
+        checks: [
+          ["pj_first_errors", "Renamed my own Day 05 files to <code>.ts</code>, ran <code>npm run check</code>, pasted the first error list into <code>NOTES.md</code>"],
+          ["pj_gradelib", "<code>grade-lib.ts</code> — every function typed, <code>letterGrade</code> returns <code>LetterGrade</code>, plus <code>isStudent</code>"],
+          ["pj_async", "<code>async-utils.ts</code> — generic <code>withTimeout&lt;T&gt;</code>, <code>retry&lt;T&gt;</code>, and <code>errorMessage(err: unknown)</code>"],
+          ["pj_listutils", "<code>list-utils.ts</code> — at least one generic helper the report uses"],
+          ["pj_db", "<code>db.ts</code> — <code>getAttendance(id: number): Promise&lt;number&gt;</code>, failing for at least one student"],
+          ["pj_barrel", "<code>index.ts</code> — a barrel re-exporting what <code>report.ts</code> and <code>main.ts</code> need"],
+          ["pj_import_type", "Every type-only import uses <code>import type</code>"],
+          ["pj_ts_ext", "Every relative import ends in <code>.ts</code>"]
+        ],
+        inputs: [
+          { k:"pj_err_count", type:"text", label:"How many errors did the first npm run check show?", ph:"9", w:"half" }
+        ]
+      },
+      {
+        sid: "10.4", title: "report.ts",
+        checks: [
+          ["r_broken", "<code>students.json</code> has at least two broken records — skipped and counted by the type guard"],
+          ["r_unknown", "The <code>JSON.parse</code> result is annotated <code>unknown</code> — no <code>any</code> reaches my code"],
+          ["r_async", "Top-level <code>await</code>, <code>withTimeout</code> on the read, <code>allSettled</code> + <code>retry</code> for attendance"],
+          ["r_errors", "Every <code>catch</code> uses <code>errorMessage</code>"],
+          ["r_output", "Header, one row per valid student (<code>—</code> for failed attendance), average, passed, skipped, typed grade tally"],
+          ["r_no_logic", "No grading logic of its own — only imports, calls and <code>console.log</code>"]
+        ]
+      },
+      {
+        sid: "10.5", title: "Prove it",
+        checks: [
+          ["pj_check_clean", "<code>npm run check</code> prints nothing — screenshotted"],
+          ["pj_report_runs", "<code>npm run report</code> works — screenshotted"],
+          ["pj_build_start", "<code>npm run build</code> then <code>npm start</code> prints the same report from <code>dist/</code>"],
+          ["pj_dist_read", "Opened <code>dist/lib/grade-lib.js</code> — types and <code>import type</code> gone, imports end in <code>.js</code>"],
+          ["pj_break_three", "Broke it three ways from README Step 15 and recorded each error"]
+        ],
+        inputs: [
+          { k:"pj_check_url", type:"url", label:"npm run check + npm run report screenshot", hint:"— required", ph:"https://…" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "t11",
+    title: "Browser: typed DOM",
+    lead: "In <code>day-06/project/</code>, rewrite your Day 05 <code>main.js</code> as <code>src/main.ts</code>. It imports the <strong>same</strong> <code>lib/</code> as <code>report.ts</code>.",
+    deliverable: "index.html + src/main.ts + 2 screenshots",
+    sections: [
+      {
+        sid: "11.1", title: "The page",
+        checks: [
+          ["w_dist", "<code>index.html</code> sits in <code>project/</code> and loads <code>./dist/main.js</code> with <code>type=\"module\"</code>"],
+          ["w_lookup", "Every element goes through a typed helper or <code>querySelector&lt;T&gt;</code> + a <code>null</code> check"],
+          ["w_specific", "Every element has its specific type — <code>HTMLInputElement</code>, <code>HTMLButtonElement</code>…"],
+          ["w_students_typed", "<code>students</code> is typed as <code>GradedStudent[]</code>"],
+          ["w_handlers", "Handlers wired with <code>addEventListener</code>, each with a typed signature"]
+        ]
+      },
+      {
+        sid: "11.2", title: "Behaviour",
+        checks: [
+          ["w_load", "<strong>Load students</strong> — <code>async</code>, <code>try</code> / <code>catch</code> / <code>finally</code>, button re-enabled <strong>only</strong> in <code>finally</code>"],
+          ["w_guard", "Fetched JSON is <code>unknown</code>; only <code>isStudent</code> records shown; status says how many were skipped"],
+          ["w_attendance", "Attendance fetched in parallel with the imported <code>getAttendance</code>; a failed one shows <code>—</code>"],
+          ["w_add", "An <strong>Add</strong> form using <code>valueAsNumber</code>, rejecting empty names, <code>NaN</code> and out-of-range scores"],
+          ["w_summary", "A summary line using the imported <code>average</code> and <code>letterGrade</code>"],
+          ["w_state_union", "Page state is a discriminated union rendered with an exhaustive <code>switch</code>"]
+        ]
+      },
+      {
+        sid: "11.3", title: "Prove it",
+        checks: [
+          ["w_live", "Runs through <strong>Live Server</strong> after <code>npm run build</code>"],
+          ["w_shot_load", "Screenshotted a load with skipped records <strong>and</strong> a <code>—</code> attendance, DevTools open"],
+          ["w_missing_el", "Changed an id, rebuilt, and screenshotted my own clear missing-element error"],
+          ["w_watch", "Ran <code>npx tsc --watch</code> and proved a save in <code>main.ts</code> reaches the browser"]
+        ],
+        inputs: [
+          { k:"w_url", type:"url", label:"Browser screenshot link", ph:"https://…" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "t12",
+    title: "Migrate your own JavaScript — the bug hunt",
+    lead: "TypeScript earns its keep on code that already exists. Prove it on yours.",
+    deliverable: "migrate/ folder + BUG-HUNT.md",
+    sections: [
+      {
+        sid: "12.1", title: "Pick and rename",
+        checks: [
+          ["m_pick", "Copied <strong>two</strong> of my own JavaScript files from Days 02–05 into <code>day-06/migrate/</code> — one is 40+ lines"],
+          ["m_rename", "Renamed them to <code>.ts</code> and ran <code>npx tsc</code> <strong>before</strong> changing anything"],
+          ["m_count", "Recorded the total number of errors in <code>BUG-HUNT.md</code>"]
+        ]
+      },
+      {
+        sid: "12.2", title: "Fix them properly",
+        checks: [
+          ["m_no_escape", "Fixed every error by describing the real data — never with <code>any</code>, <code>as</code> or <code>!</code>"],
+          ["m_expect_error", "Any <code>@ts-expect-error</code> has a written reason (or there are none)"],
+          ["m_same_output", "<code>npx tsc</code> is clean and both files still run with <code>node</code> with the same output"]
+        ]
+      },
+      {
+        sid: "12.3", title: "BUG-HUNT.md",
+        quote: "If you found zero real bugs, look again at every .find(), every catch, every array index and every JSON.parse.",
+        checks: [
+          ["m_table", "A table with one row per error: code, line, and <strong>real bug</strong> or <strong>missing type info</strong>"],
+          ["m_real_bugs", "For every real bug: the input that triggers it and what would happen at runtime"],
+          ["m_paragraph", "One paragraph on the most common kind of error and what it says about how I wrote JavaScript"]
+        ],
+        inputs: [
+          { k:"m_errors", type:"text", label:"Errors found", ph:"14", w:"half" },
+          { k:"m_bugs", type:"text", label:"Of those, real bugs", ph:"3", w:"half" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "t13",
+    title: "Notes, repo and pull request",
+    lead: "Your repo is the record of the whole 26 weeks. From today, every file in it is checked.",
+    deliverable: "NOTES.md + repo link + merged PR link",
+    sections: [
+      {
+        sid: "13.1", title: "Repo structure",
+        term: "javascript-everywhere/\n├── .gitignore               ← includes node_modules/ and dist/\n├── README.md\n├── day-01/ … day-05/\n└── day-06/\n    ├── NOTES.md\n    ├── package.json\n    ├── package-lock.json\n    ├── tsconfig.json\n    ├── predictions.md\n    ├── predictions/\n    ├── hello.ts, reading-errors.ts, primitives.ts, collections.ts, special-types.ts\n    ├── functions.ts, narrowing.ts, results.ts, shapes.ts, classes.ts, generics.ts, utility-types.ts\n    ├── types-lab.ts\n    ├── special-lab.ts\n    ├── functions-lab.ts\n    ├── narrowing-lab.ts\n    ├── db-types.ts\n    ├── typed-db.ts\n    ├── states.ts\n    ├── guards.ts\n    ├── classes-lab.ts\n    ├── generics-lab.ts\n    ├── utilities-lab.ts\n    ├── migrate/\n    │   └── BUG-HUNT.md\n    └── project/",
+        checks: [
+          ["t11_folder", "My repo matches this structure"],
+          ["t11_toc", "Added a Day 06 row to my root <code>README.md</code>"]
+        ]
+      },
+      {
+        sid: "13.2", title: "day-06/NOTES.md",
+        note: "<strong>In your own words</strong> — not the README's words.",
+        quote: "The bug section is not optional. If nothing broke, you copy-pasted.",
+        checks: [
+          ["n_erased", "Part 1 — What TypeScript is, and what \"types are erased\" means — with my own drawing"],
+          ["n_node_runs", "Part 1 — Why <code>node file.ts</code> running is <strong>not</strong> proof my code is correct"],
+          ["n_read_errors", "Part 1 — How to read an error: the five parts, and the three codes I met most"],
+          ["n_annotate", "Part 2 — When I annotate vs infer — and why <code>let</code> and <code>const</code> infer differently"],
+          ["n_primitives", "Part 2 — The seven primitives, one line each, with one surprise from <code>number</code>"],
+          ["n_null_undef", "Part 2 — <code>null</code> vs <code>undefined</code>, and what <code>strict</code> changes"],
+          ["n_collections", "Part 2 — Arrays vs tuples vs object types — when I'd use each"],
+          ["n_any_unknown", "Part 2 — <code>any</code> vs <code>unknown</code> vs <code>as</code>, and which I use for outside data"],
+          ["n_enum", "Part 2 — Why <code>enum</code> doesn't work in today's setup, and the <code>as const</code> replacement"],
+          ["n_params", "Part 3 — Optional, default and rest parameters, one example each"],
+          ["n_narrowing", "Part 3 — Narrowing, with an example"],
+          ["n_discriminated", "Part 3 — Why discriminated unions beat a <code>loading</code> boolean plus an <code>error</code> string"],
+          ["n_guards", "Part 3 — Type guards: \"types describe; guards verify\""],
+          ["n_iface_type", "Part 4 — <code>interface</code> vs <code>type</code>, and the rule I'll follow"],
+          ["n_structural", "Part 4 — Structural typing: why <code>fromForm</code> fits but the <code>scor</code> typo didn't"],
+          ["n_private", "Part 4 — <code>#private</code> vs <code>private</code>, and <code>readonly</code> — what each protects"],
+          ["n_instanceof", "Part 4 — Why <code>instanceof</code> works on a class but not on an interface"],
+          ["n_why_generics", "Part 5 — Why generics exist, in my own example"],
+          ["n_constraints", "Part 5 — What <code>&lt;T extends { id: number }&gt;</code> and <code>&lt;K extends keyof T&gt;</code> mean"],
+          ["n_utilities", "Part 5 — My three most useful utility types, with a real use for each"],
+          ["n_tsconfig", "Part 5 — Every line of my <code>tsconfig.json</code>, one sentence each"],
+          ["n_scripts", "Part 5 — Node runs / <code>tsc</code> checks / <code>tsc</code> builds — which script I run when"],
+          ["n_import_type", "Part 5 — Why <code>import type</code> and <code>.ts</code> extensions are needed, and why the browser loads <code>dist/</code>"],
+          ["n_first_errors", "Part 5 — My Task 10.3 first error list, and what it taught me about my Day 05 code"],
+          ["n_bug", "<strong>One bug I hit</strong>, the exact error message, and how I fixed it"]
+        ]
+      },
+      {
+        sid: "13.3", title: "Commits and PR",
+        checks: [
+          ["c_six", "At least <strong>six</strong> commits on <code>feature/day-06</code>, each one logical change with an imperative message"],
+          ["c_check_each", "<code>npm run check</code> was clean before every commit"],
+          ["c_no_generated", "<code>node_modules/</code> and <code>dist/</code> are <strong>not</strong> in my repo — searched GitHub to prove it"],
+          ["c_pr_open", "Opened a PR with <strong>What / Why / How to test</strong>, with <code>npm run check</code> under How to test"],
+          ["c_pr_review", "Left myself one review comment on a line in <strong>Files changed</strong>"],
+          ["c_pr_merge", "Merged it, deleted the branch on GitHub, then <code>git pull</code> and <code>git branch -d</code> locally"],
+          ["c_log", "Ran <code>git log --oneline --graph -20</code> and screenshotted it"]
+        ],
+        inputs: [
+          { k:"t7_repo_url", type:"url", label:"Repository link", hint:"— required", ph:"https://github.com/…" },
+          { k:"pr_url", type:"url", label:"Merged pull request link", hint:"— required", ph:"https://github.com/…/pull/1" },
+          { k:"t7_log_url", type:"url", label:"git log screenshot link", ph:"https://…" },
+          { k:"t7_bug_text", type:"textarea", label:"The bug you hit — the error message and the fix", ph:"…" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "t14",
+    title: "Share it",
+    lead: "Say something real. Not \"excited to continue my journey\".",
+    deliverable: "LinkedIn post link",
+    sections: [
+      {
+        sid: "14.1", title: "Post it",
+        checks: [
+          ["t8_posted", "Posted on LinkedIn about completing Day 6"],
+          ["t8_shot", "Included a screenshot of a <strong>real</strong> error TypeScript caught in my own code"],
+          ["t8_repo_pr", "Included the link to my repo <strong>and</strong> my merged pull request"],
+          ["t8_before_after", "Showed a Day 05 function next to its typed version, <strong>or</strong> my <code>BUG-HUNT.md</code> table"],
+          ["t8_learned", "Said one concrete thing I understood — why Node runs code with type errors, what <code>unknown</code> protects me from, what a discriminated union replaces…"]
+        ],
+        inputs: [
+          { k:"t8_post_url", type:"url", label:"LinkedIn post link", hint:"— required", ph:"https://linkedin.com/posts/…" },
+          { k:"t8_learned_text", type:"text", label:"The one thing that clicked", ph:"…" }
+        ]
+      },
+      {
+        sid: "Bonus", title: "Optional — for anyone going further",
+        note: "Not required. Ticking these is how a submission moves from ✅ Done to 🔥 10%.",
+        optional: true,
+        checks: [
+          ["b_actions", "A GitHub Actions workflow running <code>npm ci</code> + <code>npm run check</code> on every PR — with a failed-then-passed screenshot"],
+          ["b_zod", "Replaced <code>isStudent</code> with a <strong>Zod</strong> schema and <code>z.infer</code>"],
+          ["b_deep_readonly", "A recursive <code>DeepReadonly&lt;T&gt;</code> rejecting nested mutation"],
+          ["b_emitter", "A generic <code>EventEmitter&lt;Events&gt;</code> with typed <code>on</code> and <code>emit</code>"],
+          ["b_template_literal", "A template literal type, with one accepted and one rejected value"],
+          ["b_satisfies", "Used <code>satisfies</code> on a config object and explained how it differs from an annotation"],
+          ["b_exact_optional", "Turned on <code>exactOptionalPropertyTypes</code>, fixed what it found, and explained the rule"],
+          ["b_jsdoc", "JSDoc on my <code>lib/</code> exports, showing on hover in <code>main.ts</code>"],
+          ["b_dts", "A <code>.d.ts</code> file for an untyped JavaScript helper of my own"],
+          ["b_classmate_pr", "A PR on a classmate's repo that removes an <code>any</code> or adds a missing type guard"]
+        ]
+      },
+      {
+        sid: "Grading", title: "How this is graded",
+        grade: [
+          ["❌ Incomplete", "Copy-pasted README code, predictions written after running, any any you weren’t asked for, errors silenced with as / ! / @ts-ignore, JSON.parse or catch (err) used without narrowing, npm run check failing, dist/ or node_modules/ committed, everything done on main, no merged PR, or code you can’t explain line by line"],
+          ["✅ Done", "All fourteen tasks, your own database and Day 05 project typed, a type guard at every boundary, generic helpers with real constraints, a discriminated union with an exhaustive switch, one lib/ running in Node and the browser, npm run check clean, a bug hunt with real bugs found, NOTES.md in your own words, a merged PR"],
+          ["🔥 10%", "Done + the bonus + a project that does something beyond the spec + notes someone else could actually learn from"]
+        ]
+      }
+    ]
+  }
+];
+
+const REQUIRED_INPUTS = ["pj_check_url", "pr_url", "t7_repo_url", "t8_post_url"];
+
+/* Which assignment this is — picks the sheet column (Day 6 -> I). */
+const DAY = 6;
+
+/* Apps Script web-app /exec URL. Empty = code-only mode: the page still
+   works, students just hand over their code instead. See
+   tools/apps-script/Code.gs for how to deploy one. */
+const ENDPOINT = "https://script.google.com/macros/s/AKfycbwqjBg7wGjLQl-edi1PQVbcfBJLN1EpStr62i3m238eDhOXQ5mlZvaP1uNl2LbR1uI/exec";
+
+/* The Day 06 roster: [email, name]. Order IS the identity — a code
+   carries the index into this array, so never reorder, only append. */
+const ROSTER = [["saadmmustafa99@gmail.com","سعد محمد مصطفى"],["ahmedmohamedelroby26@gmail.com","Ahmed Mohamed Hamed Elroby"],["abobkrsayed0@gmail.com","Abobkr Sayed Mohamed Ali"],["mh.gamal855@gmail.com","Mahmoud Gamal"],["mennafathalla124@gmail.com","Menna Fathalla Esmail"],["mtahr8006@gmail.com","Omar Taher Ahmed"],["donya21creator@gmail.com","Donya El Shahat El Sadek"],["mohammedraka2030@gmail.com","محمد ركاء العنزي"],["abdallahalsabaa.pu.2021@gmail.com","Abdallah Elsaied Mohamed Alsabaa"],["nourased7@gmail.com","نورالهدى السيد حسن"],["mohammedhashmed88@gmail.com","Mohammed Hashim"],["salmazyad17@yahoo.com","سلمي زياد"],["fatmamohsenfouly@gmail.com","فاطمة محسن محمد حسن"],["abdullahmohamed752006@gmail.com","abdallah mohamed"],["mokhtaroldmoustapha@gmail.com","mokhtar moustapha"],["abdofawzy1211@gmail.com","عبدالرحمن فوزي نصر محمود"],["ahmedalaa28908@gmail.com","أحمد علاء إمبارك محمود"],["abanoubmaqqar19@gmail.com","Abanoub Maqqar Mazouz"],["mbarakat16706@gmail.com","محمد بركات مبارك محمود"],["mohamedbahaa642021@gmail.com","محمد بهاء الدين محمد الصغير"],["x1.yousef.x1.2007@gmail.com","يوسف عاطف احمد محمد"],["ww0742003@gmail.com","محمد مصطفى رمضان"],["mohammedsalah0858@gmai.com","محمد صلاح شحاته علواني"],["drnasser.khairy@gmail.com","Nasser khairy sidrak"],["a7med3oda@yahoo.com","Ahmad Mohamad Ouda"],["ahmed.m.2457@gmail.com","Ahmed Mohamed"],["engy5821@gmail.com","إنجي محمد محمود"],["mahmoudmaram002@gmail.com","Maram Mahmoud"],["emadyt0@gmail.com","Emad Ahmed Hassan"],["ismaelelnaggar69@gmail.com","Ismael Sayed El-Naggar"],["abdelhay.mahmoud.dev@gmail.com","عبدالحي محمود محمد"],["salma.eltaher1110@gmail.com","Salma Eltaher Ahmed Hamed"],["a7md.m.3bdo@gmail.com","أحمد محمد عبده محمد"],["nour.redsea@gmail.com","نورهان أشرف ناجى محمد"],["mostfashaban.soudy@gmail.com","mostafa shaban soudi"],["hemafars0@gmail.com","ابراهيم بسيونى السيد فارس محمد"],["ahmedabdo12060@gmail.com","Ahmed Abdel Aal Abdel Latif"],["reemheikal3@gmail.com","Reem Atef Heikal"],["ahmed.ibn.adell@gmail.com","احمد عادل العدل على"],["asemm9930@gmail.com","Mohamed asem ali"],["hassan20nafed@gmail.com","Hassan Mohamed Nafed"],["mahmoudaboalfadl322@gmail.com","Mahmoud Aboalfadl Mahmoud"],["mohamedmahmoudn7m@gmail.com","مروه احمد على"],["salma.abdelhares.2005@gmail.com","salma saad abd elhares"],["ahmednbg.de56@gmail.com","Ahmed Gamal ismail mahmoud"],["sameremadwasfy1@gmail.com","Samer Emad Wasfy"],["ahmedeldeeb71707@gmail.com","أحمد منتصر الديب"],["esraakhalid1977e@gmail.com","Esraa Khalid"],["georgeedwar2003@gmail.com","george edwar maher"],["gamal.elshamy.req@gmail.com","Gamal Hassan Elshamy"],["aboalnaeeb@gmail.com","Ahmed Mohamed Hassan"],["islamsaeedw@gmail.com","Islam saeed"],["moustafaelbaloty@gmail.com","moustafa ahmed"],["zmai9abd.alac@gmail.com","مى عبدالاه احمد"],["mostafasaqly1@gmail.com","mostafa saqly"]];
+</script>
+
+<script>
+/* =====================================================================
+   Day 06 submission code — shared codec.
+   The page ENCODES; tools/decode-day06.js DECODES. Keep the two in sync:
+   this exact source is embedded in the artifact.
+
+   Format:  D6.<payload-b32>.<sig>
+   payload: <rosterIndex>.<checkBits-b32>.<dayMinutes>
+   sig:     4 chars of a salted hash over the payload
+
+   The signature is not cryptography — the salt ships in the page. It only
+   stops a student from hand-typing a better code than they earned, which
+   is the realistic threat here.
+   ===================================================================== */
+
+const SALT = "js-everywhere-day06-v1";
+
+/* Crockford base32, minus the letters that get misread when retyped. */
+const B32 = "0123456789ABCDEFGHJKMNPQRSTVWXYZ";
+
+function toB32(n){
+  if (n === 0) return "0";
+  let s = "";
+  while (n > 0){ s = B32[n % 32] + s; n = Math.floor(n / 32); }
+  return s;
+}
+function fromB32(s){
+  let n = 0;
+  for (const ch of s.toUpperCase()){
+    const i = B32.indexOf(ch);
+    if (i < 0) return NaN;
+    n = n * 32 + i;
+  }
+  return n;
+}
+
+/* Bits -> base32 string, chunked so we never exceed safe integer range.
+   67 checks = 67 bits, so we pack 15 bits at a time into 3-char groups. */
+function bitsToB32(bools){
+  let out = "";
+  for (let i = 0; i < bools.length; i += 15){
+    let chunk = 0;
+    for (let j = 0; j < 15; j++){
+      if (bools[i + j]) chunk |= (1 << j);
+    }
+    out += toB32(chunk).padStart(3, "0");
+  }
+  return out;
+}
+function b32ToBits(s, count){
+  const bools = [];
+  for (let i = 0; i < s.length; i += 3){
+    const chunk = fromB32(s.slice(i, i + 3));
+    if (Number.isNaN(chunk)) return null;
+    for (let j = 0; j < 15; j++) bools.push((chunk & (1 << j)) !== 0);
+  }
+  return bools.slice(0, count);
+}
+
+/* FNV-1a, 32-bit. Small, dependency-free, good enough to detect edits. */
+function sign(payload){
+  let h = 0x811c9dc5;
+  const s = payload + "|" + SALT;
+  for (let i = 0; i < s.length; i++){
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 0x01000193) >>> 0;
+  }
+  return toB32(h).padStart(7, "0").slice(-4);
+}
+
+function encodeSubmission(rosterIndex, checkBools){
+  const day = Math.floor(Date.now() / 60000);       // minute resolution
+  const payload = toB32(rosterIndex) + "." + bitsToB32(checkBools) + "." + toB32(day);
+  return "D6." + payload + "." + sign(payload);
+}
+
+function decodeSubmission(code, checkCount){
+  const clean = String(code).trim().toUpperCase().replace(/\s+/g, "");
+  const parts = clean.split(".");
+  if (parts.length !== 5 || parts[0] !== "D6") return { ok:false, error:"Not a Day 06 code." };
+  const payload = parts[1] + "." + parts[2] + "." + parts[3];
+  if (sign(payload) !== parts[4]) return { ok:false, error:"Code was edited or mistyped." };
+  const rosterIndex = fromB32(parts[1]);
+  const bits = b32ToBits(parts[2], checkCount);
+  const day = fromB32(parts[3]);
+  if (Number.isNaN(rosterIndex) || !bits || Number.isNaN(day)){
+    return { ok:false, error:"Code is malformed." };
+  }
+  return { ok:true, rosterIndex, bits, submittedAt: new Date(day * 60000) };
+}
+</script>
+
+<script>
+/* =====================================================================
+   State + persistence
+   ===================================================================== */
+const LS_KEY = "js-everywhere-day06";
+let state = { name:"", email:"", token:"", rosterIndex:-1, checks:{}, inputs:{}, submittedAt:null };
+let active = 0;
+
+/* Flatten the model once — used everywhere for counting. */
+const ALL_CHECKS = [];       // {key, taskIdx, optional}
+const ALL_INPUTS = [];       // {key, taskIdx, optional}
+TASKS.forEach((t, ti) => {
+  t.sections.forEach(s => {
+    (s.checks || []).forEach(([k]) => ALL_CHECKS.push({ key:k, taskIdx:ti, optional:!!s.optional }));
+    (s.inputs || []).forEach(i => ALL_INPUTS.push({ key:i.k, taskIdx:ti, optional:!!s.optional }));
+  });
+});
+const REQ_CHECKS = ALL_CHECKS.filter(c => !c.optional);
+const REQ_FIELDS = ALL_INPUTS.filter(i => REQUIRED_INPUTS.includes(i.key));
+
+function loadLocal(){
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    if (raw) state = Object.assign(state, JSON.parse(raw));
+  } catch (e) { /* private window, blocked storage — carry on empty */ }
+}
+function saveLocal(){
+  try { localStorage.setItem(LS_KEY, JSON.stringify(state)); } catch (e) {}
+}
+
+/* Look a student up on the roster. Returns their index, or -1. */
+function rosterLookup(email){
+  const e = (email || "").trim().toLowerCase();
+  return ROSTER.findIndex(r => r[0] === e);
+}
+
+function setSave(kind, text){
+  const dot = document.getElementById("save-dot");
+  const txt = document.getElementById("save-text");
+  dot.className = "dot" + (kind ? " " + kind : "");
+  txt.textContent = text;
+}
+
+/* Everything lives in this browser. Nothing leaves the page until the
+   student submits and hands over their code. */
+function queueSave(){
+  saveLocal();
+  setSave("ok", "Saved on this device");
+}
+
+/* =====================================================================
+   Progress
+   ===================================================================== */
+function progress(){
+  const done = REQ_CHECKS.filter(c => state.checks[c.key]).length;
+  const total = REQ_CHECKS.length;
+  const pct = total ? Math.round(done / total * 100) : 0;
+  const tasksDone = TASKS.filter((t, ti) => taskComplete(ti)).length;
+  return { done, total, pct, tasksDone };
+}
+function taskCounts(ti){
+  const list = REQ_CHECKS.filter(c => c.taskIdx === ti);
+  return { done: list.filter(c => state.checks[c.key]).length, total: list.length };
+}
+function taskComplete(ti){
+  const c = taskCounts(ti);
+  const fields = REQ_FIELDS.filter(f => f.taskIdx === ti);
+  const fieldsOk = fields.every(f => (state.inputs[f.key] || "").trim().length > 0);
+  return c.total > 0 && c.done === c.total && fieldsOk;
+}
+function canSubmit(){
+  const p = progress();
+  return p.done === p.total &&
+         REQUIRED_INPUTS.every(k => (state.inputs[k] || "").trim().length > 0);
+}
+
+/* =====================================================================
+   Rendering
+   ===================================================================== */
+function esc(s){ return String(s).replace(/[&<>"]/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c])); }
+
+function renderNav(){
+  const nav = document.getElementById("nav");
+  nav.innerHTML = '<div class="nav-label">Tasks</div>';
+  TASKS.forEach((t, ti) => {
+    const c = taskCounts(ti);
+    const done = taskComplete(ti);
+    const b = document.createElement("button");
+    b.className = "tab" + (ti === active ? " active" : "") + (done ? " done" : "");
+    b.setAttribute("aria-current", ti === active ? "true" : "false");
+    b.innerHTML =
+      '<span class="num">' + (done ? "✓" : (ti + 1)) + '</span>' +
+      '<span class="ttl">' + esc(t.title) + '</span>' +
+      '<span class="cnt">' + c.done + "/" + c.total + '</span>';
+    b.addEventListener("click", () => { active = ti; renderAll(); window.scrollTo({ top:0, behavior:"smooth" }); });
+    nav.appendChild(b);
+  });
+}
+
+function renderProgress(){
+  const p = progress();
+  const CIRC = 157;
+  document.getElementById("ring-fg").style.strokeDashoffset = String(CIRC - CIRC * p.pct / 100);
+  document.getElementById("ring-pct").textContent = p.pct + "%";
+  document.getElementById("prog-count").textContent = p.done + " / " + p.total + " checks";
+  document.getElementById("prog-tasks").textContent = p.tasksDone + " of " + TASKS.length + " tasks complete";
+
+  const submit = document.getElementById("btn-submit");
+  const ok = canSubmit();
+  submit.disabled = !ok;
+  const msg = document.getElementById("foot-msg");
+  if (state.submittedAt){
+    msg.textContent = "Submitted " + new Date(state.submittedAt).toLocaleString() + " — you can still edit and resubmit.";
+  } else if (ok){
+    msg.textContent = "Everything required is done. Submit when you're ready.";
+  } else {
+    const missing = [];
+    if (p.done < p.total) missing.push((p.total - p.done) + " checks left");
+    const FIELD_NAMES = {
+      pj_check_url: "npm run check screenshot",
+      pr_url: "pull request link",
+      t7_repo_url: "repo link",
+      t8_post_url: "LinkedIn link"
+    };
+    REQUIRED_INPUTS.forEach(k => {
+      if (!(state.inputs[k] || "").trim()){
+        missing.push(FIELD_NAMES[k] || k);
+      }
+    });
+    msg.textContent = missing.join(" · ");
+  }
+}
+
+function fieldHTML(inp){
+  const id = "in_" + inp.k;
+  const val = esc(state.inputs[inp.k] || "");
+  const hint = inp.hint ? ' <span class="hint">' + inp.hint + "</span>" : "";
+  const ctrl = inp.type === "textarea"
+    ? '<textarea id="' + id + '" data-key="' + inp.k + '" placeholder="' + esc(inp.ph || "") + '">' + val + "</textarea>"
+    : '<input type="' + (inp.type === "url" ? "url" : "text") + '" id="' + id + '" data-key="' + inp.k +
+      '" value="' + val + '" placeholder="' + esc(inp.ph || "") + '">';
+  return '<div class="field' + (inp.w === "half" ? " half" : "") + '">' +
+         '<label for="' + id + '">' + inp.label + hint + "</label>" + ctrl + "</div>";
+}
+
+function renderMain(){
+  const t = TASKS[active];
+  const m = document.getElementById("main");
+  let html =
+    '<div class="panel-head">' +
+      '<div class="eyebrow">Task ' + (active + 1) + " of " + TASKS.length + "</div>" +
+      "<h1>" + esc(t.title) + "</h1>" +
+      "<p>" + t.lead + "</p>" +     // leads are trusted markup from TASKS, like notes
+    "</div>";
+
+  t.sections.forEach(s => {
+    html += '<section class="sec">';
+    html += '<div class="sec-head"><span class="sid">' + esc(s.sid) + "</span><h3>" + esc(s.title) + "</h3></div>";
+    if (s.note)  html += '<p class="sec-note">' + s.note + "</p>";
+    if (s.term)  html += '<pre class="term">' + esc(s.term) + "</pre>";
+    if (s.quote) html += '<p class="sec-note quote">' + s.quote + "</p>";
+
+    if (s.checks){
+      html += '<div class="checks">';
+      s.checks.forEach(([k, label]) => {
+        html += '<label class="check"><input type="checkbox" data-check="' + k + '"' +
+                (state.checks[k] ? " checked" : "") + "><span>" + label + "</span></label>";
+      });
+      html += "</div>";
+    }
+
+    if (s.inputs){
+      const half = s.inputs.every(i => i.w === "half");
+      html += '<div class="inputs' + (half ? " two" : "") + '">';
+      s.inputs.forEach(i => { html += fieldHTML(i); });
+      html += "</div>";
+    }
+
+    if (s.grade){
+      html += '<div class="grade">';
+      s.grade.forEach(([lvl, desc]) => {
+        html += '<div class="grade-row"><div class="lvl">' + lvl + '</div><div class="desc">' + desc + "</div></div>";
+      });
+      html += "</div>";
+    }
+    html += "</section>";
+  });
+
+  if (t.deliverable){
+    const done = taskComplete(active);
+    html += '<div class="deliverable' + (done ? "" : " pending") + '">' +
+            (done ? "✓" : "○") + " Deliverable — " + esc(t.deliverable) + "</div>";
+  }
+
+  m.innerHTML = html;
+
+  m.querySelectorAll("input[data-check]").forEach(el => {
+    el.addEventListener("change", () => {
+      state.checks[el.dataset.check] = el.checked;
+      if (!el.checked) delete state.checks[el.dataset.check];
+      renderNav(); renderProgress(); refreshDeliverable(); queueSave();
+    });
+  });
+  m.querySelectorAll("[data-key]").forEach(el => {
+    el.addEventListener("input", () => {
+      state.inputs[el.dataset.key] = el.value;
+      renderNav(); renderProgress(); refreshDeliverable(); queueSave();
+    });
+  });
+
+  document.getElementById("btn-prev").disabled = active === 0;
+  document.getElementById("btn-next").disabled = active === TASKS.length - 1;
+}
+
+function refreshDeliverable(){
+  const el = document.querySelector(".deliverable");
+  if (!el) return;
+  const done = taskComplete(active);
+  el.className = "deliverable" + (done ? "" : " pending");
+  el.textContent = (done ? "✓" : "○") + " Deliverable — " + TASKS[active].deliverable;
+}
+
+function renderAll(){ renderNav(); renderMain(); renderProgress(); }
+
+/* =====================================================================
+   Receipt
+   ===================================================================== */
+/* Required checks first, then bonus — this ORDER IS THE WIRE FORMAT.
+   tools/checks.json is generated from the same model in the same order,
+   so the decoder can map each bit back to its label. */
+function checkBits(){
+  return REQ_CHECKS.map(c => !!state.checks[c.key])
+    .concat(ALL_CHECKS.filter(c => c.optional).map(c => !!state.checks[c.key]));
+}
+
+function showReceipt(){
+  const p = progress();
+  const bonusDone = ALL_CHECKS.filter(c => c.optional && state.checks[c.key]).length;
+  const bonusTotal = ALL_CHECKS.filter(c => c.optional).length;
+
+  document.getElementById("receipt-sub").textContent =
+    "Well done, " + state.name.split(" ")[0] + ". Your grade is being sent to your instructor now.";
+
+  let rows = "";
+  TASKS.forEach((t, ti) => {
+    const c = taskCounts(ti);
+    const ok = taskComplete(ti);
+    rows += '<div class="summary-row"><span class="k">Task ' + (ti + 1) + " — " + esc(t.title) + "</span>" +
+            '<span class="v ' + (ok ? "pass" : "miss") + '">' + c.done + "/" + c.total + "</span></div>";
+  });
+  rows += '<div class="summary-row"><span class="k">Bonus</span><span class="v">' + bonusDone + "/" + bonusTotal + "</span></div>";
+  rows += '<div class="summary-row"><span class="k">Overall</span><span class="v pass">' + p.pct + "%</span></div>";
+  document.getElementById("receipt-summary").innerHTML = rows;
+
+  document.getElementById("shell").classList.remove("on");
+  document.getElementById("receipt").classList.add("on");
+  window.scrollTo(0, 0);
+}
+
+/* =====================================================================
+   Boot
+   ===================================================================== */
+function enterShell(){
+  document.getElementById("gate").style.display = "none";
+  document.getElementById("shell").classList.add("on");
+  document.getElementById("who-name").textContent = state.name;
+  document.getElementById("who-email").textContent = state.email;
+  renderAll();
+}
+
+document.getElementById("gate-go").addEventListener("click", async () => {
+  const email = document.getElementById("g-email").value.trim();
+  const err = document.getElementById("gate-err");
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+    err.textContent = "That email doesn't look right — check it and try again."; return;
+  }
+  const idx = rosterLookup(email);
+  if (idx < 0){
+    err.innerHTML = "That email isn't on the Day 06 roster. Use the address you " +
+                    "registered with — if you think this is a mistake, message your instructor.";
+    return;
+  }
+  const token = document.getElementById("g-token").value.trim().toLowerCase();
+  if (token.length < 6){
+    err.textContent = "Enter the 10-character code your instructor sent you.";
+    return;
+  }
+  err.textContent = "";
+
+  const rosterEmail = ROSTER[idx][0];
+
+  // Check the code with the server BEFORE opening the tasks. Getting this
+  // wrong after eight tasks of work is a miserable way to find out.
+  const go = document.getElementById("gate-go");
+  const label = go.textContent;
+  go.disabled = true;
+  go.textContent = "Checking your code…";
+
+  const accept = () => {
+    state.rosterIndex = idx;
+    state.email = rosterEmail;
+    state.name  = ROSTER[idx][1];
+    state.token = token;
+    saveLocal(); queueSave(); enterShell();
+  };
+  const restore = () => { go.disabled = false; go.textContent = label; };
+
+  if (!ENDPOINT){ accept(); restore(); return; }
+
+  try {
+    const res = await fetch(ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      redirect: "follow",
+      body: JSON.stringify({ action: "verify", email: rosterEmail, token: token })
+    });
+    const out = await res.json();
+
+    if (out.ok){
+      accept();
+    } else if (out.error === "bad_token"){
+      err.innerHTML = "That code doesn't match your email. Check the 10-character " +
+                      "code your instructor emailed you — if you can't find it, " +
+                      "ask them to resend it.";
+    } else {
+      err.textContent = "Couldn't check your code (" + (out.error || "unknown") + "). Try again.";
+    }
+  } catch (e) {
+    // Offline or the endpoint is unreachable. Don't strand the student —
+    // let them work; the code is verified again when they submit.
+    console.error("[day06] verify failed:", e);
+    accept();
+  } finally {
+    restore();
+  }
+});
+["g-email"].forEach(id => {
+  document.getElementById(id).addEventListener("keydown", e => {
+    if (e.key === "Enter") document.getElementById("gate-go").click();
+  });
+});
+
+document.getElementById("btn-prev").addEventListener("click", () => {
+  if (active > 0){ active--; renderAll(); window.scrollTo({ top:0, behavior:"smooth" }); }
+});
+document.getElementById("btn-next").addEventListener("click", () => {
+  if (active < TASKS.length - 1){ active++; renderAll(); window.scrollTo({ top:0, behavior:"smooth" }); }
+});
+document.getElementById("btn-submit").addEventListener("click", () => {
+  state.submittedAt = new Date().toISOString();
+  saveLocal();
+  showReceipt();
+  sendToSheet();
+});
+
+/* Post the result straight to the instructor's sheet. Best-effort: if this
+   fails for any reason the submission code below is still valid, so the
+   student is never blocked. */
+async function sendToSheet(){
+  const box = document.getElementById("send-state");
+  if (!ENDPOINT){ box.hidden = true; return; }
+
+  const p = progress();
+  const bonusAll = ALL_CHECKS.filter(c => c.optional);
+  const bonusDone = bonusAll.filter(c => state.checks[c.key]).length;
+  const level = p.done === p.total
+    ? (bonusDone === bonusAll.length ? "10%" : "Done")
+    : "Incomplete";
+
+  box.hidden = false;
+  box.className = "send-state sending";
+  box.textContent = "Recording your grade…";
+
+  try {
+    const res = await fetch(ENDPOINT, {
+      method: "POST",
+      // text/plain dodges the CORS preflight Apps Script won't answer.
+      // Apps Script 302s to script.googleusercontent.com, which does send
+      // CORS headers, so the followed response is readable.
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      redirect: "follow",
+      body: JSON.stringify({
+        token: state.token,
+        day: DAY,
+        email: state.email,
+        score: p.pct,
+        level: level,
+        bonus: bonusDone + "/" + bonusAll.length,
+        repo: state.inputs.t7_repo_url || "",
+        post: state.inputs.t8_post_url || ""
+      })
+    });
+    const out = await res.json();
+    if (out.ok){
+      box.className = "send-state ok";
+      box.textContent = out.resubmitted
+        ? "✓ Your grade was updated — " + out.score + "%. Nothing else to do."
+        : "✓ Recorded — " + out.score + "%. Nothing else to do.";
+    } else if (out.error === "bad_token"){
+      box.className = "send-state warn";
+      box.textContent = "That code doesn't match your email. Go back, check the code " +
+                        "your instructor emailed you, and submit again.";
+      return;
+    } else {
+      throw new Error(out.error || "rejected");
+    }
+  } catch (err) {
+    box.className = "send-state warn";
+    box.textContent = "Couldn't reach the grade sheet. Check your connection and " +
+                      "press Submit again — your answers are saved.";
+    // Surface the real reason; "Failed to fetch" here means the sandbox
+    // blocked the request, not that the endpoint is down.
+    console.error("[day06] submission POST failed:", err);
+  }
+}
+document.getElementById("btn-reopen").addEventListener("click", () => {
+  document.getElementById("receipt").classList.remove("on");
+  document.getElementById("shell").classList.add("on");
+  renderAll();
+});
+
+loadLocal();
+// A stored email must still be on the roster — it can change between days.
+if (state.email){
+  const idx = rosterLookup(state.email);
+  if (idx < 0){
+    state = { name:"", email:"", rosterIndex:-1, checks:{}, inputs:{}, submittedAt:null };
+    saveLocal();
+  } else {
+    state.rosterIndex = idx;
+    state.name = ROSTER[idx][1];
+    document.getElementById("g-email").value = state.email;
+    document.getElementById("g-token").value = state.token || "";
+    enterShell();
+  }
+}
+setSave("ok", "Saved on this device");
+</script>
