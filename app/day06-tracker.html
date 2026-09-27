@@ -296,9 +296,9 @@ pre.term{
 <!-- ================= GATE ================= -->
 <section class="gate" id="gate">
   <div class="gate-card">
-    <div class="gate-eyebrow">Track 1 · Day 6 · Parts 1–5</div>
-    <h1>Day 06 — TypeScript from Scratch</h1>
-    <p class="sub">Work through the fourteen tasks, tick what you finish, drop your links in. Your progress saves in this browser as you go — close the tab and come back.</p>
+    <div class="gate-eyebrow">Track 1 · Day 6 · Parts 1–9</div>
+    <h1>Day 06 — TypeScript, APIs + Task Manager</h1>
+    <p class="sub">Work through the twenty-four tasks, tick what you finish, drop your links in. Your progress saves in this browser as you go — close the tab and come back.</p>
     <div class="field">
       <label for="g-email">Email <span class="hint">— the one you registered with</span></label>
       <input type="email" id="g-email" autocomplete="email" placeholder="you@gmail.com">
@@ -339,7 +339,7 @@ pre.term{
       </div>
       <div class="progress-meta">
         <div class="big" id="prog-count">0 / 0 checks</div>
-        <div class="small" id="prog-tasks">0 of 14 tasks complete</div>
+        <div class="small" id="prog-tasks">0 of 24 tasks complete</div>
       </div>
     </div>
 
@@ -386,7 +386,7 @@ pre.term{
 const TASKS = [
   {
     id: "t1",
-    title: "Predict, then check",
+    title: "Predict, then check — TypeScript",
     lead: "Twenty-eight snippets, each in its own file in <code>day-06/predictions/</code>. Every snippet gets <strong>two</strong> predictions: what <code>tsc</code> says, and what <code>node</code> prints. The full code is in <code>ASSIGNMENT.md</code>.",
     deliverable: "predictions.md + 1 screenshot",
     sections: [
@@ -902,20 +902,399 @@ const TASKS = [
   },
   {
     id: "t13",
-    title: "Notes, repo and pull request",
-    lead: "Your repo is the record of the whole 26 weeks. From today, every file in it is checked.",
-    deliverable: "NOTES.md + repo link + merged PR link",
+    title: "Predict, then run — APIs & DOM",
+    lead: "Twenty-one snippets: #1–#18 run in Node against the Task API, #19–#21 are HTML files for the browser. Reset the API's data first so everyone starts from the same three tasks. The full code is in <code>ASSIGNMENT.md</code>.",
+    deliverable: "predictions-api.md + 1 screenshot",
     sections: [
       {
-        sid: "13.1", title: "Repo structure",
-        term: "javascript-everywhere/\n├── .gitignore               ← includes node_modules/ and dist/\n├── README.md\n├── day-01/ … day-05/\n└── day-06/\n    ├── NOTES.md\n    ├── package.json\n    ├── package-lock.json\n    ├── tsconfig.json\n    ├── predictions.md\n    ├── predictions/\n    ├── hello.ts, reading-errors.ts, primitives.ts, collections.ts, special-types.ts\n    ├── functions.ts, narrowing.ts, results.ts, shapes.ts, classes.ts, generics.ts, utility-types.ts\n    ├── types-lab.ts\n    ├── special-lab.ts\n    ├── functions-lab.ts\n    ├── narrowing-lab.ts\n    ├── db-types.ts\n    ├── typed-db.ts\n    ├── states.ts\n    ├── guards.ts\n    ├── classes-lab.ts\n    ├── generics-lab.ts\n    ├── utilities-lab.ts\n    ├── migrate/\n    │   └── BUG-HUNT.md\n    └── project/",
+        sid: "13.1", title: "Write your predictions first",
         checks: [
-          ["t11_folder", "My repo matches this structure"],
-          ["t11_toc", "Added a Day 06 row to my root <code>README.md</code>"]
+          ["api_t1_pred_file", "Created <code>predictions-api.md</code>, the <code>predictions-api/</code> folder with its own <code>tsconfig.json</code>, and reset the API's data"],
+          ["api_t1_pred_before", "Wrote my prediction for all 21 snippets — output or exact error name — <em>before</em> running anything"],
+          ["api_t1_pred_tsc", "Also predicted whether <code>tsc</code> accepts <strong>#16</strong> and <strong>#18</strong>"]
         ]
       },
       {
-        sid: "13.2", title: "day-06/NOTES.md",
+        sid: "13.2", title: "Now run them",
+        quote: "Getting them wrong is the assignment. Getting them wrong and not explaining why is not.",
+        checks: [
+          ["api_t1_pred_actual", "Ran every snippet in order and recorded the <em>actual</em> result next to each prediction"],
+          ["api_t1_pred_why", "For every one I got wrong, wrote one sentence explaining why"],
+          ["api_t1_pred_mech", "For <strong>#1, #2, #4, #7, #10, #12, #14 vs #15, #18 and #20</strong> named the mechanism explicitly"],
+          ["api_t1_pred_16_18", "Explained why <code>tsc</code> caught #16 but not #18"],
+          ["api_t1_pred_shot", "Screenshotted the output"]
+        ],
+        inputs: [
+          { k:"api_t1_wrong_count", type:"text", label:"How many did you get wrong?", ph:"6", w:"half" },
+          { k:"api_t1_pred_url", type:"url", label:"Screenshot link", hint:"— Drive / Imgur / GitHub", ph:"https://…" },
+          { k:"api_t1_surprise", type:"textarea", label:"Which result surprised you most, and why?", ph:"…" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "t14",
+    title: "HTTP & fetch lab — a real public API",
+    lead: "Create <code>github-lab.ts</code>, using GitHub's public API. Mind the limit: 60 requests an hour.",
+    deliverable: "github-lab.ts + 1 screenshot",
+    sections: [
+      {
+        sid: "14.1", title: "Read",
+        checks: [
+          ["api_t2_own_user", "Fetched my own GitHub user and printed <code>status</code>, <code>ok</code>, <code>statusText</code> and <code>content-type</code>"],
+          ["api_t2_ratelimit", "Printed <code>x-ratelimit-remaining</code> and explained it in a comment"],
+          ["api_t2_guard", "A <code>GitHubUser</code> interface and an <code>isGitHubUser</code> guard — the JSON is <code>unknown</code> until it passes"],
+          ["api_t2_nullable", "At least one property that can be <code>null</code>, handled with <code>??</code>"],
+          ["api_t2_check_ok", "Checked <code>res.ok</code> before reading the body, with an error that includes the status"]
+        ]
+      },
+      {
+        sid: "14.2", title: "Query strings",
+        checks: [
+          ["api_t2_repos", "Fetched my repos with <code>sort=updated</code> and <code>per_page=5</code>, built with <code>URL</code> + <code>searchParams</code>"],
+          ["api_t2_repos_print", "Printed each repo's name, language (or <code>—</code>) and stars"],
+          ["api_t2_encoded", "Searched with a space and a <code>:</code> in the query, and pointed out each encoded character"],
+          ["api_t2_by_hand", "Built one URL by hand with a value containing <code>&amp;</code>, and showed what breaks"]
+        ]
+      },
+      {
+        sid: "14.3", title: "Several at once",
+        checks: [
+          ["api_t2_parallel", "Fetched three users in parallel with <code>Promise.all</code> + <code>map</code>, printed in the order asked"],
+          ["api_t2_missing_user", "Included a username that doesn't exist, and reported it without losing the other two"]
+        ],
+        inputs: [
+          { k:"api_t2_url", type:"url", label:"Screenshot link", ph:"https://…" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "t15",
+    title: "CRUD lab — the Task API by hand",
+    lead: "Set up <code>day-06/task-manager/</code> with README Step 20, and start it with <code>npm run api</code>.",
+    deliverable: "curl.md + crud-lab.ts + 1 screenshot",
+    sections: [
+      {
+        sid: "15.1", title: "curl.md — the terminal",
+        checks: [
+          ["api_t3_ignore", "<code>data/</code> and <code>dist/</code> are in <code>.gitignore</code>"],
+          ["api_t3_curl_crud", "One <code>curl</code> command + output for each of GET all, GET one, POST, PATCH, DELETE"],
+          ["api_t3_curl_i", "Used <code>curl -i</code> and labelled the status line and two headers"],
+          ["api_t3_curl_errors", "Recorded a 400 (invalid body), 400 (broken JSON), 404 (missing task), 404 (unknown route) and 405"],
+          ["api_t3_whose_fault", "Next to each error: client's fault or server's, and why"]
+        ]
+      },
+      {
+        sid: "15.2", title: "crud-lab.ts — fetch",
+        checks: [
+          ["api_t3_fetch_crud", "Created, read, updated and deleted a task with plain <code>fetch</code>"],
+          ["api_t3_headers", "Every write sends <code>Content-Type: application/json</code> and a <code>JSON.stringify</code>'d body"],
+          ["api_t3_check_every", "Checked <code>res.ok</code> after every call, printing the server's <code>{ error }</code> on failure"],
+          ["api_t3_typed", "Typed the created task as <code>Task</code> (<code>import type</code>) after checking it with <code>isTask</code>"],
+          ["api_t3_patch_two", "PATCHed two fields in one call and proved the third didn't change"],
+          ["api_t3_204", "Handled DELETE's <code>204</code> without calling <code>res.json()</code>"],
+          ["api_t3_parallel", "Created three tasks in parallel with <code>Promise.all</code>, then deleted all three in parallel"]
+        ]
+      },
+      {
+        sid: "15.3", title: "The Network tab",
+        checks: [
+          ["api_t3_network_get", "Screenshotted a request's <strong>Headers</strong> and <strong>Response</strong> in the Network tab"],
+          ["api_t3_network_post", "Ran a <code>fetch</code> POST in the console and screenshotted its <strong>Payload</strong>"]
+        ],
+        inputs: [
+          { k:"api_t3_url", type:"url", label:"Screenshot link", ph:"https://…" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "t16",
+    title: "Failure lab — every way it breaks",
+    lead: "Create <code>failures-lab.ts</code>, with a small <code>attempt(label, fn)</code> helper like README Step 21.",
+    deliverable: "failures-lab.ts + 1 screenshot",
+    sections: [
+      {
+        sid: "16.1", title: "Cause every failure",
+        checks: [
+          ["api_t4_network", "<strong>Network:</strong> a wrong port and a host that doesn't exist — printed <code>err.name</code> and <code>err.cause.code</code>"],
+          ["api_t4_4xx", "<strong>HTTP 4xx:</strong> a 404 and a 400, each with the server's own message"],
+          ["api_t4_5xx", "<strong>HTTP 5xx:</strong> restarted with <code>FAIL_RATE=1</code> and recorded the 500"],
+          ["api_t4_parse", "<strong>Parse:</strong> <code>res.json()</code> on a response that isn't JSON"],
+          ["api_t4_shape", "<strong>Shape:</strong> valid JSON that fails my <code>isTask</code> guard"],
+          ["api_t4_timeout", "<strong>Timeout:</strong> <code>SLOW=3000</code> and <code>AbortSignal.timeout(1000)</code>"],
+          ["api_t4_abort", "<strong>Abort:</strong> cancelled a request with an <code>AbortController</code>"],
+          ["api_t4_stale", "<strong>Stale:</strong> two loads in a row, the first cancelled, only the second's result used"]
+        ]
+      },
+      {
+        sid: "16.2", title: "Classify",
+        checks: [
+          ["api_t4_table", "A comment table: each failure's layer, whether <code>fetch</code> rejects or resolves, and whether it's safe to retry"],
+          ["api_t4_why_ok", "One sentence: why <code>res.ok</code> needs checking even inside <code>try</code> / <code>catch</code>"]
+        ],
+        inputs: [
+          { k:"api_t4_url", type:"url", label:"Screenshot link", ph:"https://…" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "t17",
+    title: "The typed client",
+    lead: "In <code>task-manager/src/client/</code>, type README Step 22 — then extend it.",
+    deliverable: "http.ts + api.ts + smoke.ts + 1 screenshot",
+    sections: [
+      {
+        sid: "17.1", title: "http.ts",
+        checks: [
+          ["api_t5_union", "<code>ApiError</code> as a discriminated union of six kinds, and <code>Result&lt;T&gt;</code>"],
+          ["api_t5_layers", "<code>request&lt;T&gt;()</code> checks the three layers in order — nothing throws"],
+          ["api_t5_error_body", "Reads the server's <code>{ error }</code>, with a fallback when the body isn't JSON"],
+          ["api_t5_signals", "A timeout with <code>AbortSignal.timeout</code>, combined with the caller's signal via <code>AbortSignal.any</code>"],
+          ["api_t5_204", "Handles <code>204</code> without parsing"],
+          ["api_t5_exhaustive", "Added a seventh kind temporarily and screenshotted the error in <code>describeError</code>"]
+        ]
+      },
+      {
+        sid: "17.2", title: "api.ts",
+        checks: [
+          ["api_t5_five_fns", "<code>listTasks</code>, <code>createTask</code>, <code>updateTask</code>, <code>deleteTask</code> — plus my own <code>getTask(id)</code>"],
+          ["api_t5_guards", "Each passes the right guard and hovers as the right <code>Promise&lt;Result&lt;…&gt;&gt;</code>"],
+          ["api_t5_only_urls", "It's the only file in <code>client/</code> that contains <code>/api</code>"]
+        ]
+      },
+      {
+        sid: "17.3", title: "Retry, safely",
+        checks: [
+          ["api_t5_retry_kinds", "A retry that only retries <code>network</code>, <code>timeout</code> and <code>5xx</code>"],
+          ["api_t5_retry_get", "Only for <code>GET</code>, with a growing delay"],
+          ["api_t5_retry_where", "<code>listTasks</code> uses it, <code>createTask</code> doesn't — with a comment explaining why"]
+        ]
+      },
+      {
+        sid: "17.4", title: "smoke.ts",
+        checks: [
+          ["api_t5_smoke_all", "Exercises all five functions, including one 404 and two different 400s"],
+          ["api_t5_smoke_three", "Ran against a normal, a <code>FAIL_RATE=0.5</code> and a stopped server — screenshotted all three"],
+          ["api_t5_check", "<code>npm run check</code> is clean"]
+        ],
+        inputs: [
+          { k:"api_t5_url", type:"url", label:"Screenshot link", ph:"https://…" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "t18",
+    title: "HTML — structure and accessibility",
+    lead: "The page's skeleton, a second page with no JavaScript at all, and an audit.",
+    deliverable: "index.html + layout-lab.html + 1 screenshot",
+    sections: [
+      {
+        sid: "18.1", title: "index.html",
+        checks: [
+          ["api_h_semantic", "<code>&lt;header&gt;</code>, one <code>&lt;main&gt;</code>, <code>&lt;section&gt;</code>s with <code>aria-labelledby</code>, <code>&lt;footer&gt;</code>"],
+          ["api_h_headings", "Headings in order — one <code>&lt;h1&gt;</code>, then <code>&lt;h2&gt;</code>s"],
+          ["api_h_labels", "Every input and select has a <code>&lt;label for&gt;</code> or an <code>aria-label</code>"],
+          ["api_h_button_types", "The only <code>type=\"submit\"</code> button is in the form; every other button is <code>type=\"button\"</code>"],
+          ["api_h_live", "Status line has <code>role=\"status\"</code>; the form error has <code>role=\"alert\"</code>"],
+          ["api_h_viewport", "The <code>&lt;meta name=\"viewport\"&gt;</code> tag is present"],
+          ["api_h_no_css", "Screenshotted the page with no CSS — it still reads as a sensible document"]
+        ]
+      },
+      {
+        sid: "18.2", title: "layout-lab.html — no JavaScript",
+        checks: [
+          ["api_h_lab_semantic", "<code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code> with two links, <code>&lt;main&gt;</code>, an <code>&lt;article&gt;</code>, <code>&lt;footer&gt;</code>"],
+          ["api_h_lab_form", "A contact form with three labelled fields of different types and a submit button"],
+          ["api_h_lab_grid", "A card grid of six+ cards with <code>repeat(auto-fill, minmax(…, 1fr))</code>"],
+          ["api_h_lab_linked", "Linked from the app's footer"]
+        ]
+      },
+      {
+        sid: "18.3", title: "Audit",
+        checks: [
+          ["api_h_lighthouse", "Ran Lighthouse Accessibility on both pages, fixed what it found, screenshotted the score"],
+          ["api_h_keyboard", "Used the whole app with only the keyboard and noted what I had to fix"]
+        ],
+        inputs: [
+          { k:"api_h_score", type:"text", label:"Final Lighthouse accessibility score", ph:"100", w:"half" },
+          { k:"api_h_url", type:"url", label:"Lighthouse screenshot link", ph:"https://…" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "t19",
+    title: "CSS — Grid, Flexbox, responsive, dark mode",
+    lead: "Type README Step 24's <code>styles.css</code> — then make it yours.",
+    deliverable: "styles.css + 3 screenshots",
+    sections: [
+      {
+        sid: "19.1", title: "styles.css",
+        checks: [
+          ["api_c_tokens", "Every colour, radius and spacing value is a custom property on <code>:root</code>"],
+          ["api_c_reset", "<code>box-sizing: border-box</code> everywhere, and form controls inherit the font"],
+          ["api_c_grid", "<strong>Grid</strong> page layout — one column on phones, two from my breakpoint"],
+          ["api_c_flex", "<strong>Flexbox</strong> for task rows, toolbar and list header, with <code>gap</code>"],
+          ["api_c_wrap", "The toolbar wraps on a narrow screen"],
+          ["api_c_priority", "Priority shown with <code>[data-priority]</code> attribute selectors"],
+          ["api_c_states", "Done and pending tasks each have a distinct style"],
+          ["api_c_focus", "A visible <code>:focus-visible</code> style"],
+          ["api_c_dark", "Dark mode by redefining the tokens in <code>prefers-color-scheme: dark</code>"]
+        ]
+      },
+      {
+        sid: "19.2", title: "Make it yours",
+        checks: [
+          ["api_c_own_design", "My own palette, font stack and one layout decision — with everything in 7.1 still true"],
+          ["api_c_contrast", "Checked contrast in both themes and fixed anything below 4.5:1"]
+        ]
+      },
+      {
+        sid: "19.3", title: "Prove it",
+        checks: [
+          ["api_c_shots", "Screenshots at phone width, desktop width, and in dark mode"],
+          ["api_c_comment", "A comment naming every place I used Grid and Flexbox, and why"]
+        ],
+        inputs: [
+          { k:"api_c_url", type:"url", label:"Screenshots link", hint:"— phone, desktop, dark", ph:"https://…" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "t20",
+    title: "Build: the Task Manager",
+    lead: "Type README Step 25's <code>main.ts</code>, get it working, then make sure every item below is true of <strong>your</strong> version.",
+    deliverable: "main.ts + 2 screenshots",
+    sections: [
+      {
+        sid: "20.1", title: "State and render",
+        checks: [
+          ["api_a_state", "One <code>state</code> object, with a <code>View</code> union for loading / failed / ready"],
+          ["api_a_setstate", "Every change goes through <code>setState</code> — no mutation, always <code>render()</code>"],
+          ["api_a_no_innerhtml", "<code>render()</code> uses <code>createElement</code> + <code>textContent</code> only — no <code>innerHTML</code> in the file"],
+          ["api_a_exhaustive", "The status line is an exhaustive <code>switch</code> over <code>view.status</code>"],
+          ["api_a_focus", "Keyboard focus survives a re-render"]
+        ]
+      },
+      {
+        sid: "20.2", title: "Features",
+        checks: [
+          ["api_a_load", "<strong>Load</strong> on start, a loading message, and <strong>Try again</strong> on failure"],
+          ["api_a_add_validate", "<strong>Add</strong> with <code>FormData</code> + the shared <code>validateNewTask</code> — invalid input sends no request"],
+          ["api_a_add_finally", "The Add button is disabled during the request and re-enabled in <code>finally</code>"],
+          ["api_a_toggle", "<strong>Toggle</strong> — optimistic, with rollback and a message on failure"],
+          ["api_a_priority", "<strong>Change priority</strong> — pessimistic, with the row marked pending"],
+          ["api_a_delete", "<strong>Delete</strong>, treating a 404 as already deleted"],
+          ["api_a_filter", "<strong>Filter</strong> all / active / done, with <code>aria-pressed</code>"],
+          ["api_a_search", "<strong>Search</strong> that filters as I type"],
+          ["api_a_clear", "<strong>Clear completed</strong> — parallel deletes and one message with successes and failures"],
+          ["api_a_counts", "Counts of active and done tasks"],
+          ["api_a_empty", "An empty state, and a different one when a filter matches nothing"],
+          ["api_a_delegation", "One listener on the list handles every task's controls"]
+        ]
+      },
+      {
+        sid: "20.3", title: "Prove it",
+        checks: [
+          ["api_a_runs", "<code>npm run check</code> clean, <code>npm run build</code>, and the app works at <code>localhost:3000</code>"],
+          ["api_a_persist", "Reloaded — changes persisted — and found my tasks in <code>data/tasks.json</code>"],
+          ["api_a_shot_app", "Screenshot: six+ tasks, all three priorities, some done, Network tab showing a PATCH"],
+          ["api_a_shot_check", "Screenshot: <code>npm run check</code> + the server log"]
+        ],
+        inputs: [
+          { k:"api_a_url", type:"url", label:"App screenshot link", hint:"— required", ph:"https://…" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "t21",
+    title: "Your feature, through every layer",
+    lead: "The real test of an architecture: add something, and see how many places change. Add <strong>both</strong> of these.",
+    deliverable: "code + FEATURE.md + 1 screenshot",
+    sections: [
+      {
+        sid: "21.1", title: "Edit a title",
+        checks: [
+          ["api_f_edit_mode", "An <strong>Edit</strong> button (or double-click) turns the title into a text input"],
+          ["api_f_edit_keys", "<code>Enter</code> saves with <code>PATCH { title }</code>, <code>Escape</code> cancels, leaving the field saves"],
+          ["api_f_edit_validate", "Shared validation — an empty or 121-character title shows an error and keeps the input open"],
+          ["api_f_edit_state", "Edit mode lives in state (<code>editingId</code>), not in the DOM"],
+          ["api_f_edit_a11y", "Fully keyboard-accessible, with a label"]
+        ]
+      },
+      {
+        sid: "21.2", title: "A new field",
+        note: "A <strong>due date</strong>, <strong>tags</strong>, or <strong>notes</strong> — your choice.",
+        checks: [
+          ["api_f_types", "Added to <code>Task</code>, <code>NewTask</code> and <code>TaskUpdate</code> in <code>shared/types.ts</code>"],
+          ["api_f_validate", "Validated in <code>shared/validate.ts</code> with a real rule, and <code>isTask</code> updated"],
+          ["api_f_no_route", "No new route — noted whether <code>server.ts</code> needed any change at all"],
+          ["api_f_old_tasks", "Old tasks without the field still load — optional or default, and why"],
+          ["api_f_ui", "Shown in each row, settable when adding, changeable afterwards"],
+          ["api_f_enables", "One thing it enables: sort by due date, filter by tag, or search in notes"],
+          ["api_f_curl", "Tested with <code>curl</code>: one valid and one invalid request with the new field"]
+        ]
+      },
+      {
+        sid: "21.3", title: "FEATURE.md",
+        checks: [
+          ["api_f_files", "Every file I changed for each feature, with one line on why"],
+          ["api_f_errors", "The first <code>npm run check</code> error list after changing <code>types.ts</code>"],
+          ["api_f_shared", "A paragraph on what <code>shared/</code> saved me"]
+        ],
+        inputs: [
+          { k:"api_f_field", type:"text", label:"Which field did you add?", ph:"due date", w:"half" },
+          { k:"api_f_url", type:"url", label:"Screenshot link", ph:"https://…" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "t22",
+    title: "Break it — and prove it survives",
+    lead: "Follow README Step 26 on <strong>your</strong> app. For each test, record in <code>BREAK-IT.md</code>: how you caused it, what the user saw, a screenshot, and which line of your code handled it.",
+    deliverable: "BREAK-IT.md + 5 screenshots",
+    sections: [
+      {
+        sid: "22.1", title: "The tests",
+        checks: [
+          ["api_b_flaky", "<code>FAIL_RATE=0.5</code> — a failed load with Try again, a rolled-back toggle, a partial Clear completed"],
+          ["api_b_slow", "<code>SLOW=3000</code> — the loading state, and a double-click on Add creating only one task"],
+          ["api_b_timeout", "<code>SLOW=6000</code> — the timeout message"],
+          ["api_b_down", "Server stopped — a failed action, then recovery with Try again"],
+          ["api_b_xss", "XSS title shown as text; <code>innerHTML</code> alert screenshotted, then reverted"],
+          ["api_b_stale", "A <strong>Reload</strong> button, clicked twice with <code>SLOW=2000</code> — the first request cancelled in the Network tab"],
+          ["api_b_bad_data", "Server temporarily sends <code>\"done\": \"yes\"</code> — my app reports a shape error instead of breaking"]
+        ],
+        inputs: [
+          { k:"api_b_url", type:"url", label:"BREAK-IT.md or screenshots link", ph:"https://…" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "t23",
+    title: "Notes, repo, PRs — and a Track 1 retrospective",
+    lead: "The last day of Track 1. Leave the repo in a state you'd show an employer.",
+    deliverable: "NOTES.md + RETRO.md + repo link + merged PR links",
+    sections: [
+      {
+        sid: "23.1", title: "Repo structure",
+        term: "javascript-everywhere/\n├── .gitignore               ← node_modules/, dist/, data/, .env\n├── README.md\n├── day-01/ … day-05/\n└── day-06/\n    ├── NOTES.md\n    ├── RETRO.md\n    ├── package.json\n    ├── package-lock.json\n    ├── tsconfig.json\n    ├── predictions.md\n    ├── predictions/\n    ├── predictions-api.md\n    ├── predictions-api/\n    ├── hello.ts, reading-errors.ts, primitives.ts, collections.ts, special-types.ts\n    ├── functions.ts, narrowing.ts, results.ts, shapes.ts, classes.ts, generics.ts, utility-types.ts\n    ├── fetch-preview.ts, first-fetch.ts, search.ts, crud.ts, failures.ts\n    ├── types-lab.ts, special-lab.ts, functions-lab.ts, narrowing-lab.ts\n    ├── db-types.ts, typed-db.ts, states.ts, guards.ts, classes-lab.ts\n    ├── generics-lab.ts, utilities-lab.ts\n    ├── github-lab.ts, crud-lab.ts, curl.md, failures-lab.ts\n    ├── migrate/\n    │   └── BUG-HUNT.md\n    ├── project/                ← the typed grade report (Tasks 10–11)\n    └── task-manager/           ← the Task Manager (Tasks 15–22)\n        ├── README.md\n        ├── index.html\n        ├── layout-lab.html\n        ├── styles.css\n        ├── FEATURE.md\n        ├── BREAK-IT.md\n        └── src/\n            ├── shared/\n            ├── server/\n            ├── client/\n            └── scripts/",
+        checks: [
+          ["t11_folder", "My repo matches this structure"],
+          ["t11_toc", "Added a Day 06 row to my root <code>README.md</code>"],
+          ["api_r_project_readme", "A <code>task-manager/README.md</code>: what it is, a screenshot, and exactly how to run it"]
+        ]
+      },
+      {
+        sid: "23.2", title: "day-06/NOTES.md",
         note: "<strong>In your own words</strong> — not the README's words.",
         quote: "The bug section is not optional. If nothing broke, you copy-pasted.",
         checks: [
@@ -943,43 +1322,73 @@ const TASKS = [
           ["n_scripts", "Part 5 — Node runs / <code>tsc</code> checks / <code>tsc</code> builds — which script I run when"],
           ["n_import_type", "Part 5 — Why <code>import type</code> and <code>.ts</code> extensions are needed, and why the browser loads <code>dist/</code>"],
           ["n_first_errors", "Part 5 — My Task 10.3 first error list, and what it taught me about my Day 05 code"],
-          ["n_bug", "<strong>One bug I hit</strong>, the exact error message, and how I fixed it"]
+          ["api_n_cycle", "Part 6 — The request/response cycle, with my own drawing"],
+          ["api_n_url", "Part 6 — Every part of a URL, and why <code>URLSearchParams</code> beats string gluing"],
+          ["api_n_crud_table", "Part 6 — The CRUD ↔ method ↔ status code table, from memory"],
+          ["api_n_4xx_5xx", "Part 6 — 4xx vs 5xx: whose fault, and whether to retry"],
+          ["api_n_404_resolves", "Part 6 — Why <code>fetch</code> resolves on a 404"],
+          ["api_n_layers", "Part 7 — The three layers of failure, with a real example of each"],
+          ["api_n_timeout_abort", "Part 7 — Timeout vs abort, and what a stale response is"],
+          ["api_n_result", "Part 7 — Why <code>request&lt;T&gt;()</code> returns a <code>Result</code> instead of throwing"],
+          ["api_n_cors", "Part 7 — What CORS is, who enforces it, and why today's app didn't hit it"],
+          ["api_n_secrets", "Part 7 — Why secrets never go in frontend code"],
+          ["api_n_semantic", "Part 8 — Five semantic elements and what each gives me for free"],
+          ["api_n_forms", "Part 8 — Why forms use <code>submit</code>, <code>preventDefault</code> and <code>FormData</code>"],
+          ["api_n_flex_grid", "Part 8 — Flexbox vs Grid — when I reach for each"],
+          ["api_n_xss", "Part 8 — <code>textContent</code> vs <code>innerHTML</code>, and what XSS is"],
+          ["api_n_delegation", "Part 8 — Event delegation, and why it works"],
+          ["api_n_loop", "Part 8 — The state → render → events loop"],
+          ["api_n_architecture", "Part 9 — The architecture: what each layer knows, and what it doesn't"],
+          ["api_n_optimistic", "Part 9 — Optimistic vs pessimistic — which I used where, and why"],
+          ["api_n_shared", "Part 9 — What <code>shared/</code> gives me, with my Task 21 as the example"],
+          ["n_bug", "<strong>One bug I hit in each half</strong>, the exact error or wrong behaviour, and how I fixed it"]
         ]
       },
       {
-        sid: "13.3", title: "Commits and PR",
+        sid: "23.3", title: "day-06/RETRO.md — Track 1",
         checks: [
-          ["c_six", "At least <strong>six</strong> commits on <code>feature/day-06</code>, each one logical change with an imperative message"],
-          ["c_check_each", "<code>npm run check</code> was clean before every commit"],
-          ["c_no_generated", "<code>node_modules/</code> and <code>dist/</code> are <strong>not</strong> in my repo — searched GitHub to prove it"],
-          ["c_pr_open", "Opened a PR with <strong>What / Why / How to test</strong>, with <code>npm run check</code> under How to test"],
-          ["c_pr_review", "Left myself one review comment on a line in <strong>Files changed</strong>"],
-          ["c_pr_merge", "Merged it, deleted the branch on GitHub, then <code>git pull</code> and <code>git branch -d</code> locally"],
-          ["c_log", "Ran <code>git log --oneline --graph -20</code> and screenshotted it"]
+          ["api_rt_three", "The three ideas from Days 01–06 I'd teach a friend first, and why"],
+          ["api_rt_hardest", "The hardest day, and what finally made it click"],
+          ["api_rt_rewrite", "One piece of Day 02 or 03 code I'd now write differently — before and after"],
+          ["api_rt_goal", "What I want to be able to build by the end of Track 2"]
+        ]
+      },
+      {
+        sid: "23.4", title: "Commits and PRs",
+        checks: [
+          ["c_fourteen", "At least <strong>fourteen</strong> commits on <code>feature/day-06</code>, each one logical change"],
+          ["c_check_each", "<code>npm run check</code> was clean before every commit — in <code>day-06/</code>, <code>project/</code> and <code>task-manager/</code>"],
+          ["c_no_generated", "<code>node_modules/</code>, <code>dist/</code> and <code>data/</code> are not in my repo — searched GitHub to prove it"],
+          ["c_two_prs", "<strong>Two</strong> PRs — after Task 12 and after Task 22 — each with What / Why / How to test"],
+          ["c_pr_review", "Left myself one review comment on a line in <strong>Files changed</strong> on each"],
+          ["c_pr_merge", "Merged both, deleted the branch on GitHub, then <code>git pull</code> and <code>git branch -d</code>"],
+          ["c_log", "Ran <code>git log --oneline --graph -30</code> and screenshotted it"]
         ],
         inputs: [
           { k:"t7_repo_url", type:"url", label:"Repository link", hint:"— required", ph:"https://github.com/…" },
-          { k:"pr_url", type:"url", label:"Merged pull request link", hint:"— required", ph:"https://github.com/…/pull/1" },
+          { k:"pr_url", type:"url", label:"Merged pull request link — Tasks 1–12", hint:"— required", ph:"https://github.com/…/pull/1" },
+          { k:"pr2_url", type:"url", label:"Merged pull request link — Tasks 13–22", hint:"— required", ph:"https://github.com/…/pull/2" },
           { k:"t7_log_url", type:"url", label:"git log screenshot link", ph:"https://…" },
-          { k:"t7_bug_text", type:"textarea", label:"The bug you hit — the error message and the fix", ph:"…" }
+          { k:"t7_bug_text", type:"textarea", label:"The bugs you hit — the error messages and the fixes", ph:"…" }
         ]
       }
     ]
   },
   {
-    id: "t14",
+    id: "t24",
     title: "Share it",
-    lead: "Say something real. Not \"excited to continue my journey\".",
+    lead: "You finished Day 6 — and Track 1. Say something real. Not \"excited to continue my journey\".",
     deliverable: "LinkedIn post link",
     sections: [
       {
-        sid: "14.1", title: "Post it",
+        sid: "24.1", title: "Post it",
         checks: [
-          ["t8_posted", "Posted on LinkedIn about completing Day 6"],
+          ["t8_posted", "Posted on LinkedIn about completing Day 6 and Track 1 of JavaScript Everywhere"],
           ["t8_shot", "Included a screenshot of a <strong>real</strong> error TypeScript caught in my own code"],
-          ["t8_repo_pr", "Included the link to my repo <strong>and</strong> my merged pull request"],
-          ["t8_before_after", "Showed a Day 05 function next to its typed version, <strong>or</strong> my <code>BUG-HUNT.md</code> table"],
-          ["t8_learned", "Said one concrete thing I understood — why Node runs code with type errors, what <code>unknown</code> protects me from, what a discriminated union replaces…"]
+          ["api_t8_recording", "Included a screen recording or GIF of my Task Manager — adding, ticking, filtering, and one failure handled"],
+          ["t8_repo_pr", "Included the link to my repo <strong>and</strong> my merged pull requests"],
+          ["api_t8_feature", "Named my Task 21 feature and one thing I had to change to add it"],
+          ["t8_learned", "Said one concrete thing I understood — why Node runs code with type errors, what <code>unknown</code> protects me from, why <code>fetch</code> doesn't throw on a 404…"]
         ],
         inputs: [
           { k:"t8_post_url", type:"url", label:"LinkedIn post link", hint:"— required", ph:"https://linkedin.com/posts/…" },
@@ -1000,14 +1409,24 @@ const TASKS = [
           ["b_exact_optional", "Turned on <code>exactOptionalPropertyTypes</code>, fixed what it found, and explained the rule"],
           ["b_jsdoc", "JSDoc on my <code>lib/</code> exports, showing on hover in <code>main.ts</code>"],
           ["b_dts", "A <code>.d.ts</code> file for an untyped JavaScript helper of my own"],
-          ["b_classmate_pr", "A PR on a classmate's repo that removes an <code>any</code> or adds a missing type guard"]
+          ["b_classmate_pr", "A PR on a classmate's repo that removes an <code>any</code> or adds a missing type guard"],
+          ["api_x_bulk", "A bulk <code>DELETE /api/tasks?done=true</code> endpoint, used by Clear completed"],
+          ["api_x_undo", "Undo delete — \"Deleted — Undo\" for 5 seconds, re-creating the task if clicked"],
+          ["api_x_reorder", "Drag to reorder, with an <code>order</code> field saved through the API"],
+          ["api_x_server_search", "Server-side <code>?q=</code> search, debounced 300ms, stale requests cancelled"],
+          ["api_x_offline", "Offline mode with <code>localStorage</code>, a banner, and reload on the <code>online</code> event"],
+          ["api_x_theme", "A light / dark / system theme toggle, remembered in <code>localStorage</code>"],
+          ["api_x_relative", "Relative dates with <code>Intl.RelativeTimeFormat</code>"],
+          ["api_x_test", "An automated test that starts the server, adds a task, and checks <code>data/tasks.json</code>"],
+          ["api_x_actions", "A GitHub Actions workflow running <code>npm ci</code>, <code>npm run check</code> and the smoke test"],
+          ["api_x_classmate_pr", "A PR on a classmate's Task Manager with a real accessibility or error-handling fix"]
         ]
       },
       {
         sid: "Grading", title: "How this is graded",
         grade: [
-          ["❌ Incomplete", "Copy-pasted README code, predictions written after running, any any you weren’t asked for, errors silenced with as / ! / @ts-ignore, JSON.parse or catch (err) used without narrowing, npm run check failing, dist/ or node_modules/ committed, everything done on main, no merged PR, or code you can’t explain line by line"],
-          ["✅ Done", "All fourteen tasks, your own database and Day 05 project typed, a type guard at every boundary, generic helpers with real constraints, a discriminated union with an exhaustive switch, one lib/ running in Node and the browser, npm run check clean, a bug hunt with real bugs found, NOTES.md in your own words, a merged PR"],
+          ["❌ Incomplete", "Copy-pasted README code (other than server.ts), predictions written after running, any any you weren’t asked for, errors silenced with as / ! / @ts-ignore, JSON.parse, res.json() or catch (err) used without narrowing, a fetch with no res.ok check, no timeout, innerHTML with data, div buttons or unlabelled inputs, npm run check failing, node_modules/, dist/ or data/ committed, everything done on main, no merged PR, or code you can’t explain line by line"],
+          ["✅ Done", "All twenty-four tasks, your own database and Day 05 project typed, a type guard at every boundary, generic helpers with real constraints, a typed client that turns every failure into a Result, shared validation on both sides, a semantic and keyboard-accessible page with Grid + Flexbox + dark mode, a Task Manager with every feature in 20.2 plus your own feature, every failure in Task 22 handled, a real bug hunt, NOTES.md and RETRO.md in your own words, two merged PRs"],
           ["🔥 10%", "Done + the bonus + a project that does something beyond the spec + notes someone else could actually learn from"]
         ]
       }
@@ -1015,7 +1434,7 @@ const TASKS = [
   }
 ];
 
-const REQUIRED_INPUTS = ["pj_check_url", "pr_url", "t7_repo_url", "t8_post_url"];
+const REQUIRED_INPUTS = ["pj_check_url", "api_a_url", "t7_repo_url", "pr_url", "pr2_url", "t8_post_url"];
 
 /* Which assignment this is — picks the sheet column (Day 6 -> I). */
 const DAY = 6;
@@ -1045,7 +1464,7 @@ const ROSTER = [["saadmmustafa99@gmail.com","سعد محمد مصطفى"],["ahme
    is the realistic threat here.
    ===================================================================== */
 
-const SALT = "js-everywhere-day06-v1";
+const SALT = "js-everywhere-day06-v2";
 
 /* Crockford base32, minus the letters that get misread when retyped. */
 const B32 = "0123456789ABCDEFGHJKMNPQRSTVWXYZ";
@@ -1242,6 +1661,8 @@ function renderProgress(){
     if (p.done < p.total) missing.push((p.total - p.done) + " checks left");
     const FIELD_NAMES = {
       pj_check_url: "npm run check screenshot",
+      api_a_url: "Task Manager screenshot",
+      pr2_url: "second pull request link",
       pr_url: "pull request link",
       t7_repo_url: "repo link",
       t8_post_url: "LinkedIn link"

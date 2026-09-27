@@ -2476,4 +2476,4 @@ Same functions, with **types** on every parameter and return value. Node just ru
 
 ← Back to [Day 04 — ES6+ & Async JS](../Day-04-ES6-Destructuring/README.md)
 
-Next: [Day 06 — TypeScript from Scratch: Data Types, Functions, Interfaces, Generics](../Day-06-TypeScript-Intro/README.md) →
+Next: [Day 06 — TypeScript, APIs, Web Basics + Project: Task Manager](../Day-06-TypeScript-APIs-Task-Manager/README.md) →
