@@ -2099,3 +2099,5 @@ The code *reads* synchronously — but underneath, it's exactly the event loop y
 - [ASSIGNMENT.md](ASSIGNMENT.md) — Day 04 assignment
 
 ← Back to [Day 03 — Functions, Scope & Hoisting](../Day-03-Functions-Scope/README.md)
+
+Next: [Day 05 — Promises, Async/Await, Modules + Git](../Day-05-Promises-Modules-Git/README.md) →

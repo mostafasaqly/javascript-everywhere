@@ -1,0 +1,1499 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Day 05 Submission Desk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@10..48,500;10..48,700;10..48,800&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap">
+
+<style>
+:root{
+  --ground:#FAFAF7;
+  --surface:#FFFFFF;
+  --surface-2:#F1F1EC;
+  --line:#DEDED6;
+  --line-soft:#E9E9E2;
+  --ink:#1B1F27;
+  --ink-2:#4B5260;
+  --ink-3:#787F8C;
+  --amber:#B47C0A;
+  --amber-solid:#E8B437;
+  --amber-wash:#FBF1D8;
+  --teal:#1F7D71;
+  --teal-wash:#DDF0EC;
+  --rose:#B23A48;
+  --rose-wash:#FBE4E6;
+  --shadow:0 1px 2px rgba(27,31,39,.06), 0 8px 24px -12px rgba(27,31,39,.18);
+  --radius:10px;
+  --rail:300px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#12161F;
+    --surface:#191E29;
+    --surface-2:#212736;
+    --line:#2E3546;
+    --line-soft:#252C3B;
+    --ink:#E9ECF2;
+    --ink-2:#A6AEBF;
+    --ink-3:#798296;
+    --amber:#E8B437;
+    --amber-solid:#E8B437;
+    --amber-wash:#2C2618;
+    --teal:#4FC0AF;
+    --teal-wash:#152A29;
+    --rose:#F2848F;
+    --rose-wash:#2B1A1E;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 30px -14px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#12161F;
+  --surface:#191E29;
+  --surface-2:#212736;
+  --line:#2E3546;
+  --line-soft:#252C3B;
+  --ink:#E9ECF2;
+  --ink-2:#A6AEBF;
+  --ink-3:#798296;
+  --amber:#E8B437;
+  --amber-solid:#E8B437;
+  --amber-wash:#2C2618;
+  --teal:#4FC0AF;
+  --teal-wash:#152A29;
+  --rose:#F2848F;
+  --rose-wash:#2B1A1E;
+  --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 30px -14px rgba(0,0,0,.7);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--ground);
+  color:var(--ink);
+  font-family:"Public Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:15px;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{font-family:"Bricolage Grotesque","Public Sans",sans-serif;margin:0;text-wrap:balance;letter-spacing:-.02em}
+code,kbd,.mono{font-family:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace}
+button{font:inherit;color:inherit}
+a{color:var(--amber)}
+
+/* ---------- gate ---------- */
+.gate{min-height:100vh;display:grid;place-items:center;padding:32px 20px}
+.gate-card{
+  width:100%;max-width:480px;background:var(--surface);border:1px solid var(--line);
+  border-radius:14px;padding:32px;box-shadow:var(--shadow)
+}
+.gate-eyebrow{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--amber);margin-bottom:14px}
+.gate-card h1{font-size:30px;line-height:1.12;font-weight:800;margin-bottom:8px}
+.gate-card p.sub{color:var(--ink-2);margin:0 0 26px}
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.field label{font-size:12.5px;font-weight:600;color:var(--ink-2);letter-spacing:.01em}
+.field .hint{font-size:12px;color:var(--ink-3);font-weight:400}
+input[type=text],input[type=email],input[type=url],textarea,select{
+  width:100%;background:var(--ground);color:var(--ink);
+  border:1px solid var(--line);border-radius:8px;padding:9px 11px;
+  font:inherit;font-size:14px;transition:border-color .13s,box-shadow .13s
+}
+textarea{resize:vertical;min-height:78px;line-height:1.5}
+input:focus-visible,textarea:focus-visible,select:focus-visible{
+  outline:none;border-color:var(--amber-solid);box-shadow:0 0 0 3px color-mix(in srgb,var(--amber-solid) 22%,transparent)
+}
+input::placeholder,textarea::placeholder{color:var(--ink-3)}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  border:1px solid var(--line);background:var(--surface-2);
+  border-radius:8px;padding:9px 16px;font-size:14px;font-weight:600;
+  cursor:pointer;transition:transform .1s,background .13s,border-color .13s
+}
+.btn:hover{border-color:var(--ink-3)}
+.btn:active{transform:translateY(1px)}
+.btn:focus-visible{outline:2px solid var(--amber-solid);outline-offset:2px}
+.btn-primary{background:var(--amber-solid);border-color:var(--amber-solid);color:#1B1F27}
+.btn-primary:hover{background:#f0c25a;border-color:#f0c25a}
+.btn-primary:disabled{opacity:.45;cursor:not-allowed}
+.btn-wide{width:100%;padding:11px}
+.err{color:var(--rose);font-size:12.5px;min-height:17px;margin-top:-6px;margin-bottom:10px}
+
+/* ---------- shell ---------- */
+.shell{display:none;min-height:100vh}
+.shell.on{display:grid;grid-template-columns:var(--rail) 1fr}
+
+.rail{
+  border-right:1px solid var(--line);background:var(--surface);
+  padding:22px 18px;display:flex;flex-direction:column;gap:20px;
+  position:sticky;top:0;height:100vh;overflow-y:auto
+}
+.brand{display:flex;flex-direction:column;gap:3px}
+.brand .kicker{font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3)}
+.brand h2{font-size:19px;font-weight:800}
+
+.who{
+  background:var(--surface-2);border:1px solid var(--line-soft);border-radius:var(--radius);
+  padding:11px 12px;display:flex;flex-direction:column;gap:2px
+}
+.who .nm{font-weight:600;font-size:14px;line-height:1.3;overflow-wrap:anywhere}
+.who .em{font-size:11.5px;color:var(--ink-3);font-family:"JetBrains Mono",monospace;overflow-wrap:anywhere}
+
+.progress-block{display:flex;align-items:center;gap:14px}
+.ring{width:58px;height:58px;flex:none;position:relative}
+.ring svg{transform:rotate(-90deg)}
+.ring .pct{
+  position:absolute;inset:0;display:grid;place-items:center;
+  font-family:"JetBrains Mono",monospace;font-size:13px;font-weight:700;
+  font-variant-numeric:tabular-nums
+}
+.progress-meta{display:flex;flex-direction:column;gap:1px;min-width:0}
+.progress-meta .big{font-family:"JetBrains Mono",monospace;font-size:13px;font-weight:700;font-variant-numeric:tabular-nums}
+.progress-meta .small{font-size:11.5px;color:var(--ink-3)}
+
+nav.tasks{display:flex;flex-direction:column;gap:4px}
+.nav-label{font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:4px}
+.tab{
+  display:grid;grid-template-columns:22px 1fr auto;align-items:center;gap:10px;
+  padding:9px 10px;border-radius:8px;border:1px solid transparent;background:none;
+  cursor:pointer;text-align:left;width:100%;transition:background .12s,border-color .12s
+}
+.tab:hover{background:var(--surface-2)}
+.tab.active{background:var(--surface-2);border-color:var(--line)}
+.tab:focus-visible{outline:2px solid var(--amber-solid);outline-offset:1px}
+.tab .num{
+  font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:700;
+  width:22px;height:22px;border-radius:6px;display:grid;place-items:center;
+  background:var(--ground);border:1px solid var(--line);color:var(--ink-3)
+}
+.tab.done .num{background:var(--teal-wash);border-color:transparent;color:var(--teal)}
+.tab .ttl{font-size:13.5px;font-weight:500;line-height:1.3}
+.tab .cnt{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.tab.done .cnt{color:var(--teal)}
+
+.rail-foot{margin-top:auto;display:flex;flex-direction:column;gap:8px}
+.save-state{font-size:11.5px;color:var(--ink-3);display:flex;align-items:center;gap:6px;min-height:18px}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--ink-3);flex:none}
+.dot.ok{background:var(--teal)}
+.dot.bad{background:var(--rose)}
+.dot.busy{background:var(--amber-solid);animation:pulse 1s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.3}}
+@media (prefers-reduced-motion:reduce){.dot.busy{animation:none}}
+
+/* ---------- main ---------- */
+main{padding:34px 40px 90px;max-width:840px}
+.panel-head{margin-bottom:26px;padding-bottom:20px;border-bottom:1px solid var(--line)}
+.panel-head .eyebrow{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);margin-bottom:8px}
+.panel-head h1{font-size:27px;font-weight:800;line-height:1.15;margin-bottom:8px}
+.panel-head p{color:var(--ink-2);margin:0;max-width:62ch}
+
+.sec{margin-bottom:30px}
+.sec-head{display:flex;align-items:baseline;gap:10px;margin-bottom:12px}
+.sec-head h3{font-size:16px;font-weight:700}
+.sec-head .sid{font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--ink-3);font-weight:500}
+.sec-note{color:var(--ink-2);font-size:13.5px;margin:0 0 14px;max-width:62ch}
+.sec-note.quote{border-left:2px solid var(--amber-solid);padding-left:12px;color:var(--ink-2);font-style:italic}
+
+.checks{display:flex;flex-direction:column;gap:2px;margin-bottom:14px}
+.check{
+  display:flex;align-items:flex-start;gap:10px;padding:7px 9px;border-radius:7px;
+  cursor:pointer;transition:background .12s;border:1px solid transparent
+}
+.check:hover{background:var(--surface-2)}
+.check input{
+  appearance:none;-webkit-appearance:none;width:17px;height:17px;flex:none;margin-top:2px;
+  border:1.5px solid var(--line);border-radius:5px;background:var(--surface);
+  cursor:pointer;position:relative;transition:background .12s,border-color .12s
+}
+.check input:checked{background:var(--teal);border-color:var(--teal)}
+.check input:checked::after{
+  content:"";position:absolute;left:5px;top:1.5px;width:4px;height:9px;
+  border:solid #fff;border-width:0 2px 2px 0;transform:rotate(43deg)
+}
+.check input:focus-visible{outline:2px solid var(--amber-solid);outline-offset:2px}
+.check span{font-size:14px;line-height:1.45}
+.check input:checked + span{color:var(--ink-3)}
+.check code{
+  font-size:12.5px;background:var(--surface-2);border:1px solid var(--line-soft);
+  padding:1px 5px;border-radius:4px
+}
+
+pre.term{
+  background:var(--surface-2);border:1px solid var(--line-soft);border-radius:var(--radius);
+  padding:13px 15px;margin:0 0 14px;overflow-x:auto;
+  font-family:"JetBrains Mono",monospace;font-size:12.5px;line-height:1.65;color:var(--ink-2)
+}
+
+.inputs{display:flex;flex-direction:column;gap:14px;margin-top:6px}
+.inputs.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:760px){.inputs.two{grid-template-columns:1fr}}
+
+.deliverable{
+  display:flex;align-items:center;gap:9px;font-size:13px;font-weight:600;
+  background:var(--teal-wash);color:var(--teal);border-radius:8px;padding:9px 13px;margin-top:16px
+}
+.deliverable.pending{background:var(--surface-2);color:var(--ink-3)}
+
+.grade{border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin-top:8px}
+.grade-row{display:grid;grid-template-columns:112px 1fr;gap:0;border-bottom:1px solid var(--line-soft)}
+.grade-row:last-child{border-bottom:none}
+.grade-row .lvl{padding:11px 13px;font-weight:700;font-size:13px;background:var(--surface-2);border-right:1px solid var(--line-soft)}
+.grade-row .desc{padding:11px 13px;font-size:13px;color:var(--ink-2)}
+
+.footbar{
+  position:fixed;bottom:0;left:var(--rail);right:0;
+  background:color-mix(in srgb,var(--surface) 92%,transparent);
+  backdrop-filter:blur(10px);border-top:1px solid var(--line);
+  padding:11px 40px;display:flex;align-items:center;justify-content:space-between;gap:16px
+}
+.footbar .msg{font-size:13px;color:var(--ink-2)}
+.footbar .acts{display:flex;gap:9px}
+
+@media (max-width:880px){
+  .shell.on{grid-template-columns:1fr}
+  .rail{position:static;height:auto;border-right:none;border-bottom:1px solid var(--line)}
+  main{padding:26px 20px 96px}
+  .footbar{left:0;padding:11px 20px;flex-wrap:wrap}
+}
+
+/* ---------- receipt ---------- */
+.receipt{display:none;min-height:100vh;place-items:center;padding:40px 20px}
+.receipt.on{display:grid}
+.receipt-card{
+  width:100%;max-width:560px;background:var(--surface);border:1px solid var(--line);
+  border-radius:14px;padding:36px;box-shadow:var(--shadow);text-align:center
+}
+.stamp{
+  width:56px;height:56px;border-radius:50%;background:var(--teal-wash);color:var(--teal);
+  display:grid;place-items:center;margin:0 auto 18px;font-size:26px
+}
+.receipt-card h1{font-size:26px;font-weight:800;margin-bottom:8px}
+.receipt-card p{color:var(--ink-2);margin:0 0 22px}
+.summary{
+  text-align:left;background:var(--surface-2);border:1px solid var(--line-soft);
+  border-radius:var(--radius);padding:16px;margin-bottom:20px
+}
+.summary-row{
+  display:flex;justify-content:space-between;gap:12px;padding:6px 0;
+  border-bottom:1px dashed var(--line);font-size:13.5px
+}
+.summary-row:last-child{border-bottom:none}
+.summary-row .k{color:var(--ink-2)}
+.summary-row .v{font-family:"JetBrains Mono",monospace;font-weight:600;font-variant-numeric:tabular-nums}
+.v.pass{color:var(--teal)}
+.v.miss{color:var(--rose)}
+
+.gate-foot{font-size:12px;color:var(--ink-3);margin:14px 0 0;text-align:center;line-height:1.45}
+
+.send-state{
+  border-radius:var(--radius);padding:11px 14px;margin-bottom:16px;
+  font-size:13.5px;font-weight:600;line-height:1.45;text-align:left
+}
+.send-state.sending{background:var(--surface-2);color:var(--ink-2)}
+.send-state.ok{background:var(--teal-wash);color:var(--teal)}
+.send-state.warn{background:var(--rose-wash);color:var(--rose)}
+.sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+</style>
+
+<!-- ================= GATE ================= -->
+<section class="gate" id="gate">
+  <div class="gate-card">
+    <div class="gate-eyebrow">Track 1 · Day 5 · Parts 1–4</div>
+    <h1>Day 05 — Promises, Async/Await, Modules + Git</h1>
+    <p class="sub">Work through the twelve tasks, tick what you finish, drop your links in. Your progress saves in this browser as you go — close the tab and come back.</p>
+    <div class="field">
+      <label for="g-email">Email <span class="hint">— the one you registered with</span></label>
+      <input type="email" id="g-email" autocomplete="email" placeholder="you@gmail.com">
+    </div>
+    <div class="field">
+      <label for="g-token">Your code <span class="hint">— the 10 characters your instructor sent you</span></label>
+      <input type="text" id="g-token" autocomplete="off" spellcheck="false"
+             maxlength="10" placeholder="7f3a9c2e10" class="mono">
+    </div>
+    <div class="err" id="gate-err"></div>
+    <button class="btn btn-primary btn-wide" id="gate-go">Open my assignment</button>
+    <p class="gate-foot">When you finish, this page sends your grade to your instructor automatically.</p>
+  </div>
+</section>
+
+<!-- ================= SHELL ================= -->
+<div class="shell" id="shell">
+  <aside class="rail">
+    <div class="brand">
+      <div class="kicker">JavaScript Everywhere</div>
+      <h2>Day 05 Desk</h2>
+    </div>
+
+    <div class="who">
+      <div class="nm" id="who-name"></div>
+      <div class="em" id="who-email"></div>
+    </div>
+
+    <div class="progress-block">
+      <div class="ring">
+        <svg width="58" height="58" viewBox="0 0 58 58" aria-hidden="true">
+          <circle cx="29" cy="29" r="25" fill="none" stroke="var(--line)" stroke-width="5"></circle>
+          <circle id="ring-fg" cx="29" cy="29" r="25" fill="none" stroke="var(--amber-solid)"
+                  stroke-width="5" stroke-linecap="round" stroke-dasharray="157" stroke-dashoffset="157"
+                  style="transition:stroke-dashoffset .35s ease"></circle>
+        </svg>
+        <div class="pct" id="ring-pct">0%</div>
+      </div>
+      <div class="progress-meta">
+        <div class="big" id="prog-count">0 / 0 checks</div>
+        <div class="small" id="prog-tasks">0 of 12 tasks complete</div>
+      </div>
+    </div>
+
+    <nav class="tasks" id="nav" aria-label="Assignment tasks">
+      <div class="nav-label">Tasks</div>
+    </nav>
+
+    <div class="rail-foot">
+      <div class="save-state"><span class="dot" id="save-dot"></span><span id="save-text">Ready</span></div>
+    </div>
+  </aside>
+
+  <main id="main"></main>
+
+  <div class="footbar">
+    <div class="msg" id="foot-msg"></div>
+    <div class="acts">
+      <button class="btn" id="btn-prev">← Previous</button>
+      <button class="btn" id="btn-next">Next →</button>
+      <button class="btn btn-primary" id="btn-submit" disabled>Submit assignment</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= RECEIPT ================= -->
+<section class="receipt" id="receipt">
+  <div class="receipt-card">
+    <div class="stamp">✓</div>
+    <h1>Submitted</h1>
+    <p id="receipt-sub"></p>
+
+    <div class="send-state" id="send-state" hidden></div>
+
+    <div class="summary" id="receipt-summary"></div>
+    <button class="btn" id="btn-reopen">Back to my assignment</button>
+  </div>
+</section>
+
+<script>
+/* =====================================================================
+   Day 05 assignment — data model
+   Every checkbox and every input in the assignment is declared here.
+   ===================================================================== */
+const TASKS = [
+  {
+    id: "t1",
+    title: "Predict, then run",
+    lead: "Twenty-one snippets across all four parts. #1–#10 run from one file; the module ones need their own small folders; the Git ones need a <strong>throwaway</strong> repo. The full code is in <code>ASSIGNMENT.md</code>.",
+    deliverable: "predictions.md + 1 screenshot",
+    sections: [
+      {
+        sid: "1.1", title: "Write your predictions first",
+        checks: [
+          ["t1_pred_file", "Created <code>predictions.md</code>"],
+          ["t1_pred_before", "Wrote my prediction for all 21 snippets — output, order or exact error name — <em>before</em> running anything"]
+        ]
+      },
+      {
+        sid: "1.2", title: "Now run them",
+        quote: "Getting them wrong is the assignment. Getting them wrong and not explaining why is not.",
+        checks: [
+          ["t1_pred_actual", "Ran every snippet and recorded the <em>actual</em> result next to each prediction"],
+          ["t1_pred_why", "For every one I got wrong, wrote one sentence explaining why"],
+          ["t1_pred_mech", "For <strong>#2, #3, #6, #10, #11, #15 vs #16, #17 and #19</strong> named the mechanism explicitly"],
+          ["t1_pred_shot", "Screenshotted the output"]
+        ],
+        inputs: [
+          { k:"t1_wrong_count", type:"text", label:"How many did you get wrong?", ph:"7", w:"half" },
+          { k:"t1_pred_url", type:"url", label:"Screenshot link", hint:"— Drive / Imgur / GitHub", ph:"https://…" },
+          { k:"t1_surprise", type:"textarea", label:"Which result surprised you most, and why?", ph:"…" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "t2",
+    title: "Promise basics lab",
+    lead: "Create <code>promises.js</code>. Run after every part.",
+    deliverable: "promises.js + 1 screenshot",
+    sections: [
+      {
+        sid: "2.1", title: "Create",
+        checks: [
+          ["t2_delay", "Wrote <code>delay(ms)</code> returning a Promise that fulfils after <code>ms</code>"],
+          ["t2_delayvalue", "Wrote <code>delayValue(ms, value)</code> that fulfils <strong>with</strong> <code>value</code>"],
+          ["t2_failafter", "Wrote <code>failAfter(ms, message)</code> that rejects with a real <code>Error</code>"],
+          ["t2_pending", "Logged a Promise before and after it settles — screenshotted <code>&lt;pending&gt;</code> next to the settled value"]
+        ]
+      },
+      {
+        sid: "2.2", title: "Settles once",
+        checks: [
+          ["t2_resolve_twice", "Called <code>resolve</code> twice with different values and proved only the first counts"],
+          ["t2_resolve_reject", "Called <code>resolve</code> then <code>reject</code> and proved the <code>reject</code> is ignored"],
+          ["t2_once_why", "Commented which Day 04 callback bug this makes impossible"]
+        ]
+      },
+      {
+        sid: "2.3", title: "Chain",
+        checks: [
+          ["t2_chain_four", "Chained four <code>.then</code>s transforming a number and logged the result"],
+          ["t2_chain_wait", "Chained three steps each <strong>returning</strong> a <code>delayValue(…)</code> and proved the chain waits"],
+          ["t2_chain_noreturn", "Removed one <code>return</code>, logged what the next step received, then put it back"],
+          ["t2_chain_destructure", "Destructured an object value directly in a <code>.then(({ name, score }) => …)</code>"]
+        ]
+      },
+      {
+        sid: "2.4", title: "Errors",
+        checks: [
+          ["t2_throw_skip", "Threw inside a <code>.then</code>, caught it three steps later, and proved the steps between were skipped"],
+          ["t2_catch_recover", "Used a <code>.catch</code> that returns a fallback and proved the chain continues"],
+          ["t2_finally", "Added a <code>.finally</code> logging <code>\"cleanup\"</code> on a fulfilled and a rejected chain"],
+          ["t2_reject_string", "Rejected with a string once and a real <code>Error</code> once, and commented on <code>err.message</code>"],
+          ["t2_unhandled", "Ran a rejected Promise with <strong>no</strong> <code>.catch</code>, screenshotted the crash, then added the <code>.catch</code>"]
+        ],
+        inputs: [
+          { k:"t2_url", type:"url", label:"Screenshot link", hint:"— full output", ph:"https://…" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "t3",
+    title: "Promisify your Day 04 database, then flatten the pyramid",
+    lead: "Take <strong>your own</strong> Day 04 <code>fake-db.js</code> — the one with four tables and the level you invented.",
+    deliverable: "promisify.js + promise-db.js + chain.js + 1 screenshot",
+    sections: [
+      {
+        sid: "3.1", title: "promisify.js — wrap it",
+        checks: [
+          ["t3_paste", "Pasted my Day 04 <code>fake-db.js</code> at the top — unchanged, still callback-style"],
+          ["t3_by_hand", "Wrapped <strong>one</strong> function by hand: <code>getStudent(id)</code> returning <code>new Promise(…)</code>"],
+          ["t3_promisify", "Wrote my own <code>promisify(fn)</code> — a closure with <code>...args</code> — and wrapped the other three"],
+          ["t3_util", "Wrapped one with <code>util.promisify</code> too, and proved it behaves the same as mine"],
+          ["t3_good_bad", "Called each wrapped function with a good id (<code>.then</code>) and a bad one (<code>.catch</code>)"]
+        ]
+      },
+      {
+        sid: "3.2", title: "promise-db.js — rewrite it",
+        checks: [
+          ["t3_rewrite", "Rewrote <code>fake-db.js</code> so every function <strong>returns a Promise</strong> — no callbacks anywhere"],
+          ["t3_helper", "Used <strong>one</strong> shared helper instead of repeating <code>new Promise</code> four times"],
+          ["t3_latency", "Kept my different-delay-per-id behaviour from Day 04"],
+          ["t3_errors", "Every rejection is a real <code>Error</code> naming the table and the id"]
+        ]
+      },
+      {
+        sid: "3.3", title: "chain.js — the pyramid, flattened",
+        note: "Paste your <code>promise-db.js</code> at the top — Task 7 is where the pasting stops.",
+        checks: [
+          ["t4_flat", "Rewrote my Day 04 <code>hell.js</code> four-level lookup as <strong>one flat <code>.then</code> chain</strong>"],
+          ["t4_return", "Every step <code>return</code>s the next Promise"],
+          ["t4_print", "Printed one line using data from <strong>every</strong> level, with a template literal"],
+          ["t4_one_catch", "Exactly <strong>one</strong> <code>.catch</code>, at the end, handles a failure at <strong>any</strong> level"],
+          ["t4_break", "Broke it three ways — bad student, course and teacher id — and the same <code>.catch</code> reported each"],
+          ["t4_finally", "Added a <code>.finally</code> that logs how long the whole chain took"],
+          ["t4_build", "Wrapped it as <code>buildReport(id)</code> that <strong>returns</strong> the chain"],
+          ["t4_count", "Commented how many <code>if (err)</code> lines Day 04's <code>hell.js</code> had vs error checks in <code>chain.js</code>"]
+        ],
+        inputs: [
+          { k:"t4_url", type:"url", label:"Screenshot link", hint:"— wrappers, good run + three broken runs", ph:"https://…" },
+          { k:"t4_count_text", type:"text", label:"if (err) lines in hell.js vs error checks in chain.js", ph:"e.g. 4 vs 1", w:"half" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "t4",
+    title: "Combinators lab",
+    lead: "Create <code>combinators.js</code>. Use your <code>delayValue</code> and <code>failAfter</code> from Task 2.",
+    deliverable: "combinators.js + 1 screenshot",
+    sections: [
+      {
+        sid: "4.1", title: "Promise.all",
+        checks: [
+          ["t5_all_order", "Passed three Promises with different delays and proved the result is in <strong>input</strong> order"],
+          ["t5_all_time", "Timed it and proved the total is the slowest one, not the sum"],
+          ["t5_all_reject", "Made one reject and showed <code>.all</code> rejects — and the other values are lost"],
+          ["t5_all_loadall", "Rebuilt Day 04's <code>loadAll</code> with <code>Promise.all</code> + <code>map</code> and compared line counts in a comment"]
+        ]
+      },
+      {
+        sid: "4.2", title: "Promise.allSettled",
+        checks: [
+          ["t5_settled_lines", "Printed a ✓ / ✗ line for each using <code>status</code>, <code>value</code> and <code>reason</code>"],
+          ["t5_settled_count", "Counted the failures with <code>filter</code>"]
+        ]
+      },
+      {
+        sid: "4.3", title: "Promise.race and Promise.any",
+        checks: [
+          ["t5_race", "Raced a slow success against a fast failure — <code>race</code> rejects"],
+          ["t5_any", "Ran the same pair through <code>any</code> — it fulfils"],
+          ["t5_aggregate", "Made every Promise passed to <code>any</code> reject and logged the <code>AggregateError</code>'s name and <code>errors.length</code>"],
+          ["t5_when", "Commented one sentence per combinator on when I'd use it in a real app"]
+        ],
+        inputs: [
+          { k:"t5_url_combinators", type:"url", label:"Screenshot link", hint:"— full output", ph:"https://…" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "t5",
+    title: "async / await lab",
+    lead: "Create <code>await.js</code>. Paste your <code>promise-db.js</code> at the top.",
+    deliverable: "await.js + 1 screenshot",
+    sections: [
+      {
+        sid: "5.1", title: "Rewrite",
+        checks: [
+          ["t6_rewrite", "Rewrote Task 3's <code>buildReport</code> with <code>async</code> / <code>await</code> — no <code>.then</code> in it"],
+          ["t6_const", "Every intermediate value is a plain <code>const</code> — no shared <code>let</code>"],
+          ["t6_promise_log", "Logged <code>buildReport(1)</code> <strong>without</strong> <code>await</code> and screenshotted the <code>Promise</code>"],
+          ["t6_main", "Wrote <code>main()</code> with <code>try</code> / <code>catch</code> / <code>finally</code> reporting a good id and a bad id"],
+          ["t6_main_catch", "Called it as <code>main().catch(…)</code> at the bottom of the file"]
+        ]
+      },
+      {
+        sid: "5.2", title: "Sequential vs parallel",
+        checks: [
+          ["t6_seq", "Loaded students 1, 2, 3 <strong>sequentially</strong> with <code>for…of</code> + <code>await</code>, timed"],
+          ["t6_par", "Loaded the same three <strong>in parallel</strong> with <code>Promise.all</code> + <code>map</code>, timed"],
+          ["t6_times", "Printed both times and commented why the difference is what it is"],
+          ["t6_seq_correct", "Wrote one example where sequential is <strong>correct</strong>, and commented why"]
+        ]
+      },
+      {
+        sid: "5.3", title: "The forEach trap",
+        checks: [
+          ["t6_foreach", "Used <code>forEach(async …)</code> and screenshotted <code>\"done\"</code> printing first"],
+          ["t6_foreach_fix", "Fixed it once with <code>for…of</code> and once with <code>Promise.all</code> + <code>map</code>"]
+        ]
+      },
+      {
+        sid: "5.4", title: "return await",
+        checks: [
+          ["t6_return", "Wrote <code>return risky()</code> inside a <code>try</code> and proved its <code>catch</code> never runs"],
+          ["t6_return_await", "Changed it to <code>return await risky()</code> and proved the <code>catch</code> now runs"],
+          ["t6_return_why", "Commented one sentence explaining the difference"]
+        ],
+        inputs: [
+          { k:"t6_url", type:"url", label:"Screenshot link", hint:"— full output", ph:"https://…" },
+          { k:"t6_times_text", type:"text", label:"Your sequential vs parallel timings", ph:"e.g. 1215ms vs 512ms", w:"half" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "t6",
+    title: "Modules lab — CommonJS and ESM",
+    lead: "Two small folders: <code>cjs/</code> and <code>esm-lab/</code>. Screenshot every error you're asked to cause, then fix it.",
+    deliverable: "cjs/ + esm-lab/ + 1 screenshot",
+    sections: [
+      {
+        sid: "6.1", title: "cjs/ — export and require",
+        note: "No <code>package.json</code> needed — CommonJS is the default.",
+        checks: [
+          ["cj_lib", "<code>lib/grade-lib.js</code> with <code>letterGrade</code>, <code>average</code>, <code>formatRow</code> exported via <code>module.exports = { … }</code>"],
+          ["cj_private", "One <strong>private</strong> helper that isn't exported — proved <code>report.js</code> can't see it"],
+          ["cj_delay", "<code>lib/delay.js</code> exporting <strong>one</strong> function directly: <code>module.exports = (ms) => …</code>"],
+          ["cj_destructure", "<code>report.js</code> destructures <code>require</code> to get only what it needs"],
+          ["cj_json", "Loaded <code>students.json</code> with <code>require</code> — no <code>fs</code>, no <code>JSON.parse</code>"]
+        ]
+      },
+      {
+        sid: "6.2", title: "cjs/ — the cache",
+        checks: [
+          ["cj_cache_log", "Required <code>grade-lib.js</code> from two files and proved its top-level <code>console.log</code> prints once"],
+          ["cj_counter", "Wrote <code>lib/counter.js</code> with a private <code>count</code> and proved two files share it"]
+        ]
+      },
+      {
+        sid: "6.3", title: "cjs/ — break it",
+        checks: [
+          ["cj_exports_trap", "Replaced <code>module.exports = { … }</code> with <code>exports = { … }</code>, screenshotted the error, fixed it"],
+          ["cj_no_dot", "Required <code>\"lib/grade-lib\"</code> without <code>./</code>, screenshotted the error, and commented why"]
+        ]
+      },
+      {
+        sid: "6.4", title: "esm-lab/ — every import form",
+        note: "Create <code>esm-lab/</code> with a <code>package.json</code> containing <code>\"type\": \"module\"</code>.",
+        checks: [
+          ["es_exports", "A module with <strong>at least three named exports</strong> and <strong>one default export</strong>"],
+          ["es_named", "Imported named exports in braces"],
+          ["es_as", "Renamed one with <code>as</code>"],
+          ["es_star", "Imported the whole module with <code>import * as</code> and logged its <code>Object.keys</code>"],
+          ["es_default_two", "Imported the default under two names in two files and proved it's the same function"],
+          ["es_dynamic", "Used a dynamic <code>await import(…)</code> inside an <code>if</code>"]
+        ]
+      },
+      {
+        sid: "6.5", title: "esm-lab/ — ESM rules",
+        checks: [
+          ["es_tla", "Used top-level <code>await</code> to read a file with <code>node:fs/promises</code> — no <code>main()</code>"],
+          ["es_url_path", "Built a path with <code>new URL(…, import.meta.url)</code> and proved it works when run from another folder"],
+          ["es_meta", "Logged <code>import.meta.dirname</code> and <code>import.meta.filename</code>"],
+          ["es_live", "Recreated #15 vs #16 and commented in my own words why they differ"]
+        ]
+      },
+      {
+        sid: "6.6", title: "esm-lab/ — break it",
+        note: "Screenshot each error, then fix it.",
+        checks: [
+          ["es_err_ext", "Removed the <code>.js</code> extension from a relative import"],
+          ["es_err_require", "Used <code>require</code> in an ESM file"],
+          ["es_err_dirname", "Used <code>__dirname</code> in an ESM file"],
+          ["es_err_name", "Imported a name that isn't exported"],
+          ["es_err_type", "Deleted <code>\"type\": \"module\"</code> and read what Node printed"]
+        ],
+        inputs: [
+          { k:"es_url", type:"url", label:"Screenshot link", hint:"— cjs + esm-lab outputs and errors", ph:"https://…" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "t7",
+    title: "Build: the async grade report, as modules",
+    lead: "Your Day 04 <code>report.js</code> — rewritten with <code>await</code> <strong>and</strong> split into modules. Same data, same <code>grade-lib.js</code> functions, same output. No function pasted anywhere.",
+    deliverable: "project/ folder + 1 screenshot",
+    sections: [
+      {
+        sid: "7.1", title: "Structure",
+        term: "day-05/project/\n├── package.json          { \"type\": \"module\" }\n├── students.json\n├── report.js\n└── lib/\n    ├── index.js\n    ├── grade-lib.js\n    ├── db.js\n    └── async-utils.js",
+        checks: [
+          ["pj_structure", "Created <code>day-05/project/</code> with this shape"],
+          ["pj_package", "<code>package.json</code> has <code>\"type\": \"module\"</code> and a <code>\"report\"</code> script so <code>npm run report</code> works"]
+        ]
+      },
+      {
+        sid: "7.2", title: "The modules",
+        checks: [
+          ["pj_gradelib", "<code>lib/grade-lib.js</code> — every grading function from my Day 04 library, as <strong>named</strong> exports, <strong>no</strong> <code>console.log</code>"],
+          ["pj_db", "<code>lib/db.js</code> — <code>getAttendance(id)</code> returning a Promise, different delay per student, failing for at least one — as the <strong>default export</strong>"],
+          ["pj_utils", "<code>lib/async-utils.js</code> — <code>delay</code>, <code>withTimeout</code> and <code>retry</code> as named exports"],
+          ["pj_barrel", "<code>lib/index.js</code> — a barrel re-exporting everything <code>report.js</code> needs"],
+          ["pj_no_dupes", "No function is defined in more than one file — searched the folder to prove it"]
+        ]
+      },
+      {
+        sid: "7.3", title: "report.js",
+        checks: [
+          ["pj_imports", "Imports <strong>only</strong> from <code>./lib/index.js</code>, <code>node:</code> built-ins, and npm packages"],
+          ["pj_tla", "Uses <strong>top-level <code>await</code></strong> — no <code>main()</code> wrapper"],
+          ["r_fspromises", "Reads <code>students.json</code> with <code>node:fs/promises</code> and an <code>import.meta.url</code> path — no <code>readFileSync</code>"],
+          ["r_one_try", "<strong>One</strong> <code>try</code> / <code>catch</code> handles a missing file <strong>and</strong> broken JSON — tested both"],
+          ["r_loading_finally", "<code>Loading…</code> prints first, and a <code>finally</code> prints the total time"],
+          ["r_timeout", "Wrapped the file load in <code>withTimeout(…, 2000)</code> and proved it fires by setting it to <code>1</code>"],
+          ["r_allsettled", "Loaded every student's attendance in parallel with <code>Promise.allSettled</code> + <code>map</code>"],
+          ["r_retry", "Wrapped <code>getAttendance</code> in <code>retry</code> so a flaky student succeeds later, logging each failed attempt"],
+          ["r_dash", "Students whose attendance failed still appear, with attendance shown as <code>—</code>"],
+          ["r_order", "Prints in the <strong>original</strong> order — header, <code>formatRow</code> lines, separator, summary, tally"],
+          ["r_skip", "Invalid students are skipped and counted, like Day 04"],
+          ["r_bonus", "<code>withBonus</code> still proves no mutation"],
+          ["pj_no_logic", "Has <strong>no</strong> grading logic of its own — only imports, calls, and <code>console.log</code>"],
+          ["pj_both_ways", "Runs with <code>npm run report</code> <strong>and</strong> with <code>node day-05/project/report.js</code> from the repo root"]
+        ]
+      },
+      {
+        sid: "7.4", title: "Prove it's better",
+        checks: [
+          ["r_lines", "Put my Day 04 <code>report.js</code> line count next to today's <code>report.js</code> + <code>lib/</code> in <code>NOTES.md</code>"],
+          ["pj_copies", "Counted the copies of <code>letterGrade</code> across Day 03–04 vs now"],
+          ["r_two_sentences", "Wrote two sentences: what got shorter, and what got <strong>clearer</strong>"]
+        ],
+        inputs: [
+          { k:"t5_url", type:"url", label:"Screenshot of npm run report", hint:"— required", ph:"https://…" },
+          { k:"r_lines_text", type:"text", label:"Day 04 report.js lines vs today's report.js + lib/", ph:"e.g. 142 vs 60 + 85", w:"half" },
+          { k:"pj_copies_text", type:"text", label:"Copies of letterGrade: before vs now", ph:"e.g. 5 vs 1", w:"half" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "t8",
+    title: "Browser: one module, two runtimes",
+    lead: "In <code>day-05/project/</code>, add <code>index.html</code> and <code>main.js</code>. They import the <strong>same</strong> <code>lib/</code> files your Node report uses — and rebuild Day 04's Load button with <code>await</code>.",
+    deliverable: "index.html + main.js + 2 screenshots",
+    sections: [
+      {
+        sid: "8.1", title: "Modules in the browser",
+        checks: [
+          ["br_type_module", "<code>index.html</code> loads <code>main.js</code> with <code>&lt;script type=\"module\"&gt;</code>"],
+          ["br_same_file", "<code>main.js</code> imports the <strong>same</strong> <code>lib/grade-lib.js</code>, <code>lib/db.js</code> and <code>lib/async-utils.js</code> as <code>report.js</code> — no copies"],
+          ["br_listeners", "Handlers wired with <code>addEventListener</code> — no <code>onclick</code> in the HTML"],
+          ["br_liveserver", "Runs through <strong>Live Server</strong>"],
+          ["br_scope", "Typed a <code>main.js</code> variable in DevTools and screenshotted the <code>ReferenceError</code>"],
+          ["br_network", "Screenshotted the Network tab showing <code>main.js</code> <strong>and</strong> the <code>lib/</code> files requested"],
+          ["br_file_cors", "Opened the page as <code>file://</code>, screenshotted the CORS error, and commented why"]
+        ]
+      },
+      {
+        sid: "8.2", title: "Loading with await",
+        note: "<code>fetch</code> gets its own full session soon. Today you only need <code>const res = await fetch(\"./students.json\");</code> and <code>const data = await res.json();</code>",
+        checks: [
+          ["w_async_handler", "A <strong>Load students</strong> handler that is an <code>async</code> function with <code>try</code> / <code>catch</code> / <code>finally</code>"],
+          ["br_fetch", "It loads <code>students.json</code> with <code>await fetch(…)</code> and <code>.json()</code>"],
+          ["w_loading", "While loading: the button is <strong>disabled</strong> and <code>Loading…</code> shows"],
+          ["w_finally_only", "The button is re-enabled in <strong><code>finally</code> only</strong>"],
+          ["w_allsettled", "Attendance loads in parallel with <code>Promise.allSettled</code> and the imported <code>getAttendance</code>; a failed one shows <code>—</code>"],
+          ["w_failed_count", "The status line says how many attendance lookups failed, if any"],
+          ["w_slow", "A <strong>Simulate slow network</strong> checkbox delays the fetch enough to trip a <code>withTimeout</code> of 2 seconds"],
+          ["w_compare", "A <strong>Time both</strong> button prints sequential vs parallel timings"],
+          ["br_form", "An <strong>Add</strong> form using <code>students = [...students, newStudent]</code>, showing <code>letterGrade</code> and PASS/FAIL from <code>PASS_MARK</code>"],
+          ["br_summary", "A summary line using the imported <code>average</code>"],
+          ["w_shot_ok", "Screenshotted a successful load with at least one <code>—</code> attendance and DevTools console open"],
+          ["w_shot_timeout", "Screenshotted the timeout error after a slow load"]
+        ],
+        inputs: [
+          { k:"w_url", type:"url", label:"Screenshot link — successful load", hint:"— page + console", ph:"https://…" },
+          { k:"w_timeout_url", type:"url", label:"Screenshot link — timeout", ph:"https://…" },
+          { k:"w_finally_text", type:"textarea", label:"How many places re-enable the button in Day 04's app.js vs today's main.js?", ph:"…" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "t9",
+    title: "Git lab — staging, .gitignore, branches, a conflict",
+    lead: "In your <strong>course repo</strong>. Follow README Steps 11 and 12 on <strong>your own</strong> code.",
+    deliverable: ".gitignore + git log --graph screenshot",
+    sections: [
+      {
+        sid: "9.1", title: "Staging",
+        checks: [
+          ["g_two_commits", "Changed <strong>two</strong> files and committed them as <strong>two separate</strong> commits"],
+          ["g_diff", "Used <code>git diff</code> before staging and <code>git diff --staged</code> after, and screenshotted both"],
+          ["g_unstage", "Staged a file, then unstaged it with <code>git restore --staged</code>"],
+          ["g_discard", "Made a throwaway edit and discarded it with <code>git restore</code>"]
+        ]
+      },
+      {
+        sid: "9.2", title: ".gitignore",
+        checks: [
+          ["g_gitignore", "Added a <code>.gitignore</code> covering <code>node_modules/</code>, <code>.env</code> and OS/editor clutter"],
+          ["g_env", "Created a fake <code>.env</code> and proved <code>git status</code> doesn't show it"],
+          ["g_npm", "Installed <code>dayjs</code>, used it in <code>report.js</code>, and proved <code>node_modules/</code> stays out of <code>git status</code>"],
+          ["g_deps", "Confirmed <code>package.json</code> shows the dependency, and committed it"]
+        ]
+      },
+      {
+        sid: "9.3", title: "History",
+        checks: [
+          ["g_bad_msg", "Rewrote one bad earlier commit message, as it should have been, in <code>NOTES.md</code>"],
+          ["g_log_show", "Used <code>git log --oneline --graph</code> and <code>git show &lt;hash&gt;</code>"],
+          ["g_amend", "Fixed my latest <strong>unpushed</strong> commit's message with <code>git commit --amend</code>"]
+        ],
+        inputs: [
+          { k:"g_url", type:"url", label:"Screenshot link", hint:"— git status with .env and node_modules ignored", ph:"https://…" }
+        ]
+      },
+      {
+        sid: "9.4", title: "A clean branch",
+        checks: [
+          ["b_branch", "Did Tasks 1–8 on <code>feature/day-05</code> — <strong>not</strong> on <code>main</code>"],
+          ["b_six_commits", "At least <strong>six</strong> commits on the branch, each one logical change with an imperative message"],
+          ["b_merge", "Merged it into <code>main</code> and noted whether it was a fast-forward"],
+          ["b_delete", "Deleted the branch with <code>git branch -d</code>"]
+        ]
+      },
+      {
+        sid: "9.5", title: "A conflict on purpose",
+        checks: [
+          ["b_exp_branch", "Created <code>experiment/pass-mark</code> and changed <code>PASS_MARK</code> on it"],
+          ["b_main_edit", "On <code>main</code>, changed the <strong>same line</strong> to a different value"],
+          ["b_conflict_shot", "Merged and screenshotted the <code>CONFLICT</code> message and the markers"],
+          ["b_resolve", "Resolved it by hand, deleted all three marker lines, and proved <code>npm run report</code> still works"],
+          ["b_complete", "Completed the merge with <code>git add</code> + <code>git commit</code>"],
+          ["b_abort", "Started a second conflict and cancelled it with <code>git merge --abort</code>"],
+          ["b_graph_shot", "Screenshotted <code>git log --oneline --graph</code> showing the merge"]
+        ],
+        inputs: [
+          { k:"b_url", type:"url", label:"git log --graph screenshot link", ph:"https://…" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "t10",
+    title: "Pull request workflow",
+    lead: "Every change from here on goes through a PR. Practise the full loop on your own repo.",
+    deliverable: "merged PR link",
+    sections: [
+      {
+        sid: "10.1", title: "The loop",
+        term: "switch main → pull → switch -c docs/day-05-notes → commit → push -u → PR → review → merge → switch main → pull → branch -d",
+        checks: [
+          ["pr_pull", "Started from an up-to-date <code>main</code> (<code>git switch main &amp;&amp; git pull</code>)"],
+          ["pr_branch", "Created <code>docs/day-05-notes</code> and wrote <code>day-05/NOTES.md</code> on it"],
+          ["pr_push", "Pushed it with <code>git push -u origin docs/day-05-notes</code>"],
+          ["pr_open", "Opened a pull request on GitHub"],
+          ["pr_description", "Gave it an imperative title and a <strong>What / Why / How to test</strong> description"],
+          ["pr_review", "Left at least <strong>one review comment</strong> on a line in <strong>Files changed</strong>"],
+          ["pr_extra_commit", "Pushed one more commit and saw it appear in the PR"],
+          ["pr_merge", "<strong>Merged</strong> the PR on GitHub and deleted the branch there"],
+          ["pr_local", "Locally: <code>git switch main</code>, <code>git pull</code>, <code>git branch -d docs/day-05-notes</code>"],
+          ["pr_shot", "Screenshotted the merged PR page"]
+        ],
+        inputs: [
+          { k:"pr_url", type:"url", label:"Merged pull request link", hint:"— required", ph:"https://github.com/…/pull/1" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "t11",
+    title: "Notes and repository",
+    lead: "Your repo is the record of the whole 26 weeks. Keep it tidy from the start.",
+    deliverable: "NOTES.md + repo link + git log screenshot",
+    sections: [
+      {
+        sid: "11.1", title: "Repo structure",
+        term: "javascript-everywhere/\n├── .gitignore\n├── README.md\n├── day-01/ … day-04/\n└── day-05/\n    ├── NOTES.md\n    ├── predictions.md\n    ├── predictions.js\n    ├── p11/ … p18/\n    ├── promises.js\n    ├── promisify.js\n    ├── promise-db.js\n    ├── chain.js\n    ├── combinators.js\n    ├── await.js\n    ├── cjs/\n    ├── esm-lab/\n    └── project/\n        ├── package.json\n        ├── package-lock.json\n        ├── students.json\n        ├── report.js\n        ├── index.html\n        ├── main.js\n        └── lib/",
+        checks: [
+          ["t7_folder", "My repo matches this structure"],
+          ["t7_toc", "Added a Day 05 row to my root <code>README.md</code>"]
+        ]
+      },
+      {
+        sid: "11.2", title: "day-05/NOTES.md",
+        note: "<strong>In your own words</strong> — not the README's words.",
+        quote: "The bug section is not optional. If nothing broke, you copy-pasted.",
+        checks: [
+          ["n_what", "Parts 1–2 — What a Promise is, its three states, and why \"settles once\" fixes a Day 04 bug"],
+          ["n_missing_return", "Parts 1–2 — The missing-<code>return</code> bug — what it looks like and what it does"],
+          ["n_one_catch", "Parts 1–2 — How one <code>.catch</code> — or one <code>try</code> — replaces every <code>if (err)</code>"],
+          ["n_combinators", "Parts 1–2 — <code>all</code> vs <code>allSettled</code> vs <code>race</code> vs <code>any</code>, one line each"],
+          ["n_microtask", "Parts 1–2 — Why <code>.then</code> callbacks run before a <code>setTimeout(…, 0)</code>"],
+          ["n_await", "Parts 1–2 — What <code>await</code> pauses — and what it does <strong>not</strong> pause"],
+          ["n_parallel", "Parts 1–2 — Sequential vs parallel — the question before every <code>await</code>, with my Task 5.2 timings"],
+          ["n_foreach", "Parts 1–2 — Why <code>forEach(async …)</code> doesn't wait, and why <code>return await</code> matters inside <code>try</code>"],
+          ["n_module", "Part 3 — What a module is, and the three rules that make modules work"],
+          ["n_exports", "Part 3 — <code>module.exports</code> vs <code>exports</code>, and the trap"],
+          ["n_named_default", "Part 3 — Named vs default exports, which I prefer, and why"],
+          ["n_five_diffs", "Part 3 — Five differences between CommonJS and ESM"],
+          ["n_live", "Part 3 — Live bindings vs copies — my #15 vs #16 explanation"],
+          ["n_browser", "Part 3 — Why a module page needs Live Server, and what <code>type=\"module\"</code> changes"],
+          ["n_copies", "Part 3 — My Task 7.4 answer — the line counts and the copies of <code>letterGrade</code>"],
+          ["n_three_places", "Part 4 — Working tree vs staging area vs history, with a drawing"],
+          ["n_gitignore", "Part 4 — What belongs in <code>.gitignore</code>, and why a pushed secret must be changed"],
+          ["n_ff", "Part 4 — Fast-forward vs merge commit"],
+          ["n_conflict", "Part 4 — How to resolve a conflict, step by step"],
+          ["n_pr_loop", "Part 4 — The PR loop, from <code>git pull</code> to <code>git branch -d</code>"],
+          ["n_undo", "Part 4 — Which undo command to use before pushing, which after, and why"],
+          ["n_bug", "<strong>One bug I hit</strong>, the exact error or wrong output, and how I fixed it"]
+        ]
+      },
+      {
+        sid: "11.3", title: "Commits",
+        checks: [
+          ["c_messages", "Every commit today has an imperative, specific message — no <code>update</code>"],
+          ["c_merge_pr", "The work reached <code>main</code> through at least one merge and at least one merged PR"],
+          ["c_log", "Ran <code>git log --oneline --graph -20</code> and screenshotted it"]
+        ],
+        inputs: [
+          { k:"t7_repo_url", type:"url", label:"Repository link", hint:"— required", ph:"https://github.com/…" },
+          { k:"t7_log_url", type:"url", label:"git log screenshot link", ph:"https://…" },
+          { k:"t7_bug_text", type:"textarea", label:"The bug you hit — the error message and the fix", ph:"…" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "t12",
+    title: "Share it",
+    lead: "Say something real. Not \"excited to continue my journey\".",
+    deliverable: "LinkedIn post link",
+    sections: [
+      {
+        sid: "12.1", title: "Post it",
+        checks: [
+          ["t8_posted", "Posted on LinkedIn about completing Day 5"],
+          ["t8_shot", "Included the screenshot of my <code>npm run report</code> output"],
+          ["t8_repo_pr", "Included the link to my repo <strong>and</strong> my merged pull request"],
+          ["t8_before_after", "Showed one before-and-after — my pyramid next to my <code>await</code> version, <strong>or</strong> my Day 04 <code>report.js</code> next to <code>project/lib/</code>"],
+          ["t8_learned", "Said one concrete thing I understood — <code>forEach(async …)</code>, parallel vs sequential, live bindings, what a merge conflict really is"]
+        ],
+        inputs: [
+          { k:"t8_post_url", type:"url", label:"LinkedIn post link", hint:"— required", ph:"https://linkedin.com/posts/…" },
+          { k:"t8_learned_text", type:"text", label:"The one thing that clicked", ph:"…" }
+        ]
+      },
+      {
+        sid: "Bonus", title: "Optional — for anyone going further",
+        note: "Not required. Ticking these is how a submission moves from ✅ Done to 🔥 10%.",
+        optional: true,
+        checks: [
+          ["b_myall", "Wrote my own <code>myPromiseAll(promises)</code> — input order, rejects fast — without <code>Promise.all</code>"],
+          ["b_maplimit", "Wrote <code>mapLimit(items, limit, fn)</code> running at most <code>limit</code> calls at once"],
+          ["b_backoff", "Added exponential backoff <strong>with jitter</strong> to <code>retry</code>"],
+          ["b_abortctrl", "Used <code>AbortController</code> to make <code>withTimeout</code> actually cancel a <code>delay</code>"],
+          ["b_cancel", "Added a <strong>Cancel</strong> button that ignores a response arriving after it was clicked"],
+          ["x_circular", "Created a circular import on purpose, captured the failure, and fixed it with a third file"],
+          ["x_lazy", "Lazy-loaded a browser module with <code>import()</code> on a click, with a Network screenshot"],
+          ["x_actions", "Added a GitHub Actions workflow running <code>npm run report</code> on every push"],
+          ["x_protect", "Protected <code>main</code> so it only accepts changes through pull requests"],
+          ["x_classmate_pr", "Opened a pull request on a classmate's repo with one genuine improvement"]
+        ]
+      },
+      {
+        sid: "Grading", title: "How this is graded",
+        grade: [
+          ["❌ Incomplete", "Copy-pasted README code, predictions written after running, a .then with no return, await in a row for independent calls, forEach(async …), a button re-enabled anywhere but finally, a function still defined in two files, node_modules or .env committed, everything done on main, no merged PR, or code you can’t explain line by line"],
+          ["✅ Done", "All twelve tasks, your own Day 04 database promisified, one .catch / one try per flow, parallel work with Promise.all / allSettled, your report split into modules that run in Node and the browser, a resolved conflict and a merged PR in your history, NOTES.md in your own words, a real bug documented"],
+          ["🔥 10%", "Done + the bonus + a project that does something beyond the spec + notes someone else could actually learn from"]
+        ]
+      }
+    ]
+  }
+];
+
+const REQUIRED_INPUTS = ["t5_url", "pr_url", "t7_repo_url", "t8_post_url"];
+
+/* Which assignment this is — picks the sheet column (Day 5 -> H). */
+const DAY = 5;
+
+/* Apps Script web-app /exec URL. Empty = code-only mode: the page still
+   works, students just hand over their code instead. See
+   tools/apps-script/Code.gs for how to deploy one. */
+const ENDPOINT = "https://script.google.com/macros/s/AKfycbwqjBg7wGjLQl-edi1PQVbcfBJLN1EpStr62i3m238eDhOXQ5mlZvaP1uNl2LbR1uI/exec";
+
+/* The Day 05 roster: [email, name]. Order IS the identity — a code
+   carries the index into this array, so never reorder, only append. */
+const ROSTER = [["saadmmustafa99@gmail.com","سعد محمد مصطفى"],["ahmedmohamedelroby26@gmail.com","Ahmed Mohamed Hamed Elroby"],["abobkrsayed0@gmail.com","Abobkr Sayed Mohamed Ali"],["mh.gamal855@gmail.com","Mahmoud Gamal"],["mennafathalla124@gmail.com","Menna Fathalla Esmail"],["mtahr8006@gmail.com","Omar Taher Ahmed"],["donya21creator@gmail.com","Donya El Shahat El Sadek"],["mohammedraka2030@gmail.com","محمد ركاء العنزي"],["abdallahalsabaa.pu.2021@gmail.com","Abdallah Elsaied Mohamed Alsabaa"],["nourased7@gmail.com","نورالهدى السيد حسن"],["mohammedhashmed88@gmail.com","Mohammed Hashim"],["salmazyad17@yahoo.com","سلمي زياد"],["fatmamohsenfouly@gmail.com","فاطمة محسن محمد حسن"],["abdullahmohamed752006@gmail.com","abdallah mohamed"],["mokhtaroldmoustapha@gmail.com","mokhtar moustapha"],["abdofawzy1211@gmail.com","عبدالرحمن فوزي نصر محمود"],["ahmedalaa28908@gmail.com","أحمد علاء إمبارك محمود"],["abanoubmaqqar19@gmail.com","Abanoub Maqqar Mazouz"],["mbarakat16706@gmail.com","محمد بركات مبارك محمود"],["mohamedbahaa642021@gmail.com","محمد بهاء الدين محمد الصغير"],["x1.yousef.x1.2007@gmail.com","يوسف عاطف احمد محمد"],["ww0742003@gmail.com","محمد مصطفى رمضان"],["mohammedsalah0858@gmai.com","محمد صلاح شحاته علواني"],["drnasser.khairy@gmail.com","Nasser khairy sidrak"],["a7med3oda@yahoo.com","Ahmad Mohamad Ouda"],["ahmed.m.2457@gmail.com","Ahmed Mohamed"],["engy5821@gmail.com","إنجي محمد محمود"],["mahmoudmaram002@gmail.com","Maram Mahmoud"],["emadyt0@gmail.com","Emad Ahmed Hassan"],["ismaelelnaggar69@gmail.com","Ismael Sayed El-Naggar"],["abdelhay.mahmoud.dev@gmail.com","عبدالحي محمود محمد"],["salma.eltaher1110@gmail.com","Salma Eltaher Ahmed Hamed"],["a7md.m.3bdo@gmail.com","أحمد محمد عبده محمد"],["nour.redsea@gmail.com","نورهان أشرف ناجى محمد"],["mostfashaban.soudy@gmail.com","mostafa shaban soudi"],["hemafars0@gmail.com","ابراهيم بسيونى السيد فارس محمد"],["ahmedabdo12060@gmail.com","Ahmed Abdel Aal Abdel Latif"],["reemheikal3@gmail.com","Reem Atef Heikal"],["ahmed.ibn.adell@gmail.com","احمد عادل العدل على"],["asemm9930@gmail.com","Mohamed asem ali"],["hassan20nafed@gmail.com","Hassan Mohamed Nafed"],["mahmoudaboalfadl322@gmail.com","Mahmoud Aboalfadl Mahmoud"],["mohamedmahmoudn7m@gmail.com","مروه احمد على"],["salma.abdelhares.2005@gmail.com","salma saad abd elhares"],["ahmednbg.de56@gmail.com","Ahmed Gamal ismail mahmoud"],["sameremadwasfy1@gmail.com","Samer Emad Wasfy"],["ahmedeldeeb71707@gmail.com","أحمد منتصر الديب"],["esraakhalid1977e@gmail.com","Esraa Khalid"],["georgeedwar2003@gmail.com","george edwar maher"],["gamal.elshamy.req@gmail.com","Gamal Hassan Elshamy"],["aboalnaeeb@gmail.com","Ahmed Mohamed Hassan"],["islamsaeedw@gmail.com","Islam saeed"],["moustafaelbaloty@gmail.com","moustafa ahmed"],["zmai9abd.alac@gmail.com","مى عبدالاه احمد"],["mostafasaqly1@gmail.com","mostafa saqly"]];
+</script>
+
+<script>
+/* =====================================================================
+   Day 05 submission code — shared codec.
+   The page ENCODES; tools/decode-day05.js DECODES. Keep the two in sync:
+   this exact source is embedded in the artifact.
+
+   Format:  D5.<payload-b32>.<sig>
+   payload: <rosterIndex>.<checkBits-b32>.<dayMinutes>
+   sig:     4 chars of a salted hash over the payload
+
+   The signature is not cryptography — the salt ships in the page. It only
+   stops a student from hand-typing a better code than they earned, which
+   is the realistic threat here.
+   ===================================================================== */
+
+const SALT = "js-everywhere-day05-v1";
+
+/* Crockford base32, minus the letters that get misread when retyped. */
+const B32 = "0123456789ABCDEFGHJKMNPQRSTVWXYZ";
+
+function toB32(n){
+  if (n === 0) return "0";
+  let s = "";
+  while (n > 0){ s = B32[n % 32] + s; n = Math.floor(n / 32); }
+  return s;
+}
+function fromB32(s){
+  let n = 0;
+  for (const ch of s.toUpperCase()){
+    const i = B32.indexOf(ch);
+    if (i < 0) return NaN;
+    n = n * 32 + i;
+  }
+  return n;
+}
+
+/* Bits -> base32 string, chunked so we never exceed safe integer range.
+   67 checks = 67 bits, so we pack 15 bits at a time into 3-char groups. */
+function bitsToB32(bools){
+  let out = "";
+  for (let i = 0; i < bools.length; i += 15){
+    let chunk = 0;
+    for (let j = 0; j < 15; j++){
+      if (bools[i + j]) chunk |= (1 << j);
+    }
+    out += toB32(chunk).padStart(3, "0");
+  }
+  return out;
+}
+function b32ToBits(s, count){
+  const bools = [];
+  for (let i = 0; i < s.length; i += 3){
+    const chunk = fromB32(s.slice(i, i + 3));
+    if (Number.isNaN(chunk)) return null;
+    for (let j = 0; j < 15; j++) bools.push((chunk & (1 << j)) !== 0);
+  }
+  return bools.slice(0, count);
+}
+
+/* FNV-1a, 32-bit. Small, dependency-free, good enough to detect edits. */
+function sign(payload){
+  let h = 0x811c9dc5;
+  const s = payload + "|" + SALT;
+  for (let i = 0; i < s.length; i++){
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 0x01000193) >>> 0;
+  }
+  return toB32(h).padStart(7, "0").slice(-4);
+}
+
+function encodeSubmission(rosterIndex, checkBools){
+  const day = Math.floor(Date.now() / 60000);       // minute resolution
+  const payload = toB32(rosterIndex) + "." + bitsToB32(checkBools) + "." + toB32(day);
+  return "D5." + payload + "." + sign(payload);
+}
+
+function decodeSubmission(code, checkCount){
+  const clean = String(code).trim().toUpperCase().replace(/\s+/g, "");
+  const parts = clean.split(".");
+  if (parts.length !== 5 || parts[0] !== "D5") return { ok:false, error:"Not a Day 05 code." };
+  const payload = parts[1] + "." + parts[2] + "." + parts[3];
+  if (sign(payload) !== parts[4]) return { ok:false, error:"Code was edited or mistyped." };
+  const rosterIndex = fromB32(parts[1]);
+  const bits = b32ToBits(parts[2], checkCount);
+  const day = fromB32(parts[3]);
+  if (Number.isNaN(rosterIndex) || !bits || Number.isNaN(day)){
+    return { ok:false, error:"Code is malformed." };
+  }
+  return { ok:true, rosterIndex, bits, submittedAt: new Date(day * 60000) };
+}
+</script>
+
+<script>
+/* =====================================================================
+   State + persistence
+   ===================================================================== */
+const LS_KEY = "js-everywhere-day05";
+let state = { name:"", email:"", token:"", rosterIndex:-1, checks:{}, inputs:{}, submittedAt:null };
+let active = 0;
+
+/* Flatten the model once — used everywhere for counting. */
+const ALL_CHECKS = [];       // {key, taskIdx, optional}
+const ALL_INPUTS = [];       // {key, taskIdx, optional}
+TASKS.forEach((t, ti) => {
+  t.sections.forEach(s => {
+    (s.checks || []).forEach(([k]) => ALL_CHECKS.push({ key:k, taskIdx:ti, optional:!!s.optional }));
+    (s.inputs || []).forEach(i => ALL_INPUTS.push({ key:i.k, taskIdx:ti, optional:!!s.optional }));
+  });
+});
+const REQ_CHECKS = ALL_CHECKS.filter(c => !c.optional);
+const REQ_FIELDS = ALL_INPUTS.filter(i => REQUIRED_INPUTS.includes(i.key));
+
+function loadLocal(){
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    if (raw) state = Object.assign(state, JSON.parse(raw));
+  } catch (e) { /* private window, blocked storage — carry on empty */ }
+}
+function saveLocal(){
+  try { localStorage.setItem(LS_KEY, JSON.stringify(state)); } catch (e) {}
+}
+
+/* Look a student up on the roster. Returns their index, or -1. */
+function rosterLookup(email){
+  const e = (email || "").trim().toLowerCase();
+  return ROSTER.findIndex(r => r[0] === e);
+}
+
+function setSave(kind, text){
+  const dot = document.getElementById("save-dot");
+  const txt = document.getElementById("save-text");
+  dot.className = "dot" + (kind ? " " + kind : "");
+  txt.textContent = text;
+}
+
+/* Everything lives in this browser. Nothing leaves the page until the
+   student submits and hands over their code. */
+function queueSave(){
+  saveLocal();
+  setSave("ok", "Saved on this device");
+}
+
+/* =====================================================================
+   Progress
+   ===================================================================== */
+function progress(){
+  const done = REQ_CHECKS.filter(c => state.checks[c.key]).length;
+  const total = REQ_CHECKS.length;
+  const pct = total ? Math.round(done / total * 100) : 0;
+  const tasksDone = TASKS.filter((t, ti) => taskComplete(ti)).length;
+  return { done, total, pct, tasksDone };
+}
+function taskCounts(ti){
+  const list = REQ_CHECKS.filter(c => c.taskIdx === ti);
+  return { done: list.filter(c => state.checks[c.key]).length, total: list.length };
+}
+function taskComplete(ti){
+  const c = taskCounts(ti);
+  const fields = REQ_FIELDS.filter(f => f.taskIdx === ti);
+  const fieldsOk = fields.every(f => (state.inputs[f.key] || "").trim().length > 0);
+  return c.total > 0 && c.done === c.total && fieldsOk;
+}
+function canSubmit(){
+  const p = progress();
+  return p.done === p.total &&
+         REQUIRED_INPUTS.every(k => (state.inputs[k] || "").trim().length > 0);
+}
+
+/* =====================================================================
+   Rendering
+   ===================================================================== */
+function esc(s){ return String(s).replace(/[&<>"]/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c])); }
+
+function renderNav(){
+  const nav = document.getElementById("nav");
+  nav.innerHTML = '<div class="nav-label">Tasks</div>';
+  TASKS.forEach((t, ti) => {
+    const c = taskCounts(ti);
+    const done = taskComplete(ti);
+    const b = document.createElement("button");
+    b.className = "tab" + (ti === active ? " active" : "") + (done ? " done" : "");
+    b.setAttribute("aria-current", ti === active ? "true" : "false");
+    b.innerHTML =
+      '<span class="num">' + (done ? "✓" : (ti + 1)) + '</span>' +
+      '<span class="ttl">' + esc(t.title) + '</span>' +
+      '<span class="cnt">' + c.done + "/" + c.total + '</span>';
+    b.addEventListener("click", () => { active = ti; renderAll(); window.scrollTo({ top:0, behavior:"smooth" }); });
+    nav.appendChild(b);
+  });
+}
+
+function renderProgress(){
+  const p = progress();
+  const CIRC = 157;
+  document.getElementById("ring-fg").style.strokeDashoffset = String(CIRC - CIRC * p.pct / 100);
+  document.getElementById("ring-pct").textContent = p.pct + "%";
+  document.getElementById("prog-count").textContent = p.done + " / " + p.total + " checks";
+  document.getElementById("prog-tasks").textContent = p.tasksDone + " of " + TASKS.length + " tasks complete";
+
+  const submit = document.getElementById("btn-submit");
+  const ok = canSubmit();
+  submit.disabled = !ok;
+  const msg = document.getElementById("foot-msg");
+  if (state.submittedAt){
+    msg.textContent = "Submitted " + new Date(state.submittedAt).toLocaleString() + " — you can still edit and resubmit.";
+  } else if (ok){
+    msg.textContent = "Everything required is done. Submit when you're ready.";
+  } else {
+    const missing = [];
+    if (p.done < p.total) missing.push((p.total - p.done) + " checks left");
+    const FIELD_NAMES = {
+      t5_url: "npm run report screenshot",
+      pr_url: "pull request link",
+      t7_repo_url: "repo link",
+      t8_post_url: "LinkedIn link"
+    };
+    REQUIRED_INPUTS.forEach(k => {
+      if (!(state.inputs[k] || "").trim()){
+        missing.push(FIELD_NAMES[k] || k);
+      }
+    });
+    msg.textContent = missing.join(" · ");
+  }
+}
+
+function fieldHTML(inp){
+  const id = "in_" + inp.k;
+  const val = esc(state.inputs[inp.k] || "");
+  const hint = inp.hint ? ' <span class="hint">' + inp.hint + "</span>" : "";
+  const ctrl = inp.type === "textarea"
+    ? '<textarea id="' + id + '" data-key="' + inp.k + '" placeholder="' + esc(inp.ph || "") + '">' + val + "</textarea>"
+    : '<input type="' + (inp.type === "url" ? "url" : "text") + '" id="' + id + '" data-key="' + inp.k +
+      '" value="' + val + '" placeholder="' + esc(inp.ph || "") + '">';
+  return '<div class="field' + (inp.w === "half" ? " half" : "") + '">' +
+         '<label for="' + id + '">' + inp.label + hint + "</label>" + ctrl + "</div>";
+}
+
+function renderMain(){
+  const t = TASKS[active];
+  const m = document.getElementById("main");
+  let html =
+    '<div class="panel-head">' +
+      '<div class="eyebrow">Task ' + (active + 1) + " of " + TASKS.length + "</div>" +
+      "<h1>" + esc(t.title) + "</h1>" +
+      "<p>" + t.lead + "</p>" +     // leads are trusted markup from TASKS, like notes
+    "</div>";
+
+  t.sections.forEach(s => {
+    html += '<section class="sec">';
+    html += '<div class="sec-head"><span class="sid">' + esc(s.sid) + "</span><h3>" + esc(s.title) + "</h3></div>";
+    if (s.note)  html += '<p class="sec-note">' + s.note + "</p>";
+    if (s.term)  html += '<pre class="term">' + esc(s.term) + "</pre>";
+    if (s.quote) html += '<p class="sec-note quote">' + s.quote + "</p>";
+
+    if (s.checks){
+      html += '<div class="checks">';
+      s.checks.forEach(([k, label]) => {
+        html += '<label class="check"><input type="checkbox" data-check="' + k + '"' +
+                (state.checks[k] ? " checked" : "") + "><span>" + label + "</span></label>";
+      });
+      html += "</div>";
+    }
+
+    if (s.inputs){
+      const half = s.inputs.every(i => i.w === "half");
+      html += '<div class="inputs' + (half ? " two" : "") + '">';
+      s.inputs.forEach(i => { html += fieldHTML(i); });
+      html += "</div>";
+    }
+
+    if (s.grade){
+      html += '<div class="grade">';
+      s.grade.forEach(([lvl, desc]) => {
+        html += '<div class="grade-row"><div class="lvl">' + lvl + '</div><div class="desc">' + desc + "</div></div>";
+      });
+      html += "</div>";
+    }
+    html += "</section>";
+  });
+
+  if (t.deliverable){
+    const done = taskComplete(active);
+    html += '<div class="deliverable' + (done ? "" : " pending") + '">' +
+            (done ? "✓" : "○") + " Deliverable — " + esc(t.deliverable) + "</div>";
+  }
+
+  m.innerHTML = html;
+
+  m.querySelectorAll("input[data-check]").forEach(el => {
+    el.addEventListener("change", () => {
+      state.checks[el.dataset.check] = el.checked;
+      if (!el.checked) delete state.checks[el.dataset.check];
+      renderNav(); renderProgress(); refreshDeliverable(); queueSave();
+    });
+  });
+  m.querySelectorAll("[data-key]").forEach(el => {
+    el.addEventListener("input", () => {
+      state.inputs[el.dataset.key] = el.value;
+      renderNav(); renderProgress(); refreshDeliverable(); queueSave();
+    });
+  });
+
+  document.getElementById("btn-prev").disabled = active === 0;
+  document.getElementById("btn-next").disabled = active === TASKS.length - 1;
+}
+
+function refreshDeliverable(){
+  const el = document.querySelector(".deliverable");
+  if (!el) return;
+  const done = taskComplete(active);
+  el.className = "deliverable" + (done ? "" : " pending");
+  el.textContent = (done ? "✓" : "○") + " Deliverable — " + TASKS[active].deliverable;
+}
+
+function renderAll(){ renderNav(); renderMain(); renderProgress(); }
+
+/* =====================================================================
+   Receipt
+   ===================================================================== */
+/* Required checks first, then bonus — this ORDER IS THE WIRE FORMAT.
+   tools/checks.json is generated from the same model in the same order,
+   so the decoder can map each bit back to its label. */
+function checkBits(){
+  return REQ_CHECKS.map(c => !!state.checks[c.key])
+    .concat(ALL_CHECKS.filter(c => c.optional).map(c => !!state.checks[c.key]));
+}
+
+function showReceipt(){
+  const p = progress();
+  const bonusDone = ALL_CHECKS.filter(c => c.optional && state.checks[c.key]).length;
+  const bonusTotal = ALL_CHECKS.filter(c => c.optional).length;
+
+  document.getElementById("receipt-sub").textContent =
+    "Well done, " + state.name.split(" ")[0] + ". Your grade is being sent to your instructor now.";
+
+  let rows = "";
+  TASKS.forEach((t, ti) => {
+    const c = taskCounts(ti);
+    const ok = taskComplete(ti);
+    rows += '<div class="summary-row"><span class="k">Task ' + (ti + 1) + " — " + esc(t.title) + "</span>" +
+            '<span class="v ' + (ok ? "pass" : "miss") + '">' + c.done + "/" + c.total + "</span></div>";
+  });
+  rows += '<div class="summary-row"><span class="k">Bonus</span><span class="v">' + bonusDone + "/" + bonusTotal + "</span></div>";
+  rows += '<div class="summary-row"><span class="k">Overall</span><span class="v pass">' + p.pct + "%</span></div>";
+  document.getElementById("receipt-summary").innerHTML = rows;
+
+  document.getElementById("shell").classList.remove("on");
+  document.getElementById("receipt").classList.add("on");
+  window.scrollTo(0, 0);
+}
+
+/* =====================================================================
+   Boot
+   ===================================================================== */
+function enterShell(){
+  document.getElementById("gate").style.display = "none";
+  document.getElementById("shell").classList.add("on");
+  document.getElementById("who-name").textContent = state.name;
+  document.getElementById("who-email").textContent = state.email;
+  renderAll();
+}
+
+document.getElementById("gate-go").addEventListener("click", async () => {
+  const email = document.getElementById("g-email").value.trim();
+  const err = document.getElementById("gate-err");
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+    err.textContent = "That email doesn't look right — check it and try again."; return;
+  }
+  const idx = rosterLookup(email);
+  if (idx < 0){
+    err.innerHTML = "That email isn't on the Day 05 roster. Use the address you " +
+                    "registered with — if you think this is a mistake, message your instructor.";
+    return;
+  }
+  const token = document.getElementById("g-token").value.trim().toLowerCase();
+  if (token.length < 6){
+    err.textContent = "Enter the 10-character code your instructor sent you.";
+    return;
+  }
+  err.textContent = "";
+
+  const rosterEmail = ROSTER[idx][0];
+
+  // Check the code with the server BEFORE opening the tasks. Getting this
+  // wrong after eight tasks of work is a miserable way to find out.
+  const go = document.getElementById("gate-go");
+  const label = go.textContent;
+  go.disabled = true;
+  go.textContent = "Checking your code…";
+
+  const accept = () => {
+    state.rosterIndex = idx;
+    state.email = rosterEmail;
+    state.name  = ROSTER[idx][1];
+    state.token = token;
+    saveLocal(); queueSave(); enterShell();
+  };
+  const restore = () => { go.disabled = false; go.textContent = label; };
+
+  if (!ENDPOINT){ accept(); restore(); return; }
+
+  try {
+    const res = await fetch(ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      redirect: "follow",
+      body: JSON.stringify({ action: "verify", email: rosterEmail, token: token })
+    });
+    const out = await res.json();
+
+    if (out.ok){
+      accept();
+    } else if (out.error === "bad_token"){
+      err.innerHTML = "That code doesn't match your email. Check the 10-character " +
+                      "code your instructor emailed you — if you can't find it, " +
+                      "ask them to resend it.";
+    } else {
+      err.textContent = "Couldn't check your code (" + (out.error || "unknown") + "). Try again.";
+    }
+  } catch (e) {
+    // Offline or the endpoint is unreachable. Don't strand the student —
+    // let them work; the code is verified again when they submit.
+    console.error("[day05] verify failed:", e);
+    accept();
+  } finally {
+    restore();
+  }
+});
+["g-email"].forEach(id => {
+  document.getElementById(id).addEventListener("keydown", e => {
+    if (e.key === "Enter") document.getElementById("gate-go").click();
+  });
+});
+
+document.getElementById("btn-prev").addEventListener("click", () => {
+  if (active > 0){ active--; renderAll(); window.scrollTo({ top:0, behavior:"smooth" }); }
+});
+document.getElementById("btn-next").addEventListener("click", () => {
+  if (active < TASKS.length - 1){ active++; renderAll(); window.scrollTo({ top:0, behavior:"smooth" }); }
+});
+document.getElementById("btn-submit").addEventListener("click", () => {
+  state.submittedAt = new Date().toISOString();
+  saveLocal();
+  showReceipt();
+  sendToSheet();
+});
+
+/* Post the result straight to the instructor's sheet. Best-effort: if this
+   fails for any reason the submission code below is still valid, so the
+   student is never blocked. */
+async function sendToSheet(){
+  const box = document.getElementById("send-state");
+  if (!ENDPOINT){ box.hidden = true; return; }
+
+  const p = progress();
+  const bonusAll = ALL_CHECKS.filter(c => c.optional);
+  const bonusDone = bonusAll.filter(c => state.checks[c.key]).length;
+  const level = p.done === p.total
+    ? (bonusDone === bonusAll.length ? "10%" : "Done")
+    : "Incomplete";
+
+  box.hidden = false;
+  box.className = "send-state sending";
+  box.textContent = "Recording your grade…";
+
+  try {
+    const res = await fetch(ENDPOINT, {
+      method: "POST",
+      // text/plain dodges the CORS preflight Apps Script won't answer.
+      // Apps Script 302s to script.googleusercontent.com, which does send
+      // CORS headers, so the followed response is readable.
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      redirect: "follow",
+      body: JSON.stringify({
+        token: state.token,
+        day: DAY,
+        email: state.email,
+        score: p.pct,
+        level: level,
+        bonus: bonusDone + "/" + bonusAll.length,
+        repo: state.inputs.t7_repo_url || "",
+        post: state.inputs.t8_post_url || ""
+      })
+    });
+    const out = await res.json();
+    if (out.ok){
+      box.className = "send-state ok";
+      box.textContent = out.resubmitted
+        ? "✓ Your grade was updated — " + out.score + "%. Nothing else to do."
+        : "✓ Recorded — " + out.score + "%. Nothing else to do.";
+    } else if (out.error === "bad_token"){
+      box.className = "send-state warn";
+      box.textContent = "That code doesn't match your email. Go back, check the code " +
+                        "your instructor emailed you, and submit again.";
+      return;
+    } else {
+      throw new Error(out.error || "rejected");
+    }
+  } catch (err) {
+    box.className = "send-state warn";
+    box.textContent = "Couldn't reach the grade sheet. Check your connection and " +
+                      "press Submit again — your answers are saved.";
+    // Surface the real reason; "Failed to fetch" here means the sandbox
+    // blocked the request, not that the endpoint is down.
+    console.error("[day05] submission POST failed:", err);
+  }
+}
+document.getElementById("btn-reopen").addEventListener("click", () => {
+  document.getElementById("receipt").classList.remove("on");
+  document.getElementById("shell").classList.add("on");
+  renderAll();
+});
+
+loadLocal();
+// A stored email must still be on the roster — it can change between days.
+if (state.email){
+  const idx = rosterLookup(state.email);
+  if (idx < 0){
+    state = { name:"", email:"", rosterIndex:-1, checks:{}, inputs:{}, submittedAt:null };
+    saveLocal();
+  } else {
+    state.rosterIndex = idx;
+    state.name = ROSTER[idx][1];
+    document.getElementById("g-email").value = state.email;
+    document.getElementById("g-token").value = state.token || "";
+    enterShell();
+  }
+}
+setSave("ok", "Saved on this device");
+</script>
