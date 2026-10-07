@@ -1,0 +1,1438 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Day 07 Submission Desk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@10..48,500;10..48,700;10..48,800&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap">
+
+<style>
+:root{
+  --ground:#FAFAF7;
+  --surface:#FFFFFF;
+  --surface-2:#F1F1EC;
+  --line:#DEDED7;
+  --line-soft:#E9E9E2;
+  --ink:#1B1F27;
+  --ink-2:#4B5260;
+  --ink-3:#787F8C;
+  --amber:#B47C0A;
+  --amber-solid:#E8B437;
+  --amber-wash:#FBF1D8;
+  --teal:#1F7D71;
+  --teal-wash:#DDF0EC;
+  --rose:#B23A48;
+  --rose-wash:#FBE4E6;
+  --shadow:0 1px 2px rgba(27,31,39,.06), 0 8px 24px -12px rgba(27,31,39,.18);
+  --radius:10px;
+  --rail:300px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#12161F;
+    --surface:#191E29;
+    --surface-2:#212736;
+    --line:#2E3546;
+    --line-soft:#252C3B;
+    --ink:#E9ECF2;
+    --ink-2:#A6AEBF;
+    --ink-3:#798296;
+    --amber:#E8B437;
+    --amber-solid:#E8B437;
+    --amber-wash:#2C2618;
+    --teal:#4FC0AF;
+    --teal-wash:#152A29;
+    --rose:#F2848F;
+    --rose-wash:#2B1A1E;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 30px -14px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#12161F;
+  --surface:#191E29;
+  --surface-2:#212736;
+  --line:#2E3546;
+  --line-soft:#252C3B;
+  --ink:#E9ECF2;
+  --ink-2:#A6AEBF;
+  --ink-3:#798296;
+  --amber:#E8B437;
+  --amber-solid:#E8B437;
+  --amber-wash:#2C2618;
+  --teal:#4FC0AF;
+  --teal-wash:#152A29;
+  --rose:#F2848F;
+  --rose-wash:#2B1A1E;
+  --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 30px -14px rgba(0,0,0,.7);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--ground);
+  color:var(--ink);
+  font-family:"Public Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:15px;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{font-family:"Bricolage Grotesque","Public Sans",sans-serif;margin:0;text-wrap:balance;letter-spacing:-.02em}
+code,kbd,.mono{font-family:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace}
+button{font:inherit;color:inherit}
+a{color:var(--amber)}
+
+/* ---------- gate ---------- */
+.gate{min-height:100vh;display:grid;place-items:center;padding:32px 20px}
+.gate-card{
+  width:100%;max-width:480px;background:var(--surface);border:1px solid var(--line);
+  border-radius:14px;padding:32px;box-shadow:var(--shadow)
+}
+.gate-eyebrow{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--amber);margin-bottom:14px}
+.gate-card h1{font-size:30px;line-height:1.12;font-weight:800;margin-bottom:8px}
+.gate-card p.sub{color:var(--ink-2);margin:0 0 26px}
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.field label{font-size:12.5px;font-weight:600;color:var(--ink-2);letter-spacing:.01em}
+.field .hint{font-size:12px;color:var(--ink-3);font-weight:400}
+input[type=text],input[type=email],input[type=url],textarea,select{
+  width:100%;background:var(--ground);color:var(--ink);
+  border:1px solid var(--line);border-radius:8px;padding:9px 11px;
+  font:inherit;font-size:14px;transition:border-color .13s,box-shadow .13s
+}
+textarea{resize:vertical;min-height:78px;line-height:1.5}
+input:focus-visible,textarea:focus-visible,select:focus-visible{
+  outline:none;border-color:var(--amber-solid);box-shadow:0 0 0 3px color-mix(in srgb,var(--amber-solid) 22%,transparent)
+}
+input::placeholder,textarea::placeholder{color:var(--ink-3)}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  border:1px solid var(--line);background:var(--surface-2);
+  border-radius:8px;padding:9px 16px;font-size:14px;font-weight:600;
+  cursor:pointer;transition:transform .1s,background .13s,border-color .13s
+}
+.btn:hover{border-color:var(--ink-3)}
+.btn:active{transform:translateY(1px)}
+.btn:focus-visible{outline:2px solid var(--amber-solid);outline-offset:2px}
+.btn-primary{background:var(--amber-solid);border-color:var(--amber-solid);color:#1B1F27}
+.btn-primary:hover{background:#f0c25a;border-color:#f0c25a}
+.btn-primary:disabled{opacity:.45;cursor:not-allowed}
+.btn-wide{width:100%;padding:11px}
+.err{color:var(--rose);font-size:12.5px;min-height:17px;margin-top:-6px;margin-bottom:10px}
+
+/* ---------- shell ---------- */
+.shell{display:none;min-height:100vh}
+.shell.on{display:grid;grid-template-columns:var(--rail) 1fr}
+
+.rail{
+  border-right:1px solid var(--line);background:var(--surface);
+  padding:22px 18px;display:flex;flex-direction:column;gap:20px;
+  position:sticky;top:0;height:100vh;overflow-y:auto
+}
+.brand{display:flex;flex-direction:column;gap:3px}
+.brand .kicker{font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3)}
+.brand h2{font-size:19px;font-weight:800}
+
+.who{
+  background:var(--surface-2);border:1px solid var(--line-soft);border-radius:var(--radius);
+  padding:11px 12px;display:flex;flex-direction:column;gap:2px
+}
+.who .nm{font-weight:600;font-size:14px;line-height:1.3;overflow-wrap:anywhere}
+.who .em{font-size:11.5px;color:var(--ink-3);font-family:"JetBrains Mono",monospace;overflow-wrap:anywhere}
+
+.progress-block{display:flex;align-items:center;gap:14px}
+.ring{width:58px;height:58px;flex:none;position:relative}
+.ring svg{transform:rotate(-90deg)}
+.ring .pct{
+  position:absolute;inset:0;display:grid;place-items:center;
+  font-family:"JetBrains Mono",monospace;font-size:13px;font-weight:700;
+  font-variant-numeric:tabular-nums
+}
+.progress-meta{display:flex;flex-direction:column;gap:1px;min-width:0}
+.progress-meta .big{font-family:"JetBrains Mono",monospace;font-size:13px;font-weight:700;font-variant-numeric:tabular-nums}
+.progress-meta .small{font-size:11.5px;color:var(--ink-3)}
+
+nav.tasks{display:flex;flex-direction:column;gap:4px}
+.nav-label{font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:4px}
+.tab{
+  display:grid;grid-template-columns:22px 1fr auto;align-items:center;gap:10px;
+  padding:9px 10px;border-radius:8px;border:1px solid transparent;background:none;
+  cursor:pointer;text-align:left;width:100%;transition:background .12s,border-color .12s
+}
+.tab:hover{background:var(--surface-2)}
+.tab.active{background:var(--surface-2);border-color:var(--line)}
+.tab:focus-visible{outline:2px solid var(--amber-solid);outline-offset:1px}
+.tab .num{
+  font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:700;
+  width:22px;height:22px;border-radius:6px;display:grid;place-items:center;
+  background:var(--ground);border:1px solid var(--line);color:var(--ink-3)
+}
+.tab.done .num{background:var(--teal-wash);border-color:transparent;color:var(--teal)}
+.tab .ttl{font-size:13.5px;font-weight:500;line-height:1.3}
+.tab .cnt{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.tab.done .cnt{color:var(--teal)}
+
+.rail-foot{margin-top:auto;display:flex;flex-direction:column;gap:8px}
+.save-state{font-size:11.5px;color:var(--ink-3);display:flex;align-items:center;gap:6px;min-height:18px}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--ink-3);flex:none}
+.dot.ok{background:var(--teal)}
+.dot.bad{background:var(--rose)}
+.dot.busy{background:var(--amber-solid);animation:pulse 1s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.3}}
+@media (prefers-reduced-motion:reduce){.dot.busy{animation:none}}
+
+/* ---------- main ---------- */
+main{padding:34px 40px 90px;max-width:840px}
+.panel-head{margin-bottom:26px;padding-bottom:20px;border-bottom:1px solid var(--line)}
+.panel-head .eyebrow{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);margin-bottom:8px}
+.panel-head h1{font-size:27px;font-weight:800;line-height:1.15;margin-bottom:8px}
+.panel-head p{color:var(--ink-2);margin:0;max-width:62ch}
+
+.sec{margin-bottom:30px}
+.sec-head{display:flex;align-items:baseline;gap:10px;margin-bottom:12px}
+.sec-head h3{font-size:16px;font-weight:700}
+.sec-head .sid{font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--ink-3);font-weight:500}
+.sec-note{color:var(--ink-2);font-size:13.5px;margin:0 0 14px;max-width:62ch}
+.sec-note.quote{border-left:2px solid var(--amber-solid);padding-left:12px;color:var(--ink-2);font-style:italic}
+
+.checks{display:flex;flex-direction:column;gap:2px;margin-bottom:14px}
+.check{
+  display:flex;align-items:flex-start;gap:10px;padding:7px 9px;border-radius:7px;
+  cursor:pointer;transition:background .12s;border:1px solid transparent
+}
+.check:hover{background:var(--surface-2)}
+.check input{
+  appearance:none;-webkit-appearance:none;width:17px;height:17px;flex:none;margin-top:2px;
+  border:1.5px solid var(--line);border-radius:5px;background:var(--surface);
+  cursor:pointer;position:relative;transition:background .12s,border-color .12s
+}
+.check input:checked{background:var(--teal);border-color:var(--teal)}
+.check input:checked::after{
+  content:"";position:absolute;left:5px;top:1.5px;width:4px;height:9px;
+  border:solid #fff;border-width:0 2px 2px 0;transform:rotate(43deg)
+}
+.check input:focus-visible{outline:2px solid var(--amber-solid);outline-offset:2px}
+.check span{font-size:14px;line-height:1.45}
+.check input:checked + span{color:var(--ink-3)}
+.check code{
+  font-size:12.5px;background:var(--surface-2);border:1px solid var(--line-soft);
+  padding:1px 5px;border-radius:4px
+}
+
+pre.term{
+  background:var(--surface-2);border:1px solid var(--line-soft);border-radius:var(--radius);
+  padding:13px 15px;margin:0 0 14px;overflow-x:auto;
+  font-family:"JetBrains Mono",monospace;font-size:12.5px;line-height:1.65;color:var(--ink-2)
+}
+
+.inputs{display:flex;flex-direction:column;gap:14px;margin-top:6px}
+.inputs.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:760px){.inputs.two{grid-template-columns:1fr}}
+
+.deliverable{
+  display:flex;align-items:center;gap:9px;font-size:13px;font-weight:600;
+  background:var(--teal-wash);color:var(--teal);border-radius:8px;padding:9px 13px;margin-top:16px
+}
+.deliverable.pending{background:var(--surface-2);color:var(--ink-3)}
+
+.grade{border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin-top:8px}
+.grade-row{display:grid;grid-template-columns:112px 1fr;gap:0;border-bottom:1px solid var(--line-soft)}
+.grade-row:last-child{border-bottom:none}
+.grade-row .lvl{padding:11px 13px;font-weight:700;font-size:13px;background:var(--surface-2);border-right:1px solid var(--line-soft)}
+.grade-row .desc{padding:11px 13px;font-size:13px;color:var(--ink-2)}
+
+.footbar{
+  position:fixed;bottom:0;left:var(--rail);right:0;
+  background:color-mix(in srgb,var(--surface) 92%,transparent);
+  backdrop-filter:blur(10px);border-top:1px solid var(--line);
+  padding:11px 40px;display:flex;align-items:center;justify-content:space-between;gap:16px
+}
+.footbar .msg{font-size:13px;color:var(--ink-2)}
+.footbar .acts{display:flex;gap:9px}
+
+@media (max-width:880px){
+  .shell.on{grid-template-columns:1fr}
+  .rail{position:static;height:auto;border-right:none;border-bottom:1px solid var(--line)}
+  main{padding:26px 20px 96px}
+  .footbar{left:0;padding:11px 20px;flex-wrap:wrap}
+}
+
+/* ---------- receipt ---------- */
+.receipt{display:none;min-height:100vh;place-items:center;padding:40px 20px}
+.receipt.on{display:grid}
+.receipt-card{
+  width:100%;max-width:560px;background:var(--surface);border:1px solid var(--line);
+  border-radius:14px;padding:36px;box-shadow:var(--shadow);text-align:center
+}
+.stamp{
+  width:56px;height:56px;border-radius:50%;background:var(--teal-wash);color:var(--teal);
+  display:grid;place-items:center;margin:0 auto 18px;font-size:26px
+}
+.receipt-card h1{font-size:26px;font-weight:800;margin-bottom:8px}
+.receipt-card p{color:var(--ink-2);margin:0 0 22px}
+.summary{
+  text-align:left;background:var(--surface-2);border:1px solid var(--line-soft);
+  border-radius:var(--radius);padding:16px;margin-bottom:20px
+}
+.summary-row{
+  display:flex;justify-content:space-between;gap:12px;padding:6px 0;
+  border-bottom:1px dashed var(--line);font-size:13.5px
+}
+.summary-row:last-child{border-bottom:none}
+.summary-row .k{color:var(--ink-2)}
+.summary-row .v{font-family:"JetBrains Mono",monospace;font-weight:600;font-variant-numeric:tabular-nums}
+.v.pass{color:var(--teal)}
+.v.miss{color:var(--rose)}
+
+.gate-foot{font-size:12px;color:var(--ink-3);margin:14px 0 0;text-align:center;line-height:1.45}
+
+.send-state{
+  border-radius:var(--radius);padding:11px 14px;margin-bottom:16px;
+  font-size:13.5px;font-weight:600;line-height:1.45;text-align:left
+}
+.send-state.sending{background:var(--surface-2);color:var(--ink-2)}
+.send-state.ok{background:var(--teal-wash);color:var(--teal)}
+.send-state.warn{background:var(--rose-wash);color:var(--rose)}
+.sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+</style>
+
+<!-- ================= GATE ================= -->
+<section class="gate" id="gate">
+  <div class="gate-card">
+    <div class="gate-eyebrow">Track 2 · Day 7 · Parts 1–4</div>
+    <h1>Day 07 — React Intro: Components, Props &amp; State</h1>
+    <p class="sub">Work through the twelve tasks, tick what you finish, drop your links in. Your progress saves in this browser as you go — close the tab and come back.</p>
+    <div class="field">
+      <label for="g-email">Email <span class="hint">— the one you registered with</span></label>
+      <input type="email" id="g-email" autocomplete="email" placeholder="you@gmail.com">
+    </div>
+    <div class="field">
+      <label for="g-token">Your code <span class="hint">— the 10 characters your instructor sent you</span></label>
+      <input type="text" id="g-token" autocomplete="off" spellcheck="false"
+             maxlength="10" placeholder="7f3a9c2e10" class="mono">
+    </div>
+    <div class="err" id="gate-err"></div>
+    <button class="btn btn-primary btn-wide" id="gate-go">Open my assignment</button>
+    <p class="gate-foot">When you finish, this page sends your grade to your instructor automatically.</p>
+  </div>
+</section>
+
+<!-- ================= SHELL ================= -->
+<div class="shell" id="shell">
+  <aside class="rail">
+    <div class="brand">
+      <div class="kicker">JavaScript Everywhere</div>
+      <h2>Day 07 Desk</h2>
+    </div>
+
+    <div class="who">
+      <div class="nm" id="who-name"></div>
+      <div class="em" id="who-email"></div>
+    </div>
+
+    <div class="progress-block">
+      <div class="ring">
+        <svg width="58" height="58" viewBox="0 0 58 58" aria-hidden="true">
+          <circle cx="29" cy="29" r="25" fill="none" stroke="var(--line)" stroke-width="5"></circle>
+          <circle id="ring-fg" cx="29" cy="29" r="25" fill="none" stroke="var(--amber-solid)"
+                  stroke-width="5" stroke-linecap="round" stroke-dasharray="157" stroke-dashoffset="157"
+                  style="transition:stroke-dashoffset .35s ease"></circle>
+        </svg>
+        <div class="pct" id="ring-pct">0%</div>
+      </div>
+      <div class="progress-meta">
+        <div class="big" id="prog-count">0 / 0 checks</div>
+        <div class="small" id="prog-tasks">0 of 12 tasks complete</div>
+      </div>
+    </div>
+
+    <nav class="tasks" id="nav" aria-label="Assignment tasks">
+      <div class="nav-label">Tasks</div>
+    </nav>
+
+    <div class="rail-foot">
+      <div class="save-state"><span class="dot" id="save-dot"></span><span id="save-text">Ready</span></div>
+    </div>
+  </aside>
+
+  <main id="main"></main>
+
+  <div class="footbar">
+    <div class="msg" id="foot-msg"></div>
+    <div class="acts">
+      <button class="btn" id="btn-prev">← Previous</button>
+      <button class="btn" id="btn-next">Next →</button>
+      <button class="btn btn-primary" id="btn-submit" disabled>Submit assignment</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= RECEIPT ================= -->
+<section class="receipt" id="receipt">
+  <div class="receipt-card">
+    <div class="stamp">✓</div>
+    <h1>Submitted</h1>
+    <p id="receipt-sub"></p>
+
+    <div class="send-state" id="send-state" hidden></div>
+
+    <div class="summary" id="receipt-summary"></div>
+    <button class="btn" id="btn-reopen">Back to my assignment</button>
+  </div>
+</section>
+
+<script>
+/* =====================================================================
+   Day 07 assignment — data model
+   Every checkbox and every input in the assignment is declared here.
+   ===================================================================== */
+const TASKS = [
+  {
+    id: "t1",
+    title: "Predict, then run",
+    lead: "Twelve questions: #1–#8 are components you render, #9–#12 are written questions about what React does. The full code is in <code>ASSIGNMENT.md</code>.",
+    deliverable: "predictions.md + 1 screenshot",
+    sections: [
+      {
+        sid: "1.1", title: "Write your predictions first",
+        checks: [
+          ["t1_pred_file", "Created <code>predictions.md</code>"],
+          ["t1_pred_before", "Wrote exactly what appears on screen — or the exact error or warning — for all 12, <em>before</em> running anything"]
+        ]
+      },
+      {
+        sid: "1.2", title: "Now run them",
+        quote: "Getting them wrong is the assignment. Getting them wrong and not explaining why is not.",
+        checks: [
+          ["t1_pred_actual", "Ran <strong>#1–#8</strong> and recorded the <em>actual</em> result next to each prediction"],
+          ["t1_pred_try", "Tried #9–#12 in code too (#9 as a small list, #10 with a <code>console.log</code>, #11 and #12 as written)"],
+          ["t1_pred_why", "For every one I got wrong, wrote one sentence explaining why"],
+          ["t1_pred_mech", "For <strong>#2, #3, #5 vs #6, #7, #8 and #9</strong> named the mechanism explicitly"],
+          ["t1_pred_shot", "Screenshotted the output"]
+        ],
+        inputs: [
+          { k:"t1_wrong_count", type:"text", label:"How many did you get wrong?", ph:"5", w:"half" },
+          { k:"t1_pred_url", type:"url", label:"Screenshot link", hint:"— Drive / Imgur / GitHub", ph:"https://…" },
+          { k:"t1_surprise", type:"textarea", label:"Which result surprised you most, and why?", ph:"…" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "t2",
+    title: "JSX lab",
+    lead: "Create <code>src/JsxLab.tsx</code> and render it from <code>App.tsx</code>. Run after every part.",
+    deliverable: "JsxLab.tsx + 1 screenshot",
+    sections: [
+      {
+        sid: "2.1", title: "Expressions",
+        checks: [
+          ["t2_expr", "A component showing a name, a score array, the <strong>average</strong> (<code>toFixed(1)</code>) and a pass/fail label chosen with a <strong>ternary</strong>"],
+          ["t2_attr", "A value shown <strong>as an attribute</strong> with braces and another as a literal string — screenshotted both in the DOM inspector"],
+          ["t2_style", "An inline <code>style={{ … }}</code> with two camelCase properties, and a <code>className</code> from a CSS file"],
+          ["t2_comment", "A JSX comment <code>{/* … */}</code>"]
+        ]
+      },
+      {
+        sid: "2.2", title: "Rules",
+        checks: [
+          ["t2_fragment", "Returned two sibling elements wrapped in a <strong>Fragment</strong> <code>&lt;&gt;…&lt;/&gt;</code>"],
+          ["t2_htmlfor", "Used <code>htmlFor</code> on a <code>&lt;label&gt;</code> and <code>id</code> on its input — clicking the label focuses the input"],
+          ["t2_selfclose", "Self-closed <code>&lt;br /&gt;</code>, <code>&lt;hr /&gt;</code> and <code>&lt;input /&gt;</code>"]
+        ]
+      },
+      {
+        sid: "2.3", title: "Break it",
+        quote: "One at a time. Read the error, write it as a comment, fix it.",
+        checks: [
+          ["t2_b_class", "Used <code>class</code> instead of <code>className</code>"],
+          ["t2_b_siblings", "Left two siblings without a parent"],
+          ["t2_b_object", "Put an <strong>object</strong> inside <code>{ }</code> as content — <code>Objects are not valid as a React child</code>"],
+          ["t2_b_return", "Wrote <code>return</code> + newline + JSX without parentheses, and described why it returns <code>undefined</code>"],
+          ["t2_b_lower", "Named a component in lowercase (<code>&lt;greeting /&gt;</code>) and described what React does"]
+        ],
+        inputs: [
+          { k:"t2_url", type:"url", label:"Screenshot link", ph:"https://…" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "t3",
+    title: "Props lab",
+    lead: "Create <code>src/props-lab/</code> — one component per file.",
+    deliverable: "props-lab/ + 1 screenshot",
+    sections: [
+      {
+        sid: "3.1", title: "Typed props",
+        checks: [
+          ["t3_badge", "<code>Badge.tsx</code> with an <code>interface BadgeProps</code>: a required <code>label</code>, an optional <code>tone</code> union with a default"],
+          ["t3_avatar", "<code>Avatar.tsx</code> taking <code>name</code> and rendering the <strong>initials</strong> — computed, not passed in"],
+          ["t3_rating", "<code>Rating.tsx</code> taking <code>value</code> (0–5) and rendering that many ★ and the rest ☆ with <code>repeat</code>"],
+          ["t3_object", "A component whose prop is an <strong>object</strong> typed with my own <code>interface</code>, rendering two of its fields"]
+        ]
+      },
+      {
+        sid: "3.2", title: "children",
+        checks: [
+          ["t3_card", "<code>Card.tsx</code> with a <code>title</code> and <code>children: ReactNode</code>"],
+          ["t3_card_uses", "Used <code>Card</code> three times with <strong>different</strong> content, including another component and a list inside one"]
+        ]
+      },
+      {
+        sid: "3.3", title: "Composition",
+        checks: [
+          ["t3_profile", "A <code>ProfileCard</code> built <strong>only</strong> from <code>Card</code>, <code>Avatar</code>, <code>Badge</code> and <code>Rating</code>"],
+          ["t3_three", "Rendered <strong>three</strong> <code>ProfileCard</code>s from an array of three profile objects"]
+        ]
+      },
+      {
+        sid: "3.4", title: "Break it",
+        checks: [
+          ["t3_b_missing", "Omitted a required prop — copied the TypeScript error into a comment"],
+          ["t3_b_type", "Passed <code>\"5\"</code> where a number was expected — copied the error"],
+          ["t3_b_union", "Passed a tone that isn't in the union — copied the error"],
+          ["t3_b_mutate", "Tried to change a prop inside the child and wrote down what TypeScript says"]
+        ],
+        inputs: [
+          { k:"t3_url", type:"url", label:"Screenshot link", hint:"— the three profile cards", ph:"https://…" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "t4",
+    title: "Lists, keys and conditional rendering",
+    lead: "Create <code>src/ListLab.tsx</code>.",
+    deliverable: "ListLab.tsx + 1 screenshot",
+    sections: [
+      {
+        sid: "4.1", title: "Rendering a list",
+        checks: [
+          ["t4_map", "Rendered an array of at least five objects with <code>.map</code>, each with <code>key={item.id}</code>"],
+          ["t4_sorted", "Rendered a <strong>filtered</strong> and a <strong>sorted</strong> copy — sorted with <code>[...items].sort(…)</code> and a comment on why the spread matters"],
+          ["t4_nested", "Rendered a list of lists (categories → items) with correct keys at <strong>both</strong> levels"]
+        ]
+      },
+      {
+        sid: "4.2", title: "Conditionals",
+        checks: [
+          ["t4_empty", "An <strong>empty state</strong>, with an early <code>return</code>, when the array is <code>[]</code>"],
+          ["t4_ternary", "A ternary showing one of two labels per row"],
+          ["t4_and", "An <code>&amp;&amp;</code> showing an optional field only when it exists"],
+          ["t4_null", "A component that returns <code>null</code> in one case"]
+        ]
+      },
+      {
+        sid: "4.3", title: "The 0 trap",
+        checks: [
+          ["t4_zero_bug", "Rendered <code>{items.length &amp;&amp; &lt;List /&gt;}</code> with an empty array and screenshotted the stray <strong>0</strong>"],
+          ["t4_zero_fix", "Fixed it with <code>items.length &gt; 0 &amp;&amp;</code> and commented why"]
+        ]
+      },
+      {
+        sid: "4.4", title: "Keys, on purpose",
+        quote: "Put an uncontrolled checkbox and a text input in each row, so each row holds state of its own.",
+        checks: [
+          ["t4_key_index", "Used <code>key={index}</code>, ticked row 1, deleted row 1, and screenshotted the tick <strong>moving to the wrong row</strong>"],
+          ["t4_key_id", "Switched to <code>key={item.id}</code> and proved the tick follows the right row"],
+          ["t4_key_none", "Removed the <code>key</code> entirely and copied the console warning verbatim"]
+        ],
+        inputs: [
+          { k:"t4_url", type:"url", label:"Screenshot link", hint:"— the stray 0 and the wrong-row tick", ph:"https://…" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "t5",
+    title: "State lab",
+    lead: "Create <code>src/StateLab.tsx</code>.",
+    deliverable: "StateLab.tsx + 1 screenshot",
+    sections: [
+      {
+        sid: "5.1", title: "Basics",
+        checks: [
+          ["t5_counter", "A counter with <strong>+</strong>, <strong>−</strong> and <strong>Reset</strong>"],
+          ["t5_toggle", "A <strong>toggle</strong> (boolean state) that shows and hides a paragraph"],
+          ["t5_mirror", "A <strong>text input</strong> mirrored live into a heading"],
+          ["t5_object", "State holding an <strong>object</strong> <code>{ name, city }</code> with two buttons that each change one field"]
+        ]
+      },
+      {
+        sid: "5.2", title: "Why a variable isn't enough",
+        checks: [
+          ["t5_let", "A second counter using <code>let count = 0</code> — showed the console counting while the screen stays at 0, and commented the two reasons"],
+          ["t5_render_log", "Added <code>console.log(\"render\")</code> and described what <strong>two logs per render</strong> means in development"]
+        ]
+      },
+      {
+        sid: "5.3", title: "The snapshot and the updater",
+        checks: [
+          ["t5_plus_one", "A button doing <code>setN(n + 1)</code> three times — screenshotted it adding <strong>1</strong>"],
+          ["t5_plus_three", "The same button with <code>setN((c) =&gt; c + 1)</code> three times — screenshotted it adding <strong>3</strong>"],
+          ["t5_snapshot", "A button that does <code>setN(10); console.log(n)</code> and shows the <strong>old</strong> value — commented why"],
+          ["t5_when", "One comment: when is <code>setN(value)</code> enough, and when do I need the updater?"]
+        ]
+      },
+      {
+        sid: "5.4", title: "Break it",
+        checks: [
+          ["t5_b_if", "Put <code>useState</code> inside an <code>if</code> — copied the error or warning"],
+          ["t5_b_never", "Gave <code>useState([])</code> no type, tried to add a number, copied the error — then fixed it with <code>useState&lt;number[]&gt;([])</code>"]
+        ],
+        inputs: [
+          { k:"t5_url", type:"url", label:"Screenshot link", hint:"— +1 vs +3", ph:"https://…" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "t6",
+    title: "Immutable updates lab",
+    lead: "Create <code>src/ImmutableLab.tsx</code> with an array of <strong>five</strong> task-like objects in state.",
+    deliverable: "ImmutableLab.tsx + 1 screenshot",
+    sections: [
+      {
+        sid: "6.1", title: "The four patterns",
+        checks: [
+          ["t6_add", "<strong>Add</strong> — <code>[...prev, newItem]</code>"],
+          ["t6_remove", "<strong>Remove</strong> — <code>filter</code> by id"],
+          ["t6_update_item", "<strong>Update one field of one item</strong> — <code>map</code> + <code>{ ...item, field: value }</code>"],
+          ["t6_update_obj", "<strong>Update an object</strong> in state — <code>{ ...prev, field: value }</code>"]
+        ]
+      },
+      {
+        sid: "6.2", title: "Without mutating anything",
+        checks: [
+          ["t6_sort", "<strong>Sort</strong> by title using a copy, with buttons for A→Z and Z→A"],
+          ["t6_move", "<strong>Move an item up</strong> one position — a new array, no <code>splice</code> on the old one"],
+          ["t6_clear", "<strong>Clear all done</strong> — one <code>filter</code>"],
+          ["t6_toggle_all", "<strong>Toggle all</strong> — one <code>map</code>"]
+        ]
+      },
+      {
+        sid: "6.3", title: "Break it",
+        checks: [
+          ["t6_b_push", "Wrote <code>tasks.push(…); setTasks(tasks)</code> — screenshotted that nothing changes"],
+          ["t6_b_later", "Clicked another working button and showed the mutated value suddenly appear — commented why"],
+          ["t6_b_shallow", "Wrote <code>tasks[0].done = true; setTasks([...tasks])</code> and explained why it's still a bug even though the array is new"],
+          ["t6_b_reverse", "Used <code>n.reverse()</code> inside an updater and described what React does"]
+        ],
+        inputs: [
+          { k:"t6_url", type:"url", label:"Screenshot link", ph:"https://…" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "t7",
+    title: "Controlled input + lifting state up",
+    lead: "Create <code>src/lift/</code> — a small shopping list. State lives in <code>Shopping.tsx</code>; everything below it takes props only.",
+    deliverable: "lift/ + 1 screenshot",
+    sections: [
+      {
+        sid: "7.1", title: "The pieces",
+        checks: [
+          ["t7_shopping", "<code>Shopping.tsx</code> owns <code>items</code> (with <code>id</code>, <code>name</code>, <code>qty</code>, <code>bought</code>)"],
+          ["t7_additem", "<code>AddItem.tsx</code> — a <strong>controlled</strong> <code>name</code> input and a <code>qty</code> number input; calls <code>onAdd(name, qty)</code>, then clears itself"],
+          ["t7_list", "<code>ItemList.tsx</code> + <code>ItemRow.tsx</code> — a <code>bought</code> checkbox and a remove button"],
+          ["t7_summary", "<code>Summary.tsx</code> — shows \"N items, M bought\""]
+        ]
+      },
+      {
+        sid: "7.2", title: "Rules",
+        checks: [
+          ["t7_no_setter", "<strong>No</strong> component below <code>Shopping</code> receives <code>setItems</code> — only <code>onToggle</code>, <code>onRemove</code>, <code>onAdd</code>"],
+          ["t7_derived", "The summary is <strong>derived</strong> in render — no <code>useState</code> for the counts"],
+          ["t7_validate", "An empty or whitespace-only name does nothing; <code>qty</code> is at least 1"],
+          ["t7_prevent", "<code>e.preventDefault()</code> is called — and I removed it once to screenshot the page reloading"],
+          ["t7_enter", "Submit works with the <strong>Enter</strong> key"]
+        ]
+      },
+      {
+        sid: "7.3", title: "Draw it",
+        checks: [
+          ["t7_tree", "Wrote — as a comment at the top of <code>Shopping.tsx</code> — the component tree and where each piece of state lives"]
+        ],
+        inputs: [
+          { k:"t7_url", type:"url", label:"Screenshot link", ph:"https://…" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "t8",
+    title: "Build: the Task Board",
+    lead: "Plan first, then build. A <strong>new</strong> Vite project — <code>task-board/</code> (React + TypeScript).",
+    deliverable: "task-board/ folder + 2 screenshots",
+    sections: [
+      {
+        sid: "8.1", title: "Plan on paper",
+        checks: [
+          ["t8_sketch", "Sketched the layout and committed it as <code>docs/sketch.png</code>"],
+          ["t8_state_table", "Wrote <code>docs/state-table.md</code>: every piece of data, whether it's <strong>state or derived</strong>, and which component owns it"],
+          ["t8_state_right", "My table has the state from README 4.1 — tasks, filter, search, and the form's own title and priority — and <strong>no stored counters</strong>"]
+        ]
+      },
+      {
+        sid: "8.2", title: "Structure",
+        term: "task-board/\n├── docs/\n│   ├── sketch.png\n│   └── state-table.md\n└── src/\n    ├── main.tsx\n    ├── App.tsx\n    ├── types.ts\n    ├── tasks.ts\n    └── components/\n        ├── Header.tsx\n        ├── AddTaskForm.tsx\n        ├── FilterBar.tsx\n        ├── TaskList.tsx\n        ├── TaskItem.tsx\n        └── Footer.tsx",
+        checks: [
+          ["t8_types", "<code>types.ts</code> — <code>Priority</code>, <code>Filter</code>, <code>Task</code> (with <code>readonly id</code>)"],
+          ["t8_helpers", "<code>tasks.ts</code> — <code>visibleTasks</code> and <code>nextId</code> as <strong>pure functions</strong>, proved by a throwaway Node script printing <code>2 1 0 1 1 3</code>"],
+          ["t8_components", "<code>Header</code>, <code>AddTaskForm</code>, <code>FilterBar</code>, <code>TaskList</code>, <code>TaskItem</code>, <code>Footer</code> — one component per file, every one with a typed props <code>interface</code>"],
+          ["t8_app", "<code>App.tsx</code> holds all the top-level state and the handlers that <strong>replace</strong> the list"]
+        ]
+      },
+      {
+        sid: "8.3", title: "Behaviour",
+        checks: [
+          ["t8_add", "<strong>Add</strong> a task with a title and priority — Enter submits, whitespace is rejected"],
+          ["t8_toggle", "<strong>Toggle</strong> done with a checkbox and a struck-through title"],
+          ["t8_remove", "<strong>Remove</strong> a task"],
+          ["t8_priority", "<strong>Change priority</strong> from a <code>&lt;select&gt;</code> on the row"],
+          ["t8_filter", "<strong>Filter</strong> All / Open / Done, the active button marked <code>aria-pressed</code>"],
+          ["t8_search", "<strong>Search</strong> by title, case-insensitive"],
+          ["t8_clear", "<strong>Clear completed</strong> — hidden when nothing is complete"],
+          ["t8_header", "A header saying <code>N left</code> — and <code>All done 🎉</code> at zero"],
+          ["t8_empty_two", "<strong>Two different empty states</strong>: no tasks at all vs no matches"],
+          ["t8_nextid", "New ids come from <code>nextId</code> — never reused after a delete"]
+        ]
+      },
+      {
+        sid: "8.4", title: "Quality",
+        checks: [
+          ["t8_no_any", "<strong>No</strong> <code>any</code>, no <code>as</code> except the single <code>as Priority</code> on the <code>&lt;select&gt;</code>, no <code>@ts-ignore</code>"],
+          ["t8_tsc", "<code>npx tsc --noEmit -p tsconfig.app.json</code> prints <strong>no errors</strong>"],
+          ["t8_build", "<code>npm run build</code> succeeds"],
+          ["t8_no_mutate", "No state is mutated anywhere — I can point to every <code>map</code>, <code>filter</code> and spread"],
+          ["t8_keys", "Every list has a stable <code>key</code> from the data"],
+          ["t8_labels", "Every input has a visible or <code>aria-label</code> label; every button has text or an <code>aria-label</code>"],
+          ["t8_console", "No console warnings or errors in the browser while using the app"],
+          ["t8_explain", "I can explain every line of <code>App.tsx</code> out loud"]
+        ]
+      },
+      {
+        sid: "8.5", title: "Screenshots",
+        checks: [
+          ["t8_shot_main", "A screenshot with <strong>several tasks</strong>, a filter selected and a search typed"],
+          ["t8_shot_empty", "A screenshot of <strong>both</strong> empty states"]
+        ],
+        inputs: [
+          { k:"t8_url", type:"url", label:"Task Board screenshot link", hint:"— required", ph:"https://…" },
+          { k:"t8_empty_url", type:"url", label:"Empty states screenshot link", ph:"https://…" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "t9",
+    title: "Your feature, built into the board",
+    lead: "Pick <strong>one</strong> feature that is yours. It must add <strong>new state</strong> or <strong>a new component with props</strong> — not just CSS.",
+    deliverable: "code + FEATURE.md + 1 screenshot",
+    sections: [
+      {
+        sid: "9.1", title: "Build it",
+        checks: [
+          ["t9_doc", "Wrote <code>FEATURE.md</code>: what the feature is and <strong>why it's useful</strong>"],
+          ["t9_types", "Added the field(s) to <code>Task</code> in <code>types.ts</code> and updated the <code>INITIAL</code> data"],
+          ["t9_props", "The new or changed component has a typed props <code>interface</code>"],
+          ["t9_state_place", "State for the feature lives in the <strong>right</strong> place — and <code>FEATURE.md</code> says where and why in one sentence"],
+          ["t9_derived", "Anything I can compute is <strong>derived</strong>, not stored"],
+          ["t9_works_with", "It works with <strong>filter and search</strong> and with remove"],
+          ["t9_tsc", "<code>tsc</code> and <code>npm run build</code> still pass"],
+          ["t9_shot", "Screenshot of the feature in use"]
+        ],
+        inputs: [
+          { k:"t9_name", type:"text", label:"What's your feature?", ph:"due dates with an overdue badge", w:"half" },
+          { k:"t9_url", type:"url", label:"Screenshot link", ph:"https://…" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "t10",
+    title: "Break it — four bugs, on purpose",
+    lead: "Create <code>BREAK-IT.md</code> in <code>task-board/</code>. For each bug: make the change, <strong>screenshot</strong> what goes wrong, write what you saw and <strong>why</strong>, then fix it.",
+    deliverable: "BREAK-IT.md + 4 screenshots",
+    sections: [
+      {
+        sid: "10.1", title: "Mutated state",
+        checks: [
+          ["t10_mutate", "Rewrote <code>toggleTask</code> to mutate, screenshotted the unchanged screen, fixed with <code>map</code> + spread"]
+        ]
+      },
+      {
+        sid: "10.2", title: "Index as key",
+        checks: [
+          ["t10_index_key", "Changed <code>TaskList</code> to <code>key={index}</code> with an uncontrolled input in each row, deleted a row above one I'd changed, screenshotted the wrong row holding the state, fixed with <code>task.id</code>"]
+        ]
+      },
+      {
+        sid: "10.3", title: "Stale snapshot",
+        checks: [
+          ["t10_stale", "Wrote <code>addTask</code> as <code>setTasks([...tasks, newTask])</code>, called it <strong>twice</strong> from a button, screenshotted <strong>one</strong> task appearing, fixed with the updater form"]
+        ]
+      },
+      {
+        sid: "10.4", title: "Stored derived state",
+        checks: [
+          ["t10_derived", "Added <code>useState</code> for <code>remaining</code>, updated it in <code>addTask</code> but not <code>removeTask</code>, screenshotted the counter disagreeing with the list, fixed by deleting the state and computing it"]
+        ]
+      },
+      {
+        sid: "10.5", title: "After",
+        checks: [
+          ["t10_clean", "After all four fixes the app is <code>tsc</code>-clean and the browser console is empty"],
+          ["t10_slowest", "<code>BREAK-IT.md</code> ends with a paragraph: which of the four bugs would I have been slowest to find in a big app, and why?"]
+        ],
+        inputs: [
+          { k:"t10_url", type:"url", label:"BREAK-IT.md link", hint:"— on GitHub", ph:"https://github.com/…" },
+          { k:"t10_slowest_text", type:"textarea", label:"The bug I'd be slowest to find, and why", ph:"…" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "t11",
+    title: "Notes, branch and pull request",
+    lead: "Leave the repo in a state you'd show an employer. All work happens on <code>feature/day-07</code>.",
+    deliverable: "NOTES.md + repo link + merged PR link",
+    sections: [
+      {
+        sid: "11.1", title: "Repo structure",
+        checks: [
+          ["t11_structure", "<code>day-07/</code> holds <code>day-07-react/</code> (Tasks 2–7) and <code>task-board/</code> (Tasks 8–10) alongside <code>day-05/</code> and <code>day-06/</code>"],
+          ["t11_gitignore", "Every project has its own <code>package.json</code> and a <code>.gitignore</code> containing <code>node_modules</code> and <code>dist</code>"],
+          ["t11_no_nm", "<strong><code>node_modules</code> and <code>dist</code> are not committed</strong> — screenshotted <code>git ls-files</code> showing none"],
+          ["t11_run", "Each project says how to run it: <code>npm install</code> then <code>npm run dev</code>"]
+        ]
+      },
+      {
+        sid: "11.2", title: "day-07/NOTES.md",
+        quote: "If a sentence could have been copied from the README, rewrite it.",
+        checks: [
+          ["t11_n_ui", "<strong>UI = f(state)</strong> — what it means, with one example from my own board"],
+          ["t11_n_props", "<strong>Props vs state</strong> — one difference and one similarity"],
+          ["t11_n_var", "<strong>Why a plain variable doesn't work</strong> as state (two reasons)"],
+          ["t11_n_mutate", "<strong>Why you never mutate state</strong>, with my own bug as the example"],
+          ["t11_n_key", "<strong>What <code>key</code> does</strong> and what I saw when it was wrong"],
+          ["t11_n_derived", "<strong>Derived vs stored state</strong> — one value from my board that I compute"],
+          ["t11_n_where", "<strong>Where each piece of state lives</strong> and why — a short table"],
+          ["t11_n_bug", "<strong>A real bug</strong> that wasn't in the README: the exact error, how I found it, the fix"]
+        ],
+        inputs: [
+          { k:"t11_bug_text", type:"textarea", label:"The bug you hit — the error message and the fix", ph:"…" }
+        ]
+      },
+      {
+        sid: "11.3", title: "Branch, commits and PR",
+        checks: [
+          ["t11_branch", "All work was done on <code>feature/day-07</code>"],
+          ["t11_msgs", "Every commit has an imperative, specific message — no <code>update</code>, no <code>stuff</code>"],
+          ["t11_five", "At least <strong>five</strong> commits (labs, then the board, then the feature)"],
+          ["t11_pr", "Opened a pull request, wrote a description, and <strong>merged</strong> it"],
+          ["t11_log", "Ran <code>git log --oneline --graph -15</code> and screenshotted it"]
+        ],
+        inputs: [
+          { k:"t11_repo_url", type:"url", label:"Repo link", hint:"— required", ph:"https://github.com/…" },
+          { k:"pr_url", type:"url", label:"Merged pull request link", hint:"— required", ph:"https://github.com/…/pull/…" },
+          { k:"t11_log_url", type:"url", label:"git log screenshot link", ph:"https://…" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "t12",
+    title: "Share it",
+    lead: "Say something real. Not \"excited to continue my journey\".",
+    deliverable: "LinkedIn post link",
+    sections: [
+      {
+        sid: "12.1", title: "Post it",
+        checks: [
+          ["t12_posted", "Posted on LinkedIn about completing Day 7 — my first React app"],
+          ["t12_shot", "Included the screenshot of my Task Board"],
+          ["t12_repo_pr", "Included the link to my repo <strong>and</strong> my merged pull request"],
+          ["t12_before_after", "Showed one before-and-after — my Day 06 <code>render()</code> next to the matching React component"],
+          ["t12_learned", "Said one concrete thing I understood — the snapshot, why <code>key</code> exists, why <code>setX(x + 1)</code> three times adds one"]
+        ],
+        inputs: [
+          { k:"t12_post_url", type:"url", label:"LinkedIn post link", hint:"— required", ph:"https://linkedin.com/posts/…" },
+          { k:"t12_learned_text", type:"text", label:"The one thing that clicked", ph:"…" }
+        ]
+      },
+      {
+        sid: "Bonus", title: "Optional — for anyone going further",
+        note: "Not required. Ticking these is how a submission moves from ✅ Done to 🔥 10%.",
+        optional: true,
+        checks: [
+          ["b_usecounter", "Wrote a custom hook <code>useCounter(initial)</code> returning <code>{ count, increment, decrement, reset }</code>, used it in two components, and said what <code>use…</code> means for the rules of hooks"],
+          ["b_reducer", "Replaced the task handlers with <code>useReducer</code> and a typed action union"],
+          ["b_generic", "Added a typed generic <code>&lt;Select&lt;T&gt;&gt;</code> component whose <code>onChange</code> returns <code>T</code>"],
+          ["b_shortcuts", "Added keyboard shortcuts (<code>/</code> focuses search, <code>Esc</code> clears it)"],
+          ["b_a11y", "Made the board fully usable with a keyboard and a screen-reader pass — correct focus after add and delete"],
+          ["b_memo", "Added <code>React.memo</code> to <code>TaskItem</code>, logged renders, and said why it did or didn't matter at this size"],
+          ["b_tests", "Wrote three unit tests for <code>visibleTasks</code> with <code>node:test</code>"],
+          ["b_fetch", "Replaced <code>INITIAL</code> with the Day 06 API using <code>fetch</code> in a click handler, and noted what's awkward about it"],
+          ["b_deploy", "Deployed the board to GitHub Pages, Netlify or Vercel and added the live link to my repo"],
+          ["b_thinking", "Read <strong>react.dev → Thinking in React</strong> and added a comment to <code>state-table.md</code> where I'd now do it differently"]
+        ]
+      },
+      {
+        sid: "Grading", title: "How this is graded",
+        grade: [
+          ["❌ Incomplete", "Copy-pasted README code, predictions written after running, any state mutated, key={index} on a list that changes, a stored value that could be derived, any or @ts-ignore, a component that receives setTasks, node_modules committed, everything done on main, no merged PR, or code you can’t explain line by line"],
+          ["✅ Done", "All twelve tasks, a board where every list has a data key and every update replaces state, typed props on every component, state placed on purpose and documented in state-table.md, two empty states, your own feature, four bugs broken and fixed with screenshots, NOTES.md in your own words, a real bug documented, a merged PR"],
+          ["🔥 10%", "Done + the bonus + a feature that is genuinely yours + notes someone else could actually learn from"]
+        ]
+      }
+    ]
+  }
+];
+
+const REQUIRED_INPUTS = ["t8_url", "t11_repo_url", "pr_url", "t12_post_url"];
+
+/* Which assignment this is — picks the sheet column (Day 7 -> J). */
+const DAY = 7;
+
+/* Apps Script web-app /exec URL. Empty = code-only mode: the page still
+   works, students just hand over their code instead. See
+   tools/apps-script/Code.gs for how to deploy one. */
+const ENDPOINT = "https://script.google.com/macros/s/AKfycbwqjBg7wGjLQl-edi1PQVbcfBJLN1EpStr62i3m238eDhOXQ5mlZvaP1uNl2LbR1uI/exec";
+
+/* The Day 07 roster: [email, name]. Order IS the identity — a code
+   carries the index into this array, so never reorder, only append. */
+const ROSTER = [["saadmmustafa99@gmail.com","سعد محمد مصطفى"],["ahmedmohamedelroby26@gmail.com","Ahmed Mohamed Hamed Elroby"],["abobkrsayed0@gmail.com","Abobkr Sayed Mohamed Ali"],["mh.gamal855@gmail.com","Mahmoud Gamal"],["mennafathalla124@gmail.com","Menna Fathalla Esmail"],["mtahr8006@gmail.com","Omar Taher Ahmed"],["donya21creator@gmail.com","Donya El Shahat El Sadek"],["mohammedraka2030@gmail.com","محمد ركاء العنزي"],["abdallahalsabaa.pu.2021@gmail.com","Abdallah Elsaied Mohamed Alsabaa"],["nourased7@gmail.com","نورالهدى السيد حسن"],["mohammedhashmed88@gmail.com","Mohammed Hashim"],["salmazyad17@yahoo.com","سلمي زياد"],["fatmamohsenfouly@gmail.com","فاطمة محسن محمد حسن"],["abdullahmohamed752006@gmail.com","abdallah mohamed"],["mokhtaroldmoustapha@gmail.com","mokhtar moustapha"],["abdofawzy1211@gmail.com","عبدالرحمن فوزي نصر محمود"],["ahmedalaa28908@gmail.com","أحمد علاء إمبارك محمود"],["abanoubmaqqar19@gmail.com","Abanoub Maqqar Mazouz"],["mbarakat16706@gmail.com","محمد بركات مبارك محمود"],["mohamedbahaa642021@gmail.com","محمد بهاء الدين محمد الصغير"],["x1.yousef.x1.2007@gmail.com","يوسف عاطف احمد محمد"],["ww0742003@gmail.com","محمد مصطفى رمضان"],["mohammedsalah0858@gmai.com","محمد صلاح شحاته علواني"],["drnasser.khairy@gmail.com","Nasser khairy sidrak"],["a7med3oda@yahoo.com","Ahmad Mohamad Ouda"],["ahmed.m.2457@gmail.com","Ahmed Mohamed"],["engy5821@gmail.com","إنجي محمد محمود"],["mahmoudmaram002@gmail.com","Maram Mahmoud"],["emadyt0@gmail.com","Emad Ahmed Hassan"],["ismaelelnaggar69@gmail.com","Ismael Sayed El-Naggar"],["abdelhay.mahmoud.dev@gmail.com","عبدالحي محمود محمد"],["salma.eltaher1110@gmail.com","Salma Eltaher Ahmed Hamed"],["a7md.m.3bdo@gmail.com","أحمد محمد عبده محمد"],["nour.redsea@gmail.com","نورهان أشرف ناجى محمد"],["mostfashaban.soudy@gmail.com","mostafa shaban soudi"],["hemafars0@gmail.com","ابراهيم بسيونى السيد فارس محمد"],["ahmedabdo12060@gmail.com","Ahmed Abdel Aal Abdel Latif"],["reemheikal3@gmail.com","Reem Atef Heikal"],["ahmed.ibn.adell@gmail.com","احمد عادل العدل على"],["asemm9930@gmail.com","Mohamed asem ali"],["hassan20nafed@gmail.com","Hassan Mohamed Nafed"],["mahmoudaboalfadl322@gmail.com","Mahmoud Aboalfadl Mahmoud"],["mohamedmahmoudn7m@gmail.com","مروه احمد على"],["salma.abdelhares.2005@gmail.com","salma saad abd elhares"],["ahmednbg.de56@gmail.com","Ahmed Gamal ismail mahmoud"],["sameremadwasfy1@gmail.com","Samer Emad Wasfy"],["ahmedeldeeb71707@gmail.com","أحمد منتصر الديب"],["esraakhalid1977e@gmail.com","Esraa Khalid"],["georgeedwar2003@gmail.com","george edwar maher"],["gamal.elshamy.req@gmail.com","Gamal Hassan Elshamy"],["aboalnaeeb@gmail.com","Ahmed Mohamed Hassan"],["islamsaeedw@gmail.com","Islam saeed"],["moustafaelbaloty@gmail.com","moustafa ahmed"],["zmai9abd.alac@gmail.com","مى عبدالاه احمد"],["mostafasaqly1@gmail.com","mostafa saqly"]];
+</script>
+
+<script>
+/* =====================================================================
+   Day 07 submission code — shared codec.
+   The page ENCODES; tools/decode-day07.js DECODES. Keep the two in sync:
+   this exact source is embedded in the artifact.
+
+   Format:  D7.<payload-b32>.<sig>
+   payload: <rosterIndex>.<checkBits-b32>.<dayMinutes>
+   sig:     4 chars of a salted hash over the payload
+
+   The signature is not cryptography — the salt ships in the page. It only
+   stops a student from hand-typing a better code than they earned, which
+   is the realistic threat here.
+   ===================================================================== */
+
+const SALT = "js-everywhere-day07-v1";
+
+/* Crockford base32, minus the letters that get misread when retyped. */
+const B32 = "0123456789ABCDEFGHJKMNPQRSTVWXYZ";
+
+function toB32(n){
+  if (n === 0) return "0";
+  let s = "";
+  while (n > 0){ s = B32[n % 32] + s; n = Math.floor(n / 32); }
+  return s;
+}
+function fromB32(s){
+  let n = 0;
+  for (const ch of s.toUpperCase()){
+    const i = B32.indexOf(ch);
+    if (i < 0) return NaN;
+    n = n * 32 + i;
+  }
+  return n;
+}
+
+/* Bits -> base32 string, chunked so we never exceed safe integer range.
+   67 checks = 67 bits, so we pack 15 bits at a time into 3-char groups. */
+function bitsToB32(bools){
+  let out = "";
+  for (let i = 0; i < bools.length; i += 15){
+    let chunk = 0;
+    for (let j = 0; j < 15; j++){
+      if (bools[i + j]) chunk |= (1 << j);
+    }
+    out += toB32(chunk).padStart(3, "0");
+  }
+  return out;
+}
+function b32ToBits(s, count){
+  const bools = [];
+  for (let i = 0; i < s.length; i += 3){
+    const chunk = fromB32(s.slice(i, i + 3));
+    if (Number.isNaN(chunk)) return null;
+    for (let j = 0; j < 15; j++) bools.push((chunk & (1 << j)) !== 0);
+  }
+  return bools.slice(0, count);
+}
+
+/* FNV-1a, 32-bit. Small, dependency-free, good enough to detect edits. */
+function sign(payload){
+  let h = 0x811c9dc5;
+  const s = payload + "|" + SALT;
+  for (let i = 0; i < s.length; i++){
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 0x01000193) >>> 0;
+  }
+  return toB32(h).padStart(7, "0").slice(-4);
+}
+
+function encodeSubmission(rosterIndex, checkBools){
+  const day = Math.floor(Date.now() / 60000);       // minute resolution
+  const payload = toB32(rosterIndex) + "." + bitsToB32(checkBools) + "." + toB32(day);
+  return "D7." + payload + "." + sign(payload);
+}
+
+function decodeSubmission(code, checkCount){
+  const clean = String(code).trim().toUpperCase().replace(/\s+/g, "");
+  const parts = clean.split(".");
+  if (parts.length !== 5 || parts[0] !== "D7") return { ok:false, error:"Not a Day 07 code." };
+  const payload = parts[1] + "." + parts[2] + "." + parts[3];
+  if (sign(payload) !== parts[4]) return { ok:false, error:"Code was edited or mistyped." };
+  const rosterIndex = fromB32(parts[1]);
+  const bits = b32ToBits(parts[2], checkCount);
+  const day = fromB32(parts[3]);
+  if (Number.isNaN(rosterIndex) || !bits || Number.isNaN(day)){
+    return { ok:false, error:"Code is malformed." };
+  }
+  return { ok:true, rosterIndex, bits, submittedAt: new Date(day * 60000) };
+}
+</script>
+
+<script>
+/* =====================================================================
+   State + persistence
+   ===================================================================== */
+const LS_KEY = "js-everywhere-day07";
+let state = { name:"", email:"", token:"", rosterIndex:-1, checks:{}, inputs:{}, submittedAt:null };
+let active = 0;
+
+/* Flatten the model once — used everywhere for counting. */
+const ALL_CHECKS = [];       // {key, taskIdx, optional}
+const ALL_INPUTS = [];       // {key, taskIdx, optional}
+TASKS.forEach((t, ti) => {
+  t.sections.forEach(s => {
+    (s.checks || []).forEach(([k]) => ALL_CHECKS.push({ key:k, taskIdx:ti, optional:!!s.optional }));
+    (s.inputs || []).forEach(i => ALL_INPUTS.push({ key:i.k, taskIdx:ti, optional:!!s.optional }));
+  });
+});
+const REQ_CHECKS = ALL_CHECKS.filter(c => !c.optional);
+const REQ_FIELDS = ALL_INPUTS.filter(i => REQUIRED_INPUTS.includes(i.key));
+
+function loadLocal(){
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    if (raw) state = Object.assign(state, JSON.parse(raw));
+  } catch (e) { /* private window, blocked storage — carry on empty */ }
+}
+function saveLocal(){
+  try { localStorage.setItem(LS_KEY, JSON.stringify(state)); } catch (e) {}
+}
+
+/* Look a student up on the roster. Returns their index, or -1. */
+function rosterLookup(email){
+  const e = (email || "").trim().toLowerCase();
+  return ROSTER.findIndex(r => r[0] === e);
+}
+
+function setSave(kind, text){
+  const dot = document.getElementById("save-dot");
+  const txt = document.getElementById("save-text");
+  dot.className = "dot" + (kind ? " " + kind : "");
+  txt.textContent = text;
+}
+
+/* Everything lives in this browser. Nothing leaves the page until the
+   student submits and hands over their code. */
+function queueSave(){
+  saveLocal();
+  setSave("ok", "Saved on this device");
+}
+
+/* =====================================================================
+   Progress
+   ===================================================================== */
+function progress(){
+  const done = REQ_CHECKS.filter(c => state.checks[c.key]).length;
+  const total = REQ_CHECKS.length;
+  const pct = total ? Math.round(done / total * 100) : 0;
+  const tasksDone = TASKS.filter((t, ti) => taskComplete(ti)).length;
+  return { done, total, pct, tasksDone };
+}
+function taskCounts(ti){
+  const list = REQ_CHECKS.filter(c => c.taskIdx === ti);
+  return { done: list.filter(c => state.checks[c.key]).length, total: list.length };
+}
+function taskComplete(ti){
+  const c = taskCounts(ti);
+  const fields = REQ_FIELDS.filter(f => f.taskIdx === ti);
+  const fieldsOk = fields.every(f => (state.inputs[f.key] || "").trim().length > 0);
+  return c.total > 0 && c.done === c.total && fieldsOk;
+}
+function canSubmit(){
+  const p = progress();
+  return p.done === p.total &&
+         REQUIRED_INPUTS.every(k => (state.inputs[k] || "").trim().length > 0);
+}
+
+/* =====================================================================
+   Rendering
+   ===================================================================== */
+function esc(s){ return String(s).replace(/[&<>"]/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c])); }
+
+function renderNav(){
+  const nav = document.getElementById("nav");
+  nav.innerHTML = '<div class="nav-label">Tasks</div>';
+  TASKS.forEach((t, ti) => {
+    const c = taskCounts(ti);
+    const done = taskComplete(ti);
+    const b = document.createElement("button");
+    b.className = "tab" + (ti === active ? " active" : "") + (done ? " done" : "");
+    b.setAttribute("aria-current", ti === active ? "true" : "false");
+    b.innerHTML =
+      '<span class="num">' + (done ? "✓" : (ti + 1)) + '</span>' +
+      '<span class="ttl">' + esc(t.title) + '</span>' +
+      '<span class="cnt">' + c.done + "/" + c.total + '</span>';
+    b.addEventListener("click", () => { active = ti; renderAll(); window.scrollTo({ top:0, behavior:"smooth" }); });
+    nav.appendChild(b);
+  });
+}
+
+function renderProgress(){
+  const p = progress();
+  const CIRC = 157;
+  document.getElementById("ring-fg").style.strokeDashoffset = String(CIRC - CIRC * p.pct / 100);
+  document.getElementById("ring-pct").textContent = p.pct + "%";
+  document.getElementById("prog-count").textContent = p.done + " / " + p.total + " checks";
+  document.getElementById("prog-tasks").textContent = p.tasksDone + " of " + TASKS.length + " tasks complete";
+
+  const submit = document.getElementById("btn-submit");
+  const ok = canSubmit();
+  submit.disabled = !ok;
+  const msg = document.getElementById("foot-msg");
+  if (state.submittedAt){
+    msg.textContent = "Submitted " + new Date(state.submittedAt).toLocaleString() + " — you can still edit and resubmit.";
+  } else if (ok){
+    msg.textContent = "Everything required is done. Submit when you're ready.";
+  } else {
+    const missing = [];
+    if (p.done < p.total) missing.push((p.total - p.done) + " checks left");
+    const FIELD_NAMES = {
+      pj_check_url: "npm run check screenshot",
+      api_a_url: "Task Manager screenshot",
+      pr2_url: "second pull request link",
+      pr_url: "pull request link",
+      t7_repo_url: "repo link",
+      t8_post_url: "LinkedIn link"
+    };
+    REQUIRED_INPUTS.forEach(k => {
+      if (!(state.inputs[k] || "").trim()){
+        missing.push(FIELD_NAMES[k] || k);
+      }
+    });
+    msg.textContent = missing.join(" · ");
+  }
+}
+
+function fieldHTML(inp){
+  const id = "in_" + inp.k;
+  const val = esc(state.inputs[inp.k] || "");
+  const hint = inp.hint ? ' <span class="hint">' + inp.hint + "</span>" : "";
+  const ctrl = inp.type === "textarea"
+    ? '<textarea id="' + id + '" data-key="' + inp.k + '" placeholder="' + esc(inp.ph || "") + '">' + val + "</textarea>"
+    : '<input type="' + (inp.type === "url" ? "url" : "text") + '" id="' + id + '" data-key="' + inp.k +
+      '" value="' + val + '" placeholder="' + esc(inp.ph || "") + '">';
+  return '<div class="field' + (inp.w === "half" ? " half" : "") + '">' +
+         '<label for="' + id + '">' + inp.label + hint + "</label>" + ctrl + "</div>";
+}
+
+function renderMain(){
+  const t = TASKS[active];
+  const m = document.getElementById("main");
+  let html =
+    '<div class="panel-head">' +
+      '<div class="eyebrow">Task ' + (active + 1) + " of " + TASKS.length + "</div>" +
+      "<h1>" + esc(t.title) + "</h1>" +
+      "<p>" + t.lead + "</p>" +     // leads are trusted markup from TASKS, like notes
+    "</div>";
+
+  t.sections.forEach(s => {
+    html += '<section class="sec">';
+    html += '<div class="sec-head"><span class="sid">' + esc(s.sid) + "</span><h3>" + esc(s.title) + "</h3></div>";
+    if (s.note)  html += '<p class="sec-note">' + s.note + "</p>";
+    if (s.term)  html += '<pre class="term">' + esc(s.term) + "</pre>";
+    if (s.quote) html += '<p class="sec-note quote">' + s.quote + "</p>";
+
+    if (s.checks){
+      html += '<div class="checks">';
+      s.checks.forEach(([k, label]) => {
+        html += '<label class="check"><input type="checkbox" data-check="' + k + '"' +
+                (state.checks[k] ? " checked" : "") + "><span>" + label + "</span></label>";
+      });
+      html += "</div>";
+    }
+
+    if (s.inputs){
+      const half = s.inputs.every(i => i.w === "half");
+      html += '<div class="inputs' + (half ? " two" : "") + '">';
+      s.inputs.forEach(i => { html += fieldHTML(i); });
+      html += "</div>";
+    }
+
+    if (s.grade){
+      html += '<div class="grade">';
+      s.grade.forEach(([lvl, desc]) => {
+        html += '<div class="grade-row"><div class="lvl">' + lvl + '</div><div class="desc">' + desc + "</div></div>";
+      });
+      html += "</div>";
+    }
+    html += "</section>";
+  });
+
+  if (t.deliverable){
+    const done = taskComplete(active);
+    html += '<div class="deliverable' + (done ? "" : " pending") + '">' +
+            (done ? "✓" : "○") + " Deliverable — " + esc(t.deliverable) + "</div>";
+  }
+
+  m.innerHTML = html;
+
+  m.querySelectorAll("input[data-check]").forEach(el => {
+    el.addEventListener("change", () => {
+      state.checks[el.dataset.check] = el.checked;
+      if (!el.checked) delete state.checks[el.dataset.check];
+      renderNav(); renderProgress(); refreshDeliverable(); queueSave();
+    });
+  });
+  m.querySelectorAll("[data-key]").forEach(el => {
+    el.addEventListener("input", () => {
+      state.inputs[el.dataset.key] = el.value;
+      renderNav(); renderProgress(); refreshDeliverable(); queueSave();
+    });
+  });
+
+  document.getElementById("btn-prev").disabled = active === 0;
+  document.getElementById("btn-next").disabled = active === TASKS.length - 1;
+}
+
+function refreshDeliverable(){
+  const el = document.querySelector(".deliverable");
+  if (!el) return;
+  const done = taskComplete(active);
+  el.className = "deliverable" + (done ? "" : " pending");
+  el.textContent = (done ? "✓" : "○") + " Deliverable — " + TASKS[active].deliverable;
+}
+
+function renderAll(){ renderNav(); renderMain(); renderProgress(); }
+
+/* =====================================================================
+   Receipt
+   ===================================================================== */
+/* Required checks first, then bonus — this ORDER IS THE WIRE FORMAT.
+   tools/checks.json is generated from the same model in the same order,
+   so the decoder can map each bit back to its label. */
+function checkBits(){
+  return REQ_CHECKS.map(c => !!state.checks[c.key])
+    .concat(ALL_CHECKS.filter(c => c.optional).map(c => !!state.checks[c.key]));
+}
+
+function showReceipt(){
+  const p = progress();
+  const bonusDone = ALL_CHECKS.filter(c => c.optional && state.checks[c.key]).length;
+  const bonusTotal = ALL_CHECKS.filter(c => c.optional).length;
+
+  document.getElementById("receipt-sub").textContent =
+    "Well done, " + state.name.split(" ")[0] + ". Your grade is being sent to your instructor now.";
+
+  let rows = "";
+  TASKS.forEach((t, ti) => {
+    const c = taskCounts(ti);
+    const ok = taskComplete(ti);
+    rows += '<div class="summary-row"><span class="k">Task ' + (ti + 1) + " — " + esc(t.title) + "</span>" +
+            '<span class="v ' + (ok ? "pass" : "miss") + '">' + c.done + "/" + c.total + "</span></div>";
+  });
+  rows += '<div class="summary-row"><span class="k">Bonus</span><span class="v">' + bonusDone + "/" + bonusTotal + "</span></div>";
+  rows += '<div class="summary-row"><span class="k">Overall</span><span class="v pass">' + p.pct + "%</span></div>";
+  document.getElementById("receipt-summary").innerHTML = rows;
+
+  document.getElementById("shell").classList.remove("on");
+  document.getElementById("receipt").classList.add("on");
+  window.scrollTo(0, 0);
+}
+
+/* =====================================================================
+   Boot
+   ===================================================================== */
+function enterShell(){
+  document.getElementById("gate").style.display = "none";
+  document.getElementById("shell").classList.add("on");
+  document.getElementById("who-name").textContent = state.name;
+  document.getElementById("who-email").textContent = state.email;
+  renderAll();
+}
+
+document.getElementById("gate-go").addEventListener("click", async () => {
+  const email = document.getElementById("g-email").value.trim();
+  const err = document.getElementById("gate-err");
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+    err.textContent = "That email doesn't look right — check it and try again."; return;
+  }
+  const idx = rosterLookup(email);
+  if (idx < 0){
+    err.innerHTML = "That email isn't on the Day 07 roster. Use the address you " +
+                    "registered with — if you think this is a mistake, message your instructor.";
+    return;
+  }
+  const token = document.getElementById("g-token").value.trim().toLowerCase();
+  if (token.length < 6){
+    err.textContent = "Enter the 10-character code your instructor sent you.";
+    return;
+  }
+  err.textContent = "";
+
+  const rosterEmail = ROSTER[idx][0];
+
+  // Check the code with the server BEFORE opening the tasks. Getting this
+  // wrong after eight tasks of work is a miserable way to find out.
+  const go = document.getElementById("gate-go");
+  const label = go.textContent;
+  go.disabled = true;
+  go.textContent = "Checking your code…";
+
+  const accept = () => {
+    state.rosterIndex = idx;
+    state.email = rosterEmail;
+    state.name  = ROSTER[idx][1];
+    state.token = token;
+    saveLocal(); queueSave(); enterShell();
+  };
+  const restore = () => { go.disabled = false; go.textContent = label; };
+
+  if (!ENDPOINT){ accept(); restore(); return; }
+
+  try {
+    const res = await fetch(ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      redirect: "follow",
+      body: JSON.stringify({ action: "verify", email: rosterEmail, token: token })
+    });
+    const out = await res.json();
+
+    if (out.ok){
+      accept();
+    } else if (out.error === "bad_token"){
+      err.innerHTML = "That code doesn't match your email. Check the 10-character " +
+                      "code your instructor emailed you — if you can't find it, " +
+                      "ask them to resend it.";
+    } else {
+      err.textContent = "Couldn't check your code (" + (out.error || "unknown") + "). Try again.";
+    }
+  } catch (e) {
+    // Offline or the endpoint is unreachable. Don't strand the student —
+    // let them work; the code is verified again when they submit.
+    console.error("[day07] verify failed:", e);
+    accept();
+  } finally {
+    restore();
+  }
+});
+["g-email"].forEach(id => {
+  document.getElementById(id).addEventListener("keydown", e => {
+    if (e.key === "Enter") document.getElementById("gate-go").click();
+  });
+});
+
+document.getElementById("btn-prev").addEventListener("click", () => {
+  if (active > 0){ active--; renderAll(); window.scrollTo({ top:0, behavior:"smooth" }); }
+});
+document.getElementById("btn-next").addEventListener("click", () => {
+  if (active < TASKS.length - 1){ active++; renderAll(); window.scrollTo({ top:0, behavior:"smooth" }); }
+});
+document.getElementById("btn-submit").addEventListener("click", () => {
+  state.submittedAt = new Date().toISOString();
+  saveLocal();
+  showReceipt();
+  sendToSheet();
+});
+
+/* Post the result straight to the instructor's sheet. Best-effort: if this
+   fails for any reason the submission code below is still valid, so the
+   student is never blocked. */
+async function sendToSheet(){
+  const box = document.getElementById("send-state");
+  if (!ENDPOINT){ box.hidden = true; return; }
+
+  const p = progress();
+  const bonusAll = ALL_CHECKS.filter(c => c.optional);
+  const bonusDone = bonusAll.filter(c => state.checks[c.key]).length;
+  const level = p.done === p.total
+    ? (bonusDone === bonusAll.length ? "10%" : "Done")
+    : "Incomplete";
+
+  box.hidden = false;
+  box.className = "send-state sending";
+  box.textContent = "Recording your grade…";
+
+  try {
+    const res = await fetch(ENDPOINT, {
+      method: "POST",
+      // text/plain dodges the CORS preflight Apps Script won't answer.
+      // Apps Script 302s to script.googleusercontent.com, which does send
+      // CORS headers, so the followed response is readable.
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      redirect: "follow",
+      body: JSON.stringify({
+        token: state.token,
+        day: DAY,
+        email: state.email,
+        score: p.pct,
+        level: level,
+        bonus: bonusDone + "/" + bonusAll.length,
+        repo: state.inputs.t7_repo_url || "",
+        post: state.inputs.t8_post_url || ""
+      })
+    });
+    const out = await res.json();
+    if (out.ok){
+      box.className = "send-state ok";
+      box.textContent = out.resubmitted
+        ? "✓ Your grade was updated — " + out.score + "%. Nothing else to do."
+        : "✓ Recorded — " + out.score + "%. Nothing else to do.";
+    } else if (out.error === "bad_token"){
+      box.className = "send-state warn";
+      box.textContent = "That code doesn't match your email. Go back, check the code " +
+                        "your instructor emailed you, and submit again.";
+      return;
+    } else {
+      throw new Error(out.error || "rejected");
+    }
+  } catch (err) {
+    box.className = "send-state warn";
+    box.textContent = "Couldn't reach the grade sheet. Check your connection and " +
+                      "press Submit again — your answers are saved.";
+    // Surface the real reason; "Failed to fetch" here means the sandbox
+    // blocked the request, not that the endpoint is down.
+    console.error("[day07] submission POST failed:", err);
+  }
+}
+document.getElementById("btn-reopen").addEventListener("click", () => {
+  document.getElementById("receipt").classList.remove("on");
+  document.getElementById("shell").classList.add("on");
+  renderAll();
+});
+
+loadLocal();
+// A stored email must still be on the roster — it can change between days.
+if (state.email){
+  const idx = rosterLookup(state.email);
+  if (idx < 0){
+    state = { name:"", email:"", rosterIndex:-1, checks:{}, inputs:{}, submittedAt:null };
+    saveLocal();
+  } else {
+    state.rosterIndex = idx;
+    state.name = ROSTER[idx][1];
+    document.getElementById("g-email").value = state.email;
+    document.getElementById("g-token").value = state.token || "";
+    enterShell();
+  }
+}
+setSave("ok", "Saved on this device");
+</script>

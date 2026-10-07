@@ -6136,3 +6136,5 @@ HTML-like syntax inside TypeScript, a function that turns data into interface, a
 - [ASSIGNMENT.md](ASSIGNMENT.md) — Day 06 assignment
 
 ← Back to [Day 05 — Promises, Async/Await, Modules + Git](../Day-05-Promises-Modules-Git/README.md)
+
+Next: [Day 07 — React Intro: Components, Props, State & JSX](../Day-07-React-Intro/README.md) →
