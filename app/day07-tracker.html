@@ -701,7 +701,7 @@ const TASKS = [
         sid: "8.4", title: "Quality",
         checks: [
           ["t8_no_any", "<strong>No</strong> <code>any</code>, no <code>as</code> except the single <code>as Priority</code> on the <code>&lt;select&gt;</code>, no <code>@ts-ignore</code>"],
-          ["t8_tsc", "<code>npx tsc --noEmit -p tsconfig.app.json</code> prints <strong>no errors</strong>"],
+          ["t8_tsc", "<code>npx tsc --noEmit -p tsconfig.app.json</code> prints <strong>no errors</strong>, and <code>npm run lint</code> prints no warnings"],
           ["t8_build", "<code>npm run build</code> succeeds"],
           ["t8_no_mutate", "No state is mutated anywhere — I can point to every <code>map</code>, <code>filter</code> and spread"],
           ["t8_keys", "Every list has a stable <code>key</code> from the data"],
@@ -870,7 +870,7 @@ const TASKS = [
           ["b_generic", "Added a typed generic <code>&lt;Select&lt;T&gt;&gt;</code> component whose <code>onChange</code> returns <code>T</code>"],
           ["b_shortcuts", "Added keyboard shortcuts (<code>/</code> focuses search, <code>Esc</code> clears it)"],
           ["b_a11y", "Made the board fully usable with a keyboard and a screen-reader pass — correct focus after add and delete"],
-          ["b_memo", "Added <code>React.memo</code> to <code>TaskItem</code>, logged renders, and said why it did or didn't matter at this size"],
+          ["b_memo", "Added <code>React.memo</code> to <code>TaskItem</code>, logged renders, and read about the React Compiler to say why I might not need <code>memo</code> at all"],
           ["b_tests", "Wrote three unit tests for <code>visibleTasks</code> with <code>node:test</code>"],
           ["b_fetch", "Replaced <code>INITIAL</code> with the Day 06 API using <code>fetch</code> in a click handler, and noted what's awkward about it"],
           ["b_deploy", "Deployed the board to GitHub Pages, Netlify or Vercel and added the live link to my repo"],

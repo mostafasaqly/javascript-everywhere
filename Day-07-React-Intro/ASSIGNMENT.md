@@ -28,6 +28,8 @@
 
 > **Do this whole assignment on a branch.** Create `feature/day-07` before writing a single file, exactly as in Day 05.
 
+> **Versions:** React 19.3, Vite 8, TypeScript 6 — whatever `npm create vite@latest day-07-react -- --template react-ts` gives you. Run `npm ls react` and put the version in your `NOTES.md`. Type form handlers as `SubmitEvent<HTMLFormElement>` (the old `React.FormEvent` is deprecated).
+
 > **Where it goes:** the labs (Tasks 2–7) live in one Vite project, `day-07-react/`. The Task Board (Task 8) is its own project, `task-board/`, so you can reuse it in Session 12.
 
 ---
@@ -345,7 +347,7 @@ Plan first, then build. Create a **new** Vite project `task-board/` (React + Typ
 ### 8.4 — Quality
 
 - [ ] **No** `any`, **no** `as` except the single `as Priority` on the `<select>`, **no** `@ts-ignore`
-- [ ] `npx tsc --noEmit -p tsconfig.app.json` prints **no errors**
+- [ ] `npx tsc --noEmit -p tsconfig.app.json` prints **no errors**, and `npm run lint` prints no warnings
 - [ ] `npm run build` succeeds
 - [ ] No state is mutated anywhere — you can point to every `map`, `filter` and spread
 - [ ] Every list has a stable `key` from the data
@@ -484,7 +486,7 @@ In your own words. If a sentence could have been copied from the README, rewrite
 - [ ] Add a typed `<Select<T>>` **generic component** whose `onChange` returns `T`
 - [ ] Add **keyboard shortcuts** (`/` focuses search, `Esc` clears it) — and say honestly what you had to look up
 - [ ] Make the board **fully usable with a keyboard and a screen-reader pass** — no mouse, correct focus after add and delete
-- [ ] Add `React.memo` to `TaskItem`, log renders, and show how many rows re-render when you toggle one — then say why it did or didn't matter at this size
+- [ ] Add `React.memo` to `TaskItem`, log renders, and show how many rows re-render when you toggle one — then read about the **React Compiler** (react.dev) and say why you might not need `memo` at all
 - [ ] Write **three** unit tests for `visibleTasks` using `node:test` (Day 06 style)
 - [ ] Replace the `INITIAL` list with the Day 06 **API** using `fetch` in a click handler (no `useEffect` yet) — and note what's awkward about it
 - [ ] Deploy the board to **GitHub Pages**, Netlify or Vercel and add the live link to your repo

@@ -2,6 +2,8 @@
 
 **Track 2: Full-Stack Web Application · Day 7 · four parts · the first day of Track 2**
 
+> **Versions this guide is written for:** React **19.3** · Vite **8** · TypeScript **6** (the versions `npm create vite@latest` installs today). Older tutorials show React 17/18 patterns — Section 1.8 lists what changed so you can recognise them.
+
 > Day 06 ended with a `taskItem()` function and a `render()` that rebuilt the list from state — and a short peek at the same list written in React.
 > Today that peek becomes the whole day: you learn **JSX**, **components**, **props** and **state** — then rebuild your Task Manager's screen as a React app.
 
@@ -9,7 +11,7 @@
 
 | Part | Topic | Concept | Build |
 |---|---|---|---|
-| **1** | Why React, Setup & JSX | Sections 1.1–1.7 | Steps 1–2 |
+| **1** | Why React, Setup & JSX | Sections 1.1–1.8 | Steps 1–2 |
 | **2** | Components & Props | Sections 2.1–2.8 | Steps 3–5 |
 | **3** | State & Events | Sections 3.1–3.9 | Steps 6–9 |
 | **4** | **Project: Task Board in React** | Sections 4.1–4.4 | Steps 10–12 |
@@ -124,7 +126,15 @@ npm run dev
 
 Vite prints a local URL (usually `http://localhost:5173`). Open it — you'll see the starter page with a counter. Edit `src/App.tsx`, save, and the browser updates **without a reload**. That's hot module replacement (HMR), and it's why you don't use a hand-made `index.html` for React.
 
-> **Node version:** Vite needs a current Node LTS. `node --version` from Day 01 is fine — if the command fails with a version error, update Node first.
+> **Node version:** Vite 8 needs a current Node LTS (Node 20.19+ or 22.12+). `node --version` from Day 01 is fine — if the command fails with a version error, update Node first.
+
+Check what you actually got:
+
+```bash
+npm ls react react-dom vite typescript
+```
+
+You should see `react@19.x` and `react-dom@19.x` (19.3 at the time of writing). The template pins `^19`, so a fresh `npm install` always gives you the newest 19.x. The template also ships **oxlint** — run `npm run lint` any time to catch mistakes TypeScript doesn't.
 
 If the CLI asks questions, choose **React** and **TypeScript** — the template flag above already answers them.
 
@@ -138,6 +148,7 @@ day-07-react/
 ├── package.json        ← scripts + dependencies (react, react-dom, vite, typescript)
 ├── tsconfig.json       ← (+ tsconfig.app.json, tsconfig.node.json — Vite splits them)
 ├── vite.config.ts      ← Vite settings — you won't touch this today
+├── .oxlintrc.json      ← lint rules for `npm run lint`
 ├── public/             ← files served as-is (favicon)
 └── src/
     ├── main.tsx        ← the entry point: mounts React into #root
@@ -155,26 +166,26 @@ Only two files matter to understand today. First, `index.html` is nearly empty:
 </body>
 ```
 
-Second, `src/main.tsx` is the bridge between the DOM and React:
+Second, `src/main.tsx` is the bridge between the DOM and React (the template writes single quotes and no semicolons — your code in this course may keep double quotes and semicolons; both are valid):
 
 ```tsx
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
-import App from "./App.tsx";
-import "./index.css";
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import './index.css'
+import App from './App.tsx'
 
-createRoot(document.getElementById("root")!).render(
+createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <App />
   </StrictMode>,
-);
+)
 ```
 
 Read it top to bottom: *find `#root`, make a React root there, render `<App />` into it.* Everything else you write lives **inside** `App`. You'll never edit `main.tsx` again except to add global providers (Session 13).
 
 #### `StrictMode`
 
-`<StrictMode>` is a development helper: it runs some of your code **twice** and warns about unsafe patterns. If a `console.log` in a component prints twice while you're developing — that's `StrictMode` checking your component is pure (Section 2.8). It does nothing in the production build. Leave it on.
+`<StrictMode>` is a development helper: it runs some of your code **twice** and warns about unsafe patterns. If a `console.log` in a component prints twice while you're developing — that's `StrictMode` checking your component is pure (Section 2.8). It does nothing in the production build. Leave it on. (It's also what makes the React Compiler and future features safe to adopt.)
 
 ---
 
@@ -333,6 +344,26 @@ export default function App() {
 `export default` makes `App` the thing `main.tsx` imports as `App`. In your own files, **prefer one component per file and a named export** (`export function TaskItem …`) — it makes imports explicit and survives a rename. Both are fine; be consistent.
 
 > **Check yourself:** what does `<welcome />` (lowercase) do? React looks for an HTML element called `welcome`, finds none, and renders an empty unknown tag — your component never runs. If your component "does nothing", check the capital letter first.
+
+---
+
+### 1.8 React 19 — What's Current
+
+You'll meet older React code constantly (tutorials, Stack Overflow, other people's repos). This is how it differs from what you're learning:
+
+| Older code (React 16–18) | Today (React 19) |
+|---|---|
+| `ReactDOM.render(<App />, root)` or `class App extends Component` | `createRoot(root).render(<App />)` and **function components only** — you never write a class |
+| `forwardRef(function Input(props, ref) {…})` | `ref` is just a **prop** on a function component |
+| `<ThemeContext.Provider value={…}>` | `<ThemeContext value={…}>` (Session 13) |
+| `React.FC<Props>` | a plain function with a typed props parameter — what you write today |
+| `useMemo` / `useCallback` / `React.memo` everywhere "for speed" | the **React Compiler** (stable since late 2025) can do this automatically; write plain code first |
+| `React.FormEvent` | `SubmitEvent` — the old name is deprecated |
+| fetching in `useEffect` by hand | still valid, but React 19 adds `use()`, Actions and `useActionState` — Sessions 12–14 |
+
+Three newer features you'll **not** need today but should know exist: `<form action={fn}>` (a function as a form's action), `useOptimistic`, and `useEffectEvent` (added in 19.2). Today's whole app uses only `useState` — and that hook hasn't changed since 2019.
+
+> **If you see `import React from "react"` at the top of a file:** that's pre-2021 style. With the automatic JSX transform (`"jsx": "react-jsx"` in your `tsconfig.app.json`) you never import `React` just to write JSX.
 
 ---
 
@@ -698,14 +729,16 @@ function SaveButton() {
 }
 ```
 
-The **event object** is typed — hover over it in VS Code to see:
+The **event object** is typed — import the types you need from `react` and hover over `e` in VS Code to see what's on it:
 
 ```tsx
+import type { ChangeEvent, SubmitEvent } from "react";
+
 function Search() {
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+  function handleChange(e: ChangeEvent<HTMLInputElement>) {
     console.log(e.target.value);
   }
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
     e.preventDefault();                       // stop the page reloading — same as Day 06
     console.log("submitted");
   }
@@ -716,6 +749,8 @@ function Search() {
   );
 }
 ```
+
+> **Older tutorials** type a submit handler as `React.FormEvent<HTMLFormElement>`. In current `@types/react` that type is **deprecated** — VS Code draws a strikethrough through it. Use `SubmitEvent<HTMLFormElement>` for forms and `ChangeEvent<HTMLInputElement>` for inputs.
 
 Your Day 06 DOM habits transfer: `preventDefault()` still stops a form from reloading the page, `e.target` is still the element. What changes is that you **never call `addEventListener`** — you hand React a function and it attaches (and removes) the listener for you.
 
@@ -836,7 +871,7 @@ export default function App() {
 }
 ```
 
-Break it: pass `tone="angry"` — the editor rejects it before you save. Remove `title` from one `<Card>` — a missing-prop error. Then give `Badge` an extra prop `size="large"` — TypeScript tells you it doesn't exist. Each error is a bug you didn't have to find by clicking.
+Break it: pass `tone="angry"` — the editor rejects it before you save. Remove `title` from one `<Card>` — a missing-prop error. Then give `Badge` an extra prop `size="large"` — TypeScript tells you it doesn't exist. Each error is a bug you didn't have to find by clicking. Also notice the template's strict options: declare a variable and never use it and `tsc` fails with `noUnusedLocals` — that's deliberate, and it keeps your files tidy.
 
 ---
 
@@ -1262,10 +1297,13 @@ State is for what the user **changed**: the list and which filter is chosen. Eve
 For an input whose value your code needs, make **state the single source of truth**:
 
 ```tsx
+import { useState } from "react";
+import type { SubmitEvent } from "react";
+
 function AddTask({ onAdd }: { onAdd: (title: string) => void }) {
   const [title, setTitle] = useState("");
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
     const trimmed = title.trim();
     if (trimmed === "") return;
@@ -1643,6 +1681,7 @@ export function Header({ remaining }: HeaderProps) {
 
 ```tsx
 import { useState } from "react";
+import type { SubmitEvent } from "react";
 import type { Priority } from "../types";
 
 interface AddTaskFormProps {
@@ -1653,7 +1692,7 @@ export function AddTaskForm({ onAdd }: AddTaskFormProps) {
   const [title, setTitle] = useState("");
   const [priority, setPriority] = useState<Priority>("medium");
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  function handleSubmit(e: SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
     const trimmed = title.trim();
     if (trimmed === "") return;
@@ -1801,11 +1840,12 @@ Read it as a table of contents: three pieces of state, five functions that repla
 
 ```bash
 npx tsc --noEmit -p tsconfig.app.json     # zero type errors
+npm run lint                               # oxlint — zero warnings
 npm run build                              # production build succeeds
 npm run dev                                # run it and click everything
 ```
 
-The two commands before `dev` matter: Vite's dev server **doesn't type-check** — it strips types and runs. `tsc` is what tells you about the prop you forgot to pass.
+The commands before `dev` matter: Vite's dev server **doesn't type-check** — it strips types and runs. `tsc` is what tells you about the prop you forgot to pass.
 
 #### Break it on purpose
 
