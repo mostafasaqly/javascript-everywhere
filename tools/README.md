@@ -32,16 +32,18 @@ code will not decode as Day 02.
 | | Day 01 | Day 02 | Day 03 | Day 04 | Day 05 | Day 06 | Day 07 | Day 08 |
 |---|---|---|---|---|---|---|---|---|
 | Page | `app/day01-tracker.html` | `app/day02-tracker.html` | `app/day03-tracker.html` | `app/day04-tracker.html` | `app/day05-tracker.html` | `app/day06-tracker.html` | `app/day07-tracker.html` | `app/day08-tracker.html` |
-| Tasks | 5 | 8 | 8 | 10 | 12 | 24 | 12 | 12 |
-| Checks | 61 required + 6 bonus | 95 required + 7 bonus | 113 required + 8 bonus | 190 required + 10 bonus | 194 required + 10 bonus | 379 required + 20 bonus | 140 required + 10 bonus | 157 required + 10 bonus |
+| Tasks | 5 | 8 | 8 | 10 | 12 | 24 | 6 | 6 |
+| Checks | 61 required + 6 bonus | 95 required + 7 bonus | 113 required + 8 bonus | 190 required + 10 bonus | 194 required + 10 bonus | 379 required + 20 bonus | 23 required + 4 bonus | 23 required + 4 bonus |
 | Code prefix | `D1.` | `D2.` | `D3.` | `D4.` | `D5.` | `D6.` | `D7.` | `D8.` |
-| Salt | `js-everywhere-day01-v1` | `js-everywhere-day02-v1` | `js-everywhere-day03-v1` | `js-everywhere-day04-v3` | `js-everywhere-day05-v1` | `js-everywhere-day06-v2` | `js-everywhere-day07-v1` | `js-everywhere-day08-v1` |
+| Salt | `js-everywhere-day01-v1` | `js-everywhere-day02-v1` | `js-everywhere-day03-v1` | `js-everywhere-day04-v3` | `js-everywhere-day05-v1` | `js-everywhere-day06-v2` | `js-everywhere-day07-v2` | `js-everywhere-day08-v2` |
 | Storage key | `js-everywhere-day01` | `js-everywhere-day02` | `js-everywhere-day03` | `js-everywhere-day04` | `js-everywhere-day05` | `js-everywhere-day06` | `js-everywhere-day07` | `js-everywhere-day08` |
 | Codec | `codec.js` | `codec-day02.js` | `codec-day03.js` | `codec-day04.js` | `codec-day05.js` | `codec-day06.js` | `codec-day07.js` | `codec-day08.js` |
 | Labels | `checks.json` | `checks-day02.json` | `checks-day03.json` | `checks-day04.json` | `checks-day05.json` | `checks-day06.json` | `checks-day07.json` | `checks-day08.json` |
 | Decoder | `decode-day01.js` | `decode-day02.js` | `decode-day03.js` | `decode-day04.js` | `decode-day05.js` | `decode-day06.js` | `decode-day07.js` | `decode-day08.js` |
 
 All eight pages share `roster.json` and the same Apps Script endpoint.
+
+Day 07 and Day 08 were rewritten as problem-style assignments (a warm-up, four problems with examples, and a ship-it task — 23 checks instead of 140+), so their salts are `v2`: codes from the earlier twelve-task pages are rejected instead of being decoded against the wrong check list. See `ASSIGNMENT-FORMAT.md` for the format every day from Day 07 on follows.
 
 Day 06 covers TypeScript **and** the APIs + Task Manager material (24 tasks), so its salt is `v2`: codes from the earlier TypeScript-only Day 06 page are rejected instead of being decoded against the wrong check list.
 

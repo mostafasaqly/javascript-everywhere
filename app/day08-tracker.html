@@ -298,7 +298,7 @@ pre.term{
   <div class="gate-card">
     <div class="gate-eyebrow">Track 2 · Day 8 · Parts 1–3</div>
     <h1>Day 08 — Forms + Routing in React</h1>
-    <p class="sub">Work through the twelve tasks, tick what you finish, drop your links in. Your progress saves in this browser as you go — close the tab and come back.</p>
+    <p class="sub">A warm-up, four problems and a wrap-up. Solve each problem against its examples, tick what you finish, drop your links in. Your progress saves in this browser as you go — close the tab and come back.</p>
     <div class="field">
       <label for="g-email">Email <span class="hint">— the one you registered with</span></label>
       <input type="email" id="g-email" autocomplete="email" placeholder="you@gmail.com">
@@ -339,7 +339,7 @@ pre.term{
       </div>
       <div class="progress-meta">
         <div class="big" id="prog-count">0 / 0 checks</div>
-        <div class="small" id="prog-tasks">0 of 12 tasks complete</div>
+        <div class="small" id="prog-tasks">0 of 6 tasks complete</div>
       </div>
     </div>
 
@@ -385,547 +385,169 @@ pre.term{
    ===================================================================== */
 const TASKS = [
   {
-    id: "t1",
-    title: "Predict, then run",
-    lead: "Twelve questions: #1–#8 are components or routes you can run, #9–#12 are written questions about what React and the router do. The full code is in <code>ASSIGNMENT.md</code>.",
-    deliverable: "predictions.md + 1 screenshot",
+    id: "t0",
+    title: "Warm-up — predict the output",
+    lead: "Six snippets in <code>ASSIGNMENT.md</code> — controlled inputs, forms and params. Predict first, run second, explain every miss.",
+    deliverable: "predictions.md",
     sections: [
       {
-        sid: "1.1", title: "Write your predictions first",
+        sid: "0.1", title: "Predict, then run",
+        quote: "Getting them wrong is fine. Getting them wrong and not knowing why is not.",
         checks: [
-          ["t1_pred_file", "Created <code>predictions.md</code>"],
-          ["t1_pred_before", "Wrote exactly what appears on screen — or the exact error or warning — for all 12, <em>before</em> running anything"]
-        ]
-      },
-      {
-        sid: "1.2", title: "Now run them",
-        quote: "Getting them wrong is the assignment. Getting them wrong and not explaining why is not.",
-        checks: [
-          ["t1_pred_actual", "Ran <strong>#1–#8</strong> and recorded the <em>actual</em> result next to each prediction"],
-          ["t1_pred_try", "Tried #9–#12 in code too"],
-          ["t1_pred_why", "For every one I got wrong, wrote one sentence explaining why"],
-          ["t1_pred_mech", "For <strong>#2, #3, #5, #6, #10 and #12</strong> named the mechanism explicitly"],
-          ["t1_pred_shot", "Screenshotted the output"]
+          ["w_before", "Wrote all six predictions in <code>predictions.md</code> <em>before</em> running anything"],
+          ["w_why", "Ran all six, wrote the actual result next to each, and one sentence of <strong>why</strong> for every one I missed"]
         ],
         inputs: [
-          { k:"t1_wrong_count", type:"text", label:"How many did you get wrong?", ph:"5", w:"half" },
-          { k:"t1_pred_url", type:"url", label:"Screenshot link", hint:"— Drive / Imgur / GitHub", ph:"https://…" },
-          { k:"t1_surprise", type:"textarea", label:"Which result surprised you most, and why?", ph:"…" }
+          { k:"w_wrong_count", type:"text", label:"How many did you get wrong?", ph:"2", w:"half" },
+          { k:"w_surprise", type:"textarea", label:"Which result surprised you most, and why?", ph:"…" }
         ]
       }
     ]
   },
   {
-    id: "t2",
-    title: "Controlled inputs lab",
-    lead: "Create <code>src/forms/ControlsLab.tsx</code> and render it from <code>App.tsx</code>.",
-    deliverable: "ControlsLab.tsx + 1 screenshot",
+    id: "p1",
+    title: "validateBooking",
+    lead: "<strong>Problem 1 · 🟢 Easy</strong> — a pure function that returns every field's first error for a booking form. No React. The rules table and five examples are in <code>ASSIGNMENT.md</code>.",
+    deliverable: "validate.ts + validate.test-run.ts + 1 screenshot, all PASS",
     sections: [
       {
-        sid: "2.1", title: "Every input",
+        sid: "P1", title: "Solve it",
+        note: "Approach first, code second, examples last. Open a hint only after 20 minutes stuck.",
         checks: [
-          ["t2_all_inputs", "A text input, a <strong>textarea</strong>, a <strong>select</strong>, a <strong>checkbox</strong>, a <strong>radio group</strong> (three options, in a <code>&lt;fieldset&gt;</code> with a <code>&lt;legend&gt;</code>), a <strong>number</strong> input and a <strong>date</strong> input — all controlled"],
-          ["t2_pre", "A <code>&lt;pre&gt;</code> at the bottom printing every value with <code>JSON.stringify</code>"],
-          ["t2_labels", "Every input has a visible <code>&lt;label&gt;</code> connected with <code>htmlFor</code> (using <code>useId</code>) or by wrapping"]
-        ]
-      },
-      {
-        sid: "2.2", title: "One state object",
-        checks: [
-          ["t2_one_object", "Replaced the seven <code>useState</code>s with <strong>one</strong> <code>values</code> object and <strong>one</strong> <code>handleChange</code> using <code>name</code>"],
-          ["t2_checkbox_narrow", "The handler treats the <strong>checkbox</strong> (<code>checked</code>) differently, narrowing with <code>instanceof HTMLInputElement</code> — no <code>any</code>, no <code>as</code>"],
-          ["t2_computed_key", "A comment explaining what <code>[name]: next</code> is and which Day 04 feature it is"]
-        ]
-      },
-      {
-        sid: "2.3", title: "The number input",
-        checks: [
-          ["t2_num_string", "Proved in a comment, with a <code>console.log</code>, that the number input's state is a <strong>string</strong>"],
-          ["t2_num_convert", "Converted on <strong>submit</strong>, not every keystroke, and handled the empty string (<code>\"\"</code> → <code>undefined</code>, not <code>0</code>)"]
-        ]
-      },
-      {
-        sid: "2.4", title: "Break it",
-        quote: "One at a time. Read the warning or error, write it as a comment, fix it.",
-        checks: [
-          ["t2_b_no_onchange", "<code>value</code> without <code>onChange</code> — the warning"],
-          ["t2_b_undefined", "State starting as <code>undefined</code> — the \"uncontrolled to controlled\" warning"],
-          ["t2_b_button_type", "A button inside the form with no <code>type</code> — and what it did to the page"],
-          ["t2_b_textarea", "A <code>&lt;textarea&gt;</code> written with children instead of <code>value</code>"],
-          ["t2_b_name_typo", "A <code>name</code> typo — and what happened to <code>values</code>"]
+          ["p1_approach", "Wrote my approach in <code>APPROACH.md</code> <strong>before</strong> writing code"],
+          ["p1_examples", "My test run prints <code>PASS</code> for all <strong>5 examples</strong>"],
+          ["p1_own", "Added <strong>three examples of my own</strong> — at least one I thought might break it"],
+          ["p1_pure", "<code>validateBooking</code> is pure — no React, and it never reads the clock (<code>today</code> comes in as a parameter)"]
         ],
         inputs: [
-          { k:"t2_url", type:"url", label:"Screenshot link", ph:"https://…" }
+          { k:"p1_url", type:"url", label:"Test-run screenshot link", hint:"— Drive / Imgur / GitHub", ph:"https://…" }
         ]
       }
     ]
   },
   {
-    id: "t3",
-    title: "Validation lab",
-    lead: "A signup form with a <strong>pure</strong> validation function. Files: <code>validate.ts</code> + <code>ValidationLab.tsx</code>.",
-    deliverable: "validate.ts + ValidationLab.tsx + 1 screenshot",
+    id: "p2",
+    title: "Booking Form",
+    lead: "<strong>Problem 2 · 🟡 Medium</strong> — the form that uses Problem 1: quiet until you've typed, honest when the server fails, impossible to submit twice. The seven-step example is your test.",
+    deliverable: "BookingForm.tsx + 2 screenshots",
     sections: [
       {
-        sid: "3.1", title: "The pure part",
+        sid: "P2", title: "Solve it",
         checks: [
-          ["t3_exports", "<code>src/forms/validate.ts</code> exports <code>Values</code>, <code>Errors</code>, <code>INITIAL</code>, <code>validate(values)</code> and <code>hasErrors(errors)</code>"],
-          ["t3_rules", "A signup with name (≥ 2 after trimming), email (a regex), password (≥ 8 <strong>and</strong> a digit), password confirmation (must match) and an \"I accept\" checkbox"],
-          ["t3_pure", "<code>validate</code> is <strong>pure</strong> — it imports nothing from React"],
-          ["t3_script", "A throwaway script, <code>node src/forms/validate.test-run.ts</code>, prints <strong>at least eight</strong> checks — including the empty form, a password with no digit and a mismatched confirmation"]
-        ]
-      },
-      {
-        sid: "3.2", title: "The component",
-        checks: [
-          ["t3_state", "<code>ValidationLab.tsx</code> has <code>values</code>, <code>touched</code> and <strong>derived</strong> <code>errors</code> (never in <code>useState</code>)"],
-          ["t3_when", "An error appears <strong>only</strong> after the field's <code>onBlur</code> <strong>or</strong> after a submit attempt"],
-          ["t3_submit_all", "Submitting an invalid form shows <strong>every</strong> error and focuses the <strong>first</strong> invalid field"],
-          ["t3_novalidate", "<code>noValidate</code> on the form, and I can say why"],
-          ["t3_live_fix", "Fixing a field makes its error disappear <strong>immediately</strong>, while typing"]
-        ]
-      },
-      {
-        sid: "3.3", title: "Accessible",
-        checks: [
-          ["t3_a11y_labels", "Every field: <code>&lt;label htmlFor&gt;</code> + <code>useId</code>-based ids"],
-          ["t3_a11y_aria", "Invalid fields have <code>aria-invalid=\"true\"</code> and <code>aria-describedby</code> pointing at the message's <code>id</code> — and the attribute is <strong>absent</strong> (not <code>\"false\"</code>) when the field is fine"],
-          ["t3_a11y_fieldset", "The radio/checkbox group uses <code>&lt;fieldset&gt;</code>/<code>&lt;legend&gt;</code> where it applies"],
-          ["t3_a11y_messages", "Errors say what to do (\"Use at least 8 characters\"), not just what's wrong"],
-          ["t3_a11y_keyboard", "Tabbed through the whole form with the <strong>keyboard only</strong> and submitted it with Enter"]
-        ]
-      },
-      {
-        sid: "3.4", title: "Break it",
-        checks: [
-          ["t3_b_stored", "Stored <code>errors</code> in <code>useState</code>, updated only on submit — screenshotted a stale error staying after the field was fixed"],
-          ["t3_b_novalidate", "Removed <code>noValidate</code> and described what the browser did with <code>type=\"email\"</code>"],
-          ["t3_b_instant", "Showed errors <strong>immediately</strong> (no <code>touched</code>) and described why it feels wrong after one keystroke"]
+          ["p2_approach", "Wrote my approach in <code>APPROACH.md</code> <strong>before</strong> writing code"],
+          ["p2_examples", "All <strong>7 steps</strong> behave as expected — errors on blur, focus on the first invalid field, the alert, the success line"],
+          ["p2_once", "Pressing Enter twice quickly calls <code>fakeBook</code> <strong>once</strong>, and a failure keeps everything the user typed"],
+          ["p2_rules", "Errors are derived (never in state), <code>aria-invalid</code>/<code>aria-describedby</code> appear only with a visible error, and no <code>any</code>"]
         ],
         inputs: [
-          { k:"t3_url", type:"url", label:"Screenshot link", hint:"— with errors visible", ph:"https://…" }
+          { k:"p2_url", type:"url", label:"Screenshots link", hint:"— step 5 and step 6", ph:"https://…" }
         ]
       }
     ]
   },
   {
-    id: "t4",
-    title: "Submit states lab",
-    lead: "A form that is slow, can fail, and can be double-clicked. No <code>useEffect</code>.",
-    deliverable: "fakeApi.ts + SavingLab.tsx + 1 screenshot",
+    id: "p3",
+    title: "Country Explorer",
+    lead: "<strong>Problem 3 · 🟡 Medium</strong> — a country list where search, region, sort and page all live in the URL, plus a detail route. Nine URL examples and four history scenarios in <code>ASSIGNMENT.md</code>.",
+    deliverable: "src/countries/ + 1 screenshot with the URL visible",
     sections: [
       {
-        sid: "4.1", title: "A fake server",
+        sid: "P3", title: "Solve it",
         checks: [
-          ["t4_fakeapi", "<code>src/forms/fakeApi.ts</code> — <code>sleep(ms)</code> and <code>pretendToSave(title)</code> that waits ~600 ms and <strong>rejects</strong> for one specific title of my own"],
-          ["t4_async", "Both return Promises and <code>pretendToSave</code> is <code>async</code>"]
-        ]
-      },
-      {
-        sid: "4.2", title: "The form",
-        checks: [
-          ["t4_states", "<code>SavingLab.tsx</code> with <code>submitting</code> and <code>error</code> state — <strong>no <code>useEffect</code></strong>"],
-          ["t4_disabled", "The button is <code>disabled</code> and reads <strong>\"Saving…\"</strong> while submitting"],
-          ["t4_guard", "The handler <strong>also</strong> returns early <code>if (submitting)</code> — and I proved the difference by removing <code>disabled</code> and pressing Enter twice"],
-          ["t4_keep_text", "On <strong>failure</strong> the typed text is <strong>kept</strong>; on <strong>success</strong> it is cleared"],
-          ["t4_finally", "The button is re-enabled in a <strong><code>finally</code></strong> block, and I proved why with a version that forgot to"],
-          ["t4_narrow_err", "<code>catch (err)</code> is narrowed with <code>err instanceof Error</code> — no <code>any</code>"]
-        ]
-      },
-      {
-        sid: "4.3", title: "Reset and FormData",
-        checks: [
-          ["t4_reset", "A <strong>Reset</strong> button (<code>type=\"button\"</code>) restoring initial values and clearing <code>touched</code> and the error"],
-          ["t4_key", "A component whose parent passes a <code>key</code> — switching <code>key</code> resets the form; screenshotted stale initial values <strong>without</strong> it"],
-          ["t4_formdata", "A <strong>second</strong> version using <strong><code>FormData</code></strong> and <strong>uncontrolled</strong> inputs (<code>defaultValue</code>), narrowing <code>data.get(…)</code> with <code>typeof</code> — and a comment on what it can't do"]
-        ]
-      },
-      {
-        sid: "4.4", title: "Break it",
-        checks: [
-          ["t4_b_double", "Removed the double-submit protection and pressed Enter twice — screenshotted the duplicate"],
-          ["t4_b_clear", "Cleared the input in the <code>catch</code> and described why users hate it"],
-          ["t4_b_render", "Put the save in a render-time call instead of the handler and described what happened"]
+          ["p3_approach", "Wrote my approach in <code>APPROACH.md</code> <strong>before</strong> writing code"],
+          ["p3_examples", "All <strong>9 URL examples</strong> show the expected result — including the page clamp and the bad params"],
+          ["p3_history", "All <strong>4 history scenarios</strong> pass — search replaces, everything else pushes, Back from a country keeps the filter"],
+          ["p3_rules", "No <code>useState</code> for the params, every param parsed by a function, <code>prev</code> never mutated, no internal <code>&lt;a href&gt;</code>"]
         ],
         inputs: [
-          { k:"t4_url", type:"url", label:"Screenshot link", hint:"— Saving… and an error", ph:"https://…" }
+          { k:"p3_url", type:"url", label:"Screenshot link", hint:"— Example 3 with the URL visible", ph:"https://…" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "p4",
+    title: "Extend Task Board v2",
+    lead: "<strong>Problem 4 · 🟠 Medium+</strong> — on top of your README Part 3 board, add a <strong>sort stored in the URL</strong> and a <strong><code>/tasks/:id/duplicate</code></strong> route that reuses <code>TaskForm</code>.",
+    deliverable: "task-board-v2/ + FEATURE.md + 1 screenshot",
+    sections: [
+      {
+        sid: "P4", title: "Solve it",
+        checks: [
+          ["p4_approach", "Wrote my approach in <code>APPROACH.md</code> <strong>before</strong> writing code"],
+          ["p4_examples", "All <strong>9 examples</strong> pass — sorting with filter and search, duplicating, Back skipping the form"],
+          ["p4_pure", "<code>sortTasks</code> is pure, and a throwaway script proves it doesn't mutate its input"],
+          ["p4_feature", "<code>FEATURE.md</code> answers both questions — why the sort is in the URL, and how Back skips the form"],
+          ["p4_clean", "<code>tsc</code>, <code>npm run lint</code> and <code>npm run build</code> all pass"]
+        ],
+        inputs: [
+          { k:"p4_url", type:"url", label:"Task Board v2 link", hint:"— on GitHub, required", ph:"https://github.com/…" },
+          { k:"p4_shot_url", type:"url", label:"Screenshot link", hint:"— the list with sort in the URL", ph:"https://…" }
         ]
       }
     ]
   },
   {
     id: "t5",
-    title: "Routing lab",
-    lead: "In <code>day-08-forms/src/routing/</code>. First <code>npm install react-router</code> and wrap <code>&lt;App /&gt;</code> in <code>&lt;BrowserRouter&gt;</code>.",
-    deliverable: "routing/ + 1 screenshot",
+    title: "Ship it",
+    lead: "One branch, one pull request, four short answers, one post.",
+    deliverable: "repo link + merged PR link + LinkedIn post link",
     sections: [
       {
-        sid: "5.1", title: "Routes",
+        sid: "5.1", title: "Repo and pull request",
+        term: "day-08/\n├── NOTES.md\n├── predictions.md\n├── APPROACH.md\n├── day-08-problems/   ← Problems 1–3\n└── task-board-v2/     ← README Part 3 + Problem 4",
         checks: [
-          ["t5_layout", "A layout route (no <code>path</code>) with a header, a <code>NavLink</code> nav and an <code>&lt;Outlet /&gt;</code>"],
-          ["t5_index_404", "An <strong>index</strong> route, three static pages, and a <strong>404</strong> (<code>path=\"*\"</code>)"],
-          ["t5_dynamic", "A <strong>dynamic</strong> route <code>lessons/:n</code> and a list of links to it"],
-          ["t5_navigate", "A <code>&lt;Navigate to=\"…\" replace /&gt;</code> route for an old URL — Back <strong>skips</strong> it"]
-        ]
-      },
-      {
-        sid: "5.2", title: "Links",
-        checks: [
-          ["t5_navlink", "<code>NavLink</code>s style the active page; the Home link has <strong><code>end</code></strong>"],
-          ["t5_no_a", "<code>&lt;Link&gt;</code> for in-app links — <strong>no</strong> <code>&lt;a href&gt;</code> for any internal page"],
-          ["t5_nav_label", "<code>aria-label</code> on the <code>&lt;nav&gt;</code>"]
-        ]
-      },
-      {
-        sid: "5.3", title: "Params are strings",
-        checks: [
-          ["t5_typeof", "A page printing <code>typeof n</code> — <code>string</code>"],
-          ["t5_bad_ids", "<strong>Bad ids render \"not found\"</strong>: <code>/lessons/abc</code> and <code>/lessons/99</code> both show a not-found message, using <code>Number(n)</code> + <code>Number.isInteger</code> and a lookup — not a crash"],
-          ["t5_navigate_fn", "A <code>useNavigate</code> button doing <code>navigate(-1)</code>, and another doing <code>navigate(\"/\", { replace: true })</code>"]
-        ]
-      },
-      {
-        sid: "5.4", title: "A layout that owns state",
-        checks: [
-          ["t5_shared_layout", "<code>SharedLayout</code> owns a <code>useState</code> counter and passes it with <code>&lt;Outlet context={…} /&gt;</code>"],
-          ["t5_use_shared", "A typed <code>useShared()</code> wrapper around <code>useOutletContext&lt;Shared&gt;()</code>"],
-          ["t5_reset_proof", "<strong>Two pages</strong> read the counter; one has its own <code>useState</code> that <strong>reset to 0</strong> on leaving and returning while the layout's count survived — and I wrote one sentence on why"]
-        ]
-      },
-      {
-        sid: "5.5", title: "Break it",
-        checks: [
-          ["t5_b_end", "Removed <code>end</code> from the Home <code>NavLink</code> and screenshotted it active everywhere"],
-          ["t5_b_a_href", "Replaced one <code>&lt;Link&gt;</code> with <code>&lt;a href&gt;</code> and showed the Network tab making a <strong>document</strong> request"],
-          ["t5_b_string", "Compared <code>n === 3</code> (<code>useParams</code> string vs number) and described the result"],
-          ["t5_b_order", "Moved <code>path=\"*\"</code> to the top and described why it still works (specificity, not order)"]
+          ["s_pr", "All work on <code>feature/day-08</code> with clear commit messages, merged through a <strong>pull request</strong>"],
+          ["s_nm", "<code>node_modules</code> and <code>dist</code> are <strong>not</strong> committed"]
         ],
         inputs: [
-          { k:"t5_url", type:"url", label:"Screenshot link", hint:"— Network tab or the active-everywhere bug", ph:"https://…" }
-        ]
-      }
-    ]
-  },
-  {
-    id: "t6",
-    title: "URL state lab",
-    lead: "Create <code>src/routing/UrlLab.tsx</code> with a list of at least eight items.",
-    deliverable: "UrlLab.tsx + 1 screenshot",
-    sections: [
-      {
-        sid: "6.1", title: "The URL is the state",
-        checks: [
-          ["t6_url_state", "A <strong>search box</strong> and a <strong>sort</strong> button, both in <code>useSearchParams</code> — <strong>no</strong> <code>useState</code> for them"],
-          ["t6_parse", "Unknown values fall back safely: <code>?sort=banana</code> behaves like the default (a <code>parseSort</code> function)"],
-          ["t6_delete_empty", "An empty search <strong>deletes</strong> the param, so the URL stays clean"],
-          ["t6_fn_form", "Updates use the <strong>function form</strong> of <code>setSearchParams</code> and <code>new URLSearchParams(prev)</code> — never mutating <code>prev</code>"]
+          { k:"t5_repo_url", type:"url", label:"Repo link", hint:"— required", ph:"https://github.com/…" },
+          { k:"pr_url", type:"url", label:"Merged pull request link", hint:"— required", ph:"https://github.com/…/pull/…" }
         ]
       },
       {
-        sid: "6.2", title: "History",
-        checks: [
-          ["t6_replace", "The search box uses <strong><code>{ replace: true }</code></strong> — Back leaves the page, not the previous letter"],
-          ["t6_push", "The sort button <strong>pushes</strong> — Back reverses the sort"],
-          ["t6_refresh_share", "Refreshing keeps the view; the URL pasted into a private window shows the same view"]
-        ]
-      },
-      {
-        sid: "6.3", title: "Add a third param",
-        checks: [
-          ["t6_page", "A <strong>page</strong> param with Previous/Next buttons, validated: <code>?page=abc</code>, <code>?page=-3</code> and <code>?page=999</code> all land on a real page"],
-          ["t6_reset_page", "<strong>Changing the search resets the page to 1</strong> — and I wrote down why"]
-        ]
-      },
-      {
-        sid: "6.4", title: "Break it",
-        checks: [
-          ["t6_b_replace_false", "Used <code>{ replace: false }</code> on the search box, typed a word, and counted the Back presses"],
-          ["t6_b_not_fn", "Used <code>setSearchParams({ q })</code> (not the function form) and showed it <strong>erasing</strong> the sort param"]
-        ],
-        inputs: [
-          { k:"t6_url", type:"url", label:"Screenshot link", hint:"— showing the URL with several params", ph:"https://…" }
-        ]
-      }
-    ]
-  },
-  {
-    id: "t7",
-    title: "Build: Task Board v2 — structure and routes",
-    lead: "A <strong>new</strong> project <code>task-board-v2/</code> (React + TypeScript + <code>react-router</code>).",
-    deliverable: "task-board-v2/ + 1 screenshot",
-    sections: [
-      {
-        sid: "7.1", title: "Plan on paper",
-        checks: [
-          ["t7_route_table", "<code>docs/route-table.md</code> — every URL, its page, and whether it has params"],
-          ["t7_state_table", "<code>docs/state-table.md</code> — every piece of data, <strong>state or derived</strong>, which component owns it, and <strong>why it can't live lower</strong>"],
-          ["t7_state_right", "My table has <code>tasks</code> in <strong><code>Layout</code></strong>, <code>filter</code> and <code>q</code> in the <strong>URL</strong>, and <strong>no stored <code>errors</code></strong>"]
-        ]
-      },
-      {
-        sid: "7.2", title: "Structure",
-        term: "task-board-v2/src/\n├── main.tsx            ← <BrowserRouter>\n├── App.tsx             ← only the <Routes>\n├── Layout.tsx\n├── board-context.ts\n├── types.ts\n├── validate.ts\n├── fakeApi.ts\n├── components/\n│   └── TaskForm.tsx\n└── pages/\n    ├── TaskListPage.tsx\n    ├── NewTaskPage.tsx\n    ├── TaskDetailPage.tsx\n    ├── EditTaskPage.tsx\n    └── NotFoundPage.tsx",
-        checks: [
-          ["t7_tree", "The tree above: <code>Layout</code>, <code>board-context.ts</code>, <code>types.ts</code>, <code>validate.ts</code>, <code>fakeApi.ts</code>, <code>TaskForm</code> and <strong>five</strong> pages"],
-          ["t7_types", "<code>types.ts</code> has <code>TaskFormValues</code> and <code>Task extends TaskFormValues</code> with a <code>readonly id</code>"],
-          ["t7_validate_script", "<code>validate.ts</code> is <strong>pure</strong> and proved with a throwaway Node script printing at least six checks"],
-          ["t7_main_app", "<code>main.tsx</code> has the <code>BrowserRouter</code>; <code>App.tsx</code> is <strong>only</strong> the route table"]
-        ]
-      },
-      {
-        sid: "7.3", title: "Behaviour",
-        checks: [
-          ["t7_list", "<strong>List</strong> page: toggle, remove, <strong>filter</strong> and <strong>search</strong> — both in the URL and surviving a refresh"],
-          ["t7_detail", "<strong>Detail</strong> page: all fields, an <strong>Edit</strong> link and a <strong>Delete</strong> button that navigates home"],
-          ["t7_same_form", "<strong>New</strong> and <strong>Edit</strong> use the <strong>same</strong> <code>TaskForm</code>"],
-          ["t7_navlink", "The nav marks the current page (<code>NavLink</code>, with <code>end</code> where needed)"],
-          ["t7_not_found", "<code>/tasks/999</code> shows <strong>\"Task not found\"</strong>; <code>/nope</code> shows the <strong>404</strong> page"],
-          ["t7_replace_after_add", "After <strong>adding</strong>, I land on the new task's page and <strong>Back does not return to the form</strong> (<code>replace</code>)"],
-          ["t7_survive_nav", "Tasks survive navigating between pages (they live in <code>Layout</code>)"]
-        ]
-      },
-      {
-        sid: "7.4", title: "Quality",
-        checks: [
-          ["t7_no_any", "<strong>No</strong> <code>any</code>, no <code>@ts-ignore</code>, no <code>as</code> except the <code>name as FieldName</code> in the blur handler"],
-          ["t7_tsc_lint", "<code>npx tsc --noEmit -p tsconfig.app.json</code> prints <strong>no errors</strong>, and <code>npm run lint</code> prints no warnings"],
-          ["t7_build", "<code>npm run build</code> succeeds"],
-          ["t7_no_a_href", "No internal <code>&lt;a href&gt;</code> anywhere — <code>grep</code> proves it"],
-          ["t7_parse_urls", "Every URL param and search param is <strong>parsed</strong> before use — nothing trusts the address bar"],
-          ["t7_console", "No browser console warnings or errors while using the app"],
-          ["t7_explain", "I can explain every line of <code>Layout.tsx</code> and <code>TaskListPage.tsx</code> out loud"]
-        ],
-        inputs: [
-          { k:"t7_url", type:"url", label:"List page screenshot link", hint:"— URL visible, required", ph:"https://…" }
-        ]
-      }
-    ]
-  },
-  {
-    id: "t8",
-    title: "Build: Task Board v2 — the form",
-    lead: "One <code>TaskForm</code> that creates <strong>and</strong> edits.",
-    deliverable: "TaskForm.tsx + 2 screenshots",
-    sections: [
-      {
-        sid: "8.1", title: "One form, two jobs",
-        checks: [
-          ["t8_props", "<code>TaskForm</code> takes <code>initial</code>, <code>submitLabel</code>, <code>checkPast</code> and an <strong>async</strong> <code>onSubmit</code> — and <strong>nothing else</strong>"],
-          ["t8_controlled", "It's <strong>controlled</strong>, with one <code>values</code> object and one <code>handleChange</code>"],
-          ["t8_fields", "Title, priority (<strong>radio group</strong> in a <code>&lt;fieldset&gt;</code>), due date, notes (<strong>textarea</strong> with a live <code>n / 200</code> counter) and a done checkbox"],
-          ["t8_key", "<strong>Edit</strong> passes <code>key={task.id}</code> — and I proved the form updates going from <code>/tasks/1/edit</code> to <code>/tasks/2/edit</code>"]
-        ]
-      },
-      {
-        sid: "8.2", title: "Validation",
-        checks: [
-          ["t8_v_title", "Title: required, 3–80 characters after trimming"],
-          ["t8_v_date", "Due date: <strong>can't be in the past when creating</strong>, but an old task can stay overdue when editing"],
-          ["t8_v_notes", "Notes: ≤ 200 characters"],
-          ["t8_v_when", "Errors appear on <strong>blur</strong> and on <strong>submit</strong>; submit shows <strong>all</strong> and focuses the first invalid field"],
-          ["t8_v_trim", "The values are <strong>trimmed</strong> before they're saved"]
-        ]
-      },
-      {
-        sid: "8.3", title: "Submit",
-        checks: [
-          ["t8_s_saving", "The button is disabled and reads <strong>\"Saving…\"</strong> while saving"],
-          ["t8_s_error", "A <strong>server error</strong> shows in a <code>role=\"alert\"</code> message and <strong>keeps</strong> what the user typed"],
-          ["t8_s_success", "On success the page navigates away; the form does not try to reset itself"],
-          ["t8_s_double", "A double-click on <strong>Add task</strong> adds <strong>one</strong> task"]
-        ]
-      },
-      {
-        sid: "8.4", title: "Accessibility",
-        checks: [
-          ["t8_a_aria", "Every field has a label; every error has <code>aria-describedby</code> and <code>aria-invalid</code>"],
-          ["t8_a_keyboard", "I used the <strong>whole</strong> app with the keyboard only — add, filter, edit, delete"],
-          ["t8_a_focus", "Focus lands somewhere sensible after a failed submit"]
-        ]
-      },
-      {
-        sid: "8.5", title: "Screenshots",
-        checks: [
-          ["t8_shot_errors", "A screenshot of the form <strong>with errors showing</strong>"],
-          ["t8_shot_server", "A screenshot of the <strong>server-error</strong> state <strong>or</strong> the \"Saving…\" state"]
-        ],
-        inputs: [
-          { k:"t8_errors_url", type:"url", label:"Form with errors — screenshot link", ph:"https://…" },
-          { k:"t8_server_url", type:"url", label:"Server error / Saving… — screenshot link", ph:"https://…" }
-        ]
-      }
-    ]
-  },
-  {
-    id: "t9",
-    title: "Your feature, built into the board",
-    lead: "Pick <strong>one</strong> feature that is yours. It must touch <strong>both</strong> a form and a route — not just CSS.",
-    deliverable: "code + FEATURE.md + 1 screenshot",
-    sections: [
-      {
-        sid: "9.1", title: "Build it",
-        checks: [
-          ["t9_doc", "Wrote <code>FEATURE.md</code>: what it is and <strong>why it's useful</strong>"],
-          ["t9_types", "Added fields to <code>types.ts</code> and updated <code>INITIAL</code> if needed"],
-          ["t9_typed", "New code has typed props / typed hooks, no <code>any</code>"],
-          ["t9_rule_route", "Added at least one <strong>new validation rule</strong> or <strong>new route</strong> — and covered it in a throwaway script or a screenshot"],
-          ["t9_url_derived", "Anything computable is <strong>derived</strong>; anything that should survive refresh and sharing is in the <strong>URL</strong>"],
-          ["t9_state_doc", "<code>FEATURE.md</code> says where each new piece of state lives and why, in one sentence each"],
-          ["t9_checks", "<code>tsc</code>, <code>lint</code> and <code>npm run build</code> still pass"],
-          ["t9_shot", "Screenshot of the feature in use"]
-        ],
-        inputs: [
-          { k:"t9_name", type:"text", label:"What's your feature?", ph:"a /stats page", w:"half" },
-          { k:"t9_url", type:"url", label:"Screenshot link", ph:"https://…" }
-        ]
-      }
-    ]
-  },
-  {
-    id: "t10",
-    title: "Break it — four bugs, on purpose",
-    lead: "Create <code>BREAK-IT.md</code> in <code>task-board-v2/</code>. For each bug: make the change, <strong>screenshot</strong> what goes wrong, write what you saw and <strong>why</strong>, then fix it.",
-    deliverable: "BREAK-IT.md + 4 screenshots",
-    sections: [
-      {
-        sid: "10.1", title: "a href instead of Link",
-        checks: [
-          ["t10_a_href", "Changed the \"New task\" nav link to <code>&lt;a href&gt;</code>, added a task, clicked it, and screenshotted the tasks <strong>gone</strong> (and a document request in the Network tab)"]
-        ]
-      },
-      {
-        sid: "10.2", title: "The param is a string",
-        checks: [
-          ["t10_param", "Wrote <code>t.id === id</code> in <code>TaskDetailPage</code>, screenshotted every task being \"not found\", fixed with <code>Number(id)</code>"]
-        ]
-      },
-      {
-        sid: "10.3", title: "No double-submit guard",
-        checks: [
-          ["t10_double", "Removed <code>disabled={submitting}</code> <strong>and</strong> the early return, double-clicked <strong>Add task</strong>, screenshotted the duplicate, restored both"]
-        ]
-      },
-      {
-        sid: "10.4", title: "NavLink without end",
-        checks: [
-          ["t10_end", "Removed <code>end</code> from the Tasks link, screenshotted it active on every page, restored it"]
-        ]
-      },
-      {
-        sid: "10.5", title: "After",
-        checks: [
-          ["t10_clean", "After all four fixes the app is <code>tsc</code>- and <code>lint</code>-clean and the console is empty"],
-          ["t10_hardest", "<code>BREAK-IT.md</code> ends with a paragraph: which bug would be hardest to notice in a big app, and why?"]
-        ],
-        inputs: [
-          { k:"t10_url", type:"url", label:"BREAK-IT.md link", hint:"— on GitHub", ph:"https://github.com/…" },
-          { k:"t10_hardest_text", type:"textarea", label:"The bug that would be hardest to notice, and why", ph:"…" }
-        ]
-      }
-    ]
-  },
-  {
-    id: "t11",
-    title: "Notes, branch and pull request",
-    lead: "Leave the repo in a state you'd show an employer. All work happens on <code>feature/day-08</code>.",
-    deliverable: "NOTES.md + repo link + merged PR link",
-    sections: [
-      {
-        sid: "11.1", title: "Repo structure",
-        checks: [
-          ["t11_structure", "<code>day-08/</code> holds <code>day-08-forms/</code> (Tasks 2–6), <code>task-board-v2/</code> (Tasks 7–10), <code>predictions.md</code> and <code>NOTES.md</code>"],
-          ["t11_gitignore", "Every project has its own <code>package.json</code> and a <code>.gitignore</code> containing <code>node_modules</code> and <code>dist</code>"],
-          ["t11_no_nm", "<strong><code>node_modules</code> and <code>dist</code> are not committed</strong> — screenshotted <code>git ls-files</code> showing none"],
-          ["t11_run", "Each project says how to run it: <code>npm install</code> then <code>npm run dev</code>"]
-        ]
-      },
-      {
-        sid: "11.2", title: "day-08/NOTES.md",
+        sid: "5.2", title: "day-08/NOTES.md",
         quote: "If a sentence could have been copied from the README, rewrite it.",
         checks: [
-          ["t11_n_controlled", "<strong>Controlled vs uncontrolled</strong> — one example of each from my code, and when I'd pick which"],
-          ["t11_n_derived", "<strong>Why errors are derived, not stored</strong> — with my own stale-error bug as the example"],
-          ["t11_n_touched", "<strong><code>touched</code></strong> — what it is and why a form needs it"],
-          ["t11_n_submit", "<strong>The four states of a submit</strong> and how my form handles each"],
-          ["t11_n_link", "<strong><code>&lt;Link&gt;</code> vs <code>&lt;a href&gt;</code></strong> — what the browser does differently, with my screenshot"],
-          ["t11_n_string", "<strong>Why a route's <code>id</code> is a string</strong> — and what I do about a URL I don't recognise"],
-          ["t11_n_url_state", "<strong>State in the URL vs <code>useState</code></strong> — one value I moved to the URL and why"],
-          ["t11_n_layout", "<strong>Why <code>tasks</code> lives in <code>Layout</code></strong> — what would break if it lived in <code>TaskListPage</code>"],
-          ["t11_n_replace", "<strong><code>replace</code> vs push</strong> — where I used each and why"],
-          ["t11_n_bug", "<strong>A real bug</strong> that wasn't in the README: the exact error, how I found it, the fix"],
-          ["t11_n_versions", "The output of <code>npm ls react react-router</code>"]
+          ["s_notes", "Answered all four in my own words: derived errors · <code>touched</code> · URL state vs <code>useState</code> · <strong>one real bug</strong> I hit and how I fixed it"]
         ],
         inputs: [
-          { k:"t11_bug_text", type:"textarea", label:"The bug you hit — the error message and the fix", ph:"…" }
+          { k:"s_bug_text", type:"textarea", label:"The bug you hit — the symptom and the fix", ph:"…" }
         ]
       },
       {
-        sid: "11.3", title: "Branch, commits and PR",
+        sid: "5.3", title: "LinkedIn",
         checks: [
-          ["t11_branch", "All work was done on <code>feature/day-08</code>"],
-          ["t11_msgs", "Every commit has an imperative, specific message — no <code>update</code>, no <code>stuff</code>"],
-          ["t11_five", "At least <strong>five</strong> commits (forms labs, routing labs, the board, the form, the feature)"],
-          ["t11_pr", "Opened a pull request, wrote a description, and <strong>merged</strong> it"],
-          ["t11_log", "Ran <code>git log --oneline --graph -15</code> and screenshotted it"]
+          ["s_post", "Posted about Day 8 with a screenshot of a URL full of params, my repo link, and <strong>one concrete thing that clicked</strong>"]
         ],
         inputs: [
-          { k:"t11_repo_url", type:"url", label:"Repo link", hint:"— required", ph:"https://github.com/…" },
-          { k:"pr_url", type:"url", label:"Merged pull request link", hint:"— required", ph:"https://github.com/…/pull/…" },
-          { k:"t11_log_url", type:"url", label:"git log screenshot link", ph:"https://…" }
-        ]
-      }
-    ]
-  },
-  {
-    id: "t12",
-    title: "Share it",
-    lead: "Say something real. Not \"excited to continue my journey\".",
-    deliverable: "LinkedIn post link",
-    sections: [
-      {
-        sid: "12.1", title: "Post it",
-        checks: [
-          ["t12_posted", "Posted on LinkedIn about completing Day 8 — forms and routing in React"],
-          ["t12_shot", "Included a screenshot of the Task Board <strong>with the filter in the URL</strong>"],
-          ["t12_repo_pr", "Included the link to my repo <strong>and</strong> my merged pull request"],
-          ["t12_before_after", "Showed one before-and-after — my Day 07 <code>useState</code> filter next to the URL-driven one, <strong>or</strong> my Day 07 <code>AddTaskForm</code> next to <code>TaskForm</code>"],
-          ["t12_learned", "Said one concrete thing I understood — why errors are derived, why <code>id</code> is a string, why the layout owns the state"]
-        ],
-        inputs: [
-          { k:"t12_post_url", type:"url", label:"LinkedIn post link", hint:"— required", ph:"https://linkedin.com/posts/…" },
-          { k:"t12_learned_text", type:"text", label:"The one thing that clicked", ph:"…" }
+          { k:"t5_post_url", type:"url", label:"LinkedIn post link", hint:"— required", ph:"https://linkedin.com/posts/…" }
         ]
       },
       {
-        sid: "Bonus", title: "Optional — for anyone going further",
-        note: "Not required. Ticking these is how a submission moves from ✅ Done to 🔥 10%.",
+        sid: "Bonus", title: "Challenge problems — optional",
+        note: "Not required. Statements are in <code>ASSIGNMENT.md</code>. Ticking these is how a submission moves from ✅ Done to 🔥 10%.",
         optional: true,
         checks: [
-          ["b_textfield", "Extracted a reusable <code>TextField</code> component (label + input + error + hint) and used it for every text field in <code>TaskForm</code>"],
-          ["b_rhf", "Replaced the hand-written form with <strong>React Hook Form</strong> and listed what it removed and what it hid"],
-          ["b_zod", "Wrote the validation as a <strong>Zod</strong> schema and inferred <code>TaskFormValues</code> with <code>z.infer</code>"],
-          ["b_unsaved", "Added an \"unsaved changes — leave anyway?\" guard when navigating away from a dirty form"],
-          ["b_scroll", "Scrolled to the top on every route change by hand (<code>useLocation</code>) and said what I needed <code>useEffect</code> for"],
-          ["b_lazy", "Added a lazy-loaded route with <code>React.lazy</code> + <code>Suspense</code> and showed the extra chunk in the Network tab"],
-          ["b_deeplink", "Added a deep link that opens the list with a task highlighted — from a URL param"],
-          ["b_data_mode", "Switched to <strong>Data mode</strong> (<code>createBrowserRouter</code> + <code>RouterProvider</code>) and said what I gained"],
-          ["b_deploy", "Deployed the board to Netlify or Vercel with the <strong>SPA rewrite</strong> and proved a refresh on <code>/tasks/2</code> works"],
-          ["b_modes", "Read the React Router <strong>Picking a Mode</strong> page and wrote three sentences on which mode I'd pick for Session 21's app"]
+          ["b_zod", "<strong>Zod</strong> — <code>validateBooking</code> as a schema, Problem 1 test run passes unchanged"],
+          ["b_unsaved", "<strong>Unsaved changes</strong> — leaving a dirty form asks first; a clean one doesn't"],
+          ["b_prevnext", "<strong>Previous / Next country</strong> links that respect the list's params"],
+          ["b_deploy", "<strong>Deployed</strong> with the SPA rewrite — a refresh on a deep URL works"]
         ]
       },
       {
         sid: "Grading", title: "How this is graded",
         grade: [
-          ["❌ Incomplete", "Copy-pasted README code, predictions written after running, &lt;a href&gt; for an internal link, errors stored in state, a route param compared without converting, a search box that pushes a history entry per keystroke, state shared between pages that lives in a page, no double-submit protection, any or @ts-ignore, node_modules committed, everything done on main, no merged PR, or code you can’t explain line by line"],
-          ["✅ Done", "All twelve tasks, a pure validation function proved by a script, one TaskForm for create and edit, five routes with a layout, filter and search in the URL and parsed safely, a not-found page for bad ids and bad URLs, your own feature, four bugs broken and fixed with screenshots, NOTES.md in your own words, a real bug documented, a merged PR"],
-          ["🔥 10%", "Done + the bonus + a feature that is genuinely yours + notes someone else could actually learn from"]
+          ["❌ Incomplete", "An example that doesn't match its expected output, approach written after the code, copy-pasted code, errors stored in state, a URL param used without parsing, a search box that pushes on every keystroke, a form that submits twice, &lt;a href&gt; for an internal link, any or @ts-ignore, node_modules committed, no merged PR, or code you can’t explain line by line"],
+          ["✅ Done", "Warm-up done honestly · Problems 1–4 pass every example · APPROACH.md written before each problem · notes in your own words · a merged PR"],
+          ["🔥 10%", "Done + the challenge problems + notes someone else could learn from"]
         ]
       }
     ]
   }
 ];
 
-const REQUIRED_INPUTS = ["t7_url", "t11_repo_url", "pr_url", "t12_post_url"];
+const REQUIRED_INPUTS = ["p4_url", "t5_repo_url", "pr_url", "t5_post_url"];
 
 /* Which assignment this is — picks the sheet column (Day 8 -> K). */
 const DAY = 8;
@@ -955,7 +577,7 @@ const ROSTER = [["saadmmustafa99@gmail.com","سعد محمد مصطفى"],["ahme
    is the realistic threat here.
    ===================================================================== */
 
-const SALT = "js-everywhere-day08-v1";
+const SALT = "js-everywhere-day08-v2";
 
 /* Crockford base32, minus the letters that get misread when retyped. */
 const B32 = "0123456789ABCDEFGHJKMNPQRSTVWXYZ";
@@ -1151,12 +773,10 @@ function renderProgress(){
     const missing = [];
     if (p.done < p.total) missing.push((p.total - p.done) + " checks left");
     const FIELD_NAMES = {
-      pj_check_url: "npm run check screenshot",
-      api_a_url: "Task Manager screenshot",
-      pr2_url: "second pull request link",
-      pr_url: "pull request link",
-      t7_repo_url: "repo link",
-      t8_post_url: "LinkedIn link"
+      p4_url: "Task Board v2 link",
+      t5_repo_url: "Repo link",
+      pr_url: "Merged pull request link",
+      t5_post_url: "LinkedIn post link"
     };
     REQUIRED_INPUTS.forEach(k => {
       if (!(state.inputs[k] || "").trim()){

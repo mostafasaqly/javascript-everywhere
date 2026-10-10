@@ -1166,7 +1166,7 @@ Break it:
 1. Remove `end` from the Home `NavLink` — Home is highlighted on every page.
 2. Replace one `<Link to="/about">` with `<a href="/about">` — the page reloads (watch the Network tab).
 3. Move `path="*"` to be the **first** route. It still works only for unmatched URLs — React Router ranks by specificity, not order. (Contrast with Express in Session 15, where order **does** matter.)
-4. Visit `/lessons/abc`. It renders "Lesson abc" — **a bad URL still matched.** What would you have to add to treat it as "not found"? (Answer in Task 5.)
+4. Visit `/lessons/abc`. It renders "Lesson abc" — **a bad URL still matched.** What would you have to add to treat it as "not found"? (You'll need the answer for the assignment's Country Explorer — `/countries/XX`.)
 
 ---
 

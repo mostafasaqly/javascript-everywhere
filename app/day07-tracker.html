@@ -298,7 +298,7 @@ pre.term{
   <div class="gate-card">
     <div class="gate-eyebrow">Track 2 · Day 7 · Parts 1–4</div>
     <h1>Day 07 — React Intro: Components, Props &amp; State</h1>
-    <p class="sub">Work through the twelve tasks, tick what you finish, drop your links in. Your progress saves in this browser as you go — close the tab and come back.</p>
+    <p class="sub">A warm-up, four problems and a wrap-up. Solve each problem against its examples, tick what you finish, drop your links in. Your progress saves in this browser as you go — close the tab and come back.</p>
     <div class="field">
       <label for="g-email">Email <span class="hint">— the one you registered with</span></label>
       <input type="email" id="g-email" autocomplete="email" placeholder="you@gmail.com">
@@ -339,7 +339,7 @@ pre.term{
       </div>
       <div class="progress-meta">
         <div class="big" id="prog-count">0 / 0 checks</div>
-        <div class="small" id="prog-tasks">0 of 12 tasks complete</div>
+        <div class="small" id="prog-tasks">0 of 6 tasks complete</div>
       </div>
     </div>
 
@@ -385,511 +385,169 @@ pre.term{
    ===================================================================== */
 const TASKS = [
   {
-    id: "t1",
-    title: "Predict, then run",
-    lead: "Twelve questions: #1–#8 are components you render, #9–#12 are written questions about what React does. The full code is in <code>ASSIGNMENT.md</code>.",
-    deliverable: "predictions.md + 1 screenshot",
+    id: "t0",
+    title: "Warm-up — predict the output",
+    lead: "Six snippets in <code>ASSIGNMENT.md</code>. Predict first, run second, explain every miss.",
+    deliverable: "predictions.md",
     sections: [
       {
-        sid: "1.1", title: "Write your predictions first",
+        sid: "0.1", title: "Predict, then run",
+        quote: "Getting them wrong is fine. Getting them wrong and not knowing why is not.",
         checks: [
-          ["t1_pred_file", "Created <code>predictions.md</code>"],
-          ["t1_pred_before", "Wrote exactly what appears on screen — or the exact error or warning — for all 12, <em>before</em> running anything"]
-        ]
-      },
-      {
-        sid: "1.2", title: "Now run them",
-        quote: "Getting them wrong is the assignment. Getting them wrong and not explaining why is not.",
-        checks: [
-          ["t1_pred_actual", "Ran <strong>#1–#8</strong> and recorded the <em>actual</em> result next to each prediction"],
-          ["t1_pred_try", "Tried #9–#12 in code too (#9 as a small list, #10 with a <code>console.log</code>, #11 and #12 as written)"],
-          ["t1_pred_why", "For every one I got wrong, wrote one sentence explaining why"],
-          ["t1_pred_mech", "For <strong>#2, #3, #5 vs #6, #7, #8 and #9</strong> named the mechanism explicitly"],
-          ["t1_pred_shot", "Screenshotted the output"]
+          ["w_before", "Wrote all six predictions in <code>predictions.md</code> <em>before</em> running anything"],
+          ["w_why", "Ran all six, wrote the actual result next to each, and one sentence of <strong>why</strong> for every one I missed"]
         ],
         inputs: [
-          { k:"t1_wrong_count", type:"text", label:"How many did you get wrong?", ph:"5", w:"half" },
-          { k:"t1_pred_url", type:"url", label:"Screenshot link", hint:"— Drive / Imgur / GitHub", ph:"https://…" },
-          { k:"t1_surprise", type:"textarea", label:"Which result surprised you most, and why?", ph:"…" }
+          { k:"w_wrong_count", type:"text", label:"How many did you get wrong?", ph:"2", w:"half" },
+          { k:"w_surprise", type:"textarea", label:"Which result surprised you most, and why?", ph:"…" }
         ]
       }
     ]
   },
   {
-    id: "t2",
-    title: "JSX lab",
-    lead: "Create <code>src/JsxLab.tsx</code> and render it from <code>App.tsx</code>. Run after every part.",
-    deliverable: "JsxLab.tsx + 1 screenshot",
+    id: "p1",
+    title: "Star Rating",
+    lead: "<strong>Problem 1 · 🟢 Easy</strong> — a <code>Rating</code> component that turns a number into <code>★★★☆☆ (3/5)</code>. The full statement, eight examples and hints are in <code>ASSIGNMENT.md</code>.",
+    deliverable: "src/rating/ + 1 screenshot of all eight examples",
     sections: [
       {
-        sid: "2.1", title: "Expressions",
+        sid: "P1", title: "Solve it",
+        note: "Approach first, code second, examples last. Open a hint only after 20 minutes stuck.",
         checks: [
-          ["t2_expr", "A component showing a name, a score array, the <strong>average</strong> (<code>toFixed(1)</code>) and a pass/fail label chosen with a <strong>ternary</strong>"],
-          ["t2_attr", "A value shown <strong>as an attribute</strong> with braces and another as a literal string — screenshotted both in the DOM inspector"],
-          ["t2_style", "An inline <code>style={{ … }}</code> with two camelCase properties, and a <code>className</code> from a CSS file"],
-          ["t2_comment", "A JSX comment <code>{/* … */}</code>"]
-        ]
-      },
-      {
-        sid: "2.2", title: "Rules",
-        checks: [
-          ["t2_fragment", "Returned two sibling elements wrapped in a <strong>Fragment</strong> <code>&lt;&gt;…&lt;/&gt;</code>"],
-          ["t2_htmlfor", "Used <code>htmlFor</code> on a <code>&lt;label&gt;</code> and <code>id</code> on its input — clicking the label focuses the input"],
-          ["t2_selfclose", "Self-closed <code>&lt;br /&gt;</code>, <code>&lt;hr /&gt;</code> and <code>&lt;input /&gt;</code>"]
-        ]
-      },
-      {
-        sid: "2.3", title: "Break it",
-        quote: "One at a time. Read the error, write it as a comment, fix it.",
-        checks: [
-          ["t2_b_class", "Used <code>class</code> instead of <code>className</code>"],
-          ["t2_b_siblings", "Left two siblings without a parent"],
-          ["t2_b_object", "Put an <strong>object</strong> inside <code>{ }</code> as content — <code>Objects are not valid as a React child</code>"],
-          ["t2_b_return", "Wrote <code>return</code> + newline + JSX without parentheses, and described why it returns <code>undefined</code>"],
-          ["t2_b_lower", "Named a component in lowercase (<code>&lt;greeting /&gt;</code>) and described what React does"]
+          ["p1_approach", "Wrote my approach in <code>APPROACH.md</code> <strong>before</strong> writing code"],
+          ["p1_examples", "All <strong>8 examples</strong> render exactly the expected output, from an array of example props"],
+          ["p1_edge", "No crash for <code>NaN</code>, <code>Infinity</code> or <code>-Infinity</code>; an invalid <code>max</code> renders nothing"],
+          ["p1_a11y", "A screen reader hears <em>\"3 out of 5\"</em> — not five star characters"]
         ],
         inputs: [
-          { k:"t2_url", type:"url", label:"Screenshot link", ph:"https://…" }
+          { k:"p1_url", type:"url", label:"Screenshot link", hint:"— Drive / Imgur / GitHub", ph:"https://…" }
         ]
       }
     ]
   },
   {
-    id: "t3",
-    title: "Props lab",
-    lead: "Create <code>src/props-lab/</code> — one component per file.",
-    deliverable: "props-lab/ + 1 screenshot",
+    id: "p2",
+    title: "Product Catalog",
+    lead: "<strong>Problem 2 · 🟡 Medium</strong> — group a flat product list by category, sort it, hide sold-out items on demand, and handle two empty states. No state at all — everything is derived from props.",
+    deliverable: "src/catalog/ + 1 screenshot of all five examples",
     sections: [
       {
-        sid: "3.1", title: "Typed props",
+        sid: "P2", title: "Solve it",
         checks: [
-          ["t3_badge", "<code>Badge.tsx</code> with an <code>interface BadgeProps</code>: a required <code>label</code>, an optional <code>tone</code> union with a default"],
-          ["t3_avatar", "<code>Avatar.tsx</code> taking <code>name</code> and rendering the <strong>initials</strong> — computed, not passed in"],
-          ["t3_rating", "<code>Rating.tsx</code> taking <code>value</code> (0–5) and rendering that many ★ and the rest ☆ with <code>repeat</code>"],
-          ["t3_object", "A component whose prop is an <strong>object</strong> typed with my own <code>interface</code>, rendering two of its fields"]
-        ]
-      },
-      {
-        sid: "3.2", title: "children",
-        checks: [
-          ["t3_card", "<code>Card.tsx</code> with a <code>title</code> and <code>children: ReactNode</code>"],
-          ["t3_card_uses", "Used <code>Card</code> three times with <strong>different</strong> content, including another component and a list inside one"]
-        ]
-      },
-      {
-        sid: "3.3", title: "Composition",
-        checks: [
-          ["t3_profile", "A <code>ProfileCard</code> built <strong>only</strong> from <code>Card</code>, <code>Avatar</code>, <code>Badge</code> and <code>Rating</code>"],
-          ["t3_three", "Rendered <strong>three</strong> <code>ProfileCard</code>s from an array of three profile objects"]
-        ]
-      },
-      {
-        sid: "3.4", title: "Break it",
-        checks: [
-          ["t3_b_missing", "Omitted a required prop — copied the TypeScript error into a comment"],
-          ["t3_b_type", "Passed <code>\"5\"</code> where a number was expected — copied the error"],
-          ["t3_b_union", "Passed a tone that isn't in the union — copied the error"],
-          ["t3_b_mutate", "Tried to change a prop inside the child and wrote down what TypeScript says"]
+          ["p2_approach", "Wrote my approach in <code>APPROACH.md</code> <strong>before</strong> writing code"],
+          ["p2_examples", "All <strong>5 examples</strong> match the expected output — including the price tie and both empty states"],
+          ["p2_nomutate", "Proved the <code>products</code> prop isn't changed — the ids still print <code>1,2,3,4,5,6</code> after rendering"],
+          ["p2_keys", "Keys come from the data at <strong>both</strong> levels, and there's no <code>useState</code> anywhere"]
         ],
         inputs: [
-          { k:"t3_url", type:"url", label:"Screenshot link", hint:"— the three profile cards", ph:"https://…" }
+          { k:"p2_url", type:"url", label:"Screenshot link", ph:"https://…" }
         ]
       }
     ]
   },
   {
-    id: "t4",
-    title: "Lists, keys and conditional rendering",
-    lead: "Create <code>src/ListLab.tsx</code>.",
-    deliverable: "ListLab.tsx + 1 screenshot",
+    id: "p3",
+    title: "Shopping List",
+    lead: "<strong>Problem 3 · 🟡 Medium</strong> — add items by name, merge duplicates case-insensitively, change quantities. The nine-step example in <code>ASSIGNMENT.md</code> is your test.",
+    deliverable: "src/shopping/ + 1 screenshot after step 8",
     sections: [
       {
-        sid: "4.1", title: "Rendering a list",
+        sid: "P3", title: "Solve it",
         checks: [
-          ["t4_map", "Rendered an array of at least five objects with <code>.map</code>, each with <code>key={item.id}</code>"],
-          ["t4_sorted", "Rendered a <strong>filtered</strong> and a <strong>sorted</strong> copy — sorted with <code>[...items].sort(…)</code> and a comment on why the spread matters"],
-          ["t4_nested", "Rendered a list of lists (categories → items) with correct keys at <strong>both</strong> levels"]
-        ]
-      },
-      {
-        sid: "4.2", title: "Conditionals",
-        checks: [
-          ["t4_empty", "An <strong>empty state</strong>, with an early <code>return</code>, when the array is <code>[]</code>"],
-          ["t4_ternary", "A ternary showing one of two labels per row"],
-          ["t4_and", "An <code>&amp;&amp;</code> showing an optional field only when it exists"],
-          ["t4_null", "A component that returns <code>null</code> in one case"]
-        ]
-      },
-      {
-        sid: "4.3", title: "The 0 trap",
-        checks: [
-          ["t4_zero_bug", "Rendered <code>{items.length &amp;&amp; &lt;List /&gt;}</code> with an empty array and screenshotted the stray <strong>0</strong>"],
-          ["t4_zero_fix", "Fixed it with <code>items.length &gt; 0 &amp;&amp;</code> and commented why"]
-        ]
-      },
-      {
-        sid: "4.4", title: "Keys, on purpose",
-        quote: "Put an uncontrolled checkbox and a text input in each row, so each row holds state of its own.",
-        checks: [
-          ["t4_key_index", "Used <code>key={index}</code>, ticked row 1, deleted row 1, and screenshotted the tick <strong>moving to the wrong row</strong>"],
-          ["t4_key_id", "Switched to <code>key={item.id}</code> and proved the tick follows the right row"],
-          ["t4_key_none", "Removed the <code>key</code> entirely and copied the console warning verbatim"]
+          ["p3_approach", "Wrote my approach in <code>APPROACH.md</code> <strong>before</strong> writing code"],
+          ["p3_examples", "All <strong>9 steps</strong> of the example give the expected rows and summary"],
+          ["p3_plus3", "<strong>+3</strong> calls <code>onIncrease(id)</code> three times — and adds exactly 3"],
+          ["p3_owner", "One component owns the list, no child receives <code>setItems</code>, the summary is derived, and the tree is drawn in a comment"]
         ],
         inputs: [
-          { k:"t4_url", type:"url", label:"Screenshot link", hint:"— the stray 0 and the wrong-row tick", ph:"https://…" }
+          { k:"p3_url", type:"url", label:"Screenshot link", ph:"https://…" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "p4",
+    title: "Extend the Task Board",
+    lead: "<strong>Problem 4 · 🟠 Medium+</strong> — on top of your README Part 4 board, add <strong>sorting</strong> (Added / Priority / A → Z) and <strong>edit a title in place</strong>.",
+    deliverable: "task-board/ + FEATURE.md + 1 screenshot",
+    sections: [
+      {
+        sid: "P4", title: "Solve it",
+        checks: [
+          ["p4_approach", "Wrote my approach in <code>APPROACH.md</code> <strong>before</strong> writing code"],
+          ["p4_examples", "All <strong>9 examples</strong> pass — including the lowercase <code>apply to 3 jobs</code> trap"],
+          ["p4_pure", "<code>sortTasks</code> is pure, and a throwaway script proves it doesn't mutate its input"],
+          ["p4_feature", "<code>FEATURE.md</code> says where the sort value and the editing row live, and why — one sentence each"],
+          ["p4_clean", "<code>tsc</code>, <code>npm run lint</code> and <code>npm run build</code> all pass"]
+        ],
+        inputs: [
+          { k:"p4_url", type:"url", label:"Task Board link", hint:"— on GitHub, required", ph:"https://github.com/…" },
+          { k:"p4_shot_url", type:"url", label:"Screenshot link", hint:"— a sort applied and a row in edit mode", ph:"https://…" }
         ]
       }
     ]
   },
   {
     id: "t5",
-    title: "State lab",
-    lead: "Create <code>src/StateLab.tsx</code>.",
-    deliverable: "StateLab.tsx + 1 screenshot",
+    title: "Ship it",
+    lead: "One branch, one pull request, four short answers, one post.",
+    deliverable: "repo link + merged PR link + LinkedIn post link",
     sections: [
       {
-        sid: "5.1", title: "Basics",
+        sid: "5.1", title: "Repo and pull request",
+        term: "day-07/\n├── NOTES.md\n├── predictions.md\n├── APPROACH.md\n├── day-07-problems/   ← Problems 1–3\n└── task-board/        ← README Part 4 + Problem 4",
         checks: [
-          ["t5_counter", "A counter with <strong>+</strong>, <strong>−</strong> and <strong>Reset</strong>"],
-          ["t5_toggle", "A <strong>toggle</strong> (boolean state) that shows and hides a paragraph"],
-          ["t5_mirror", "A <strong>text input</strong> mirrored live into a heading"],
-          ["t5_object", "State holding an <strong>object</strong> <code>{ name, city }</code> with two buttons that each change one field"]
-        ]
-      },
-      {
-        sid: "5.2", title: "Why a variable isn't enough",
-        checks: [
-          ["t5_let", "A second counter using <code>let count = 0</code> — showed the console counting while the screen stays at 0, and commented the two reasons"],
-          ["t5_render_log", "Added <code>console.log(\"render\")</code> and described what <strong>two logs per render</strong> means in development"]
-        ]
-      },
-      {
-        sid: "5.3", title: "The snapshot and the updater",
-        checks: [
-          ["t5_plus_one", "A button doing <code>setN(n + 1)</code> three times — screenshotted it adding <strong>1</strong>"],
-          ["t5_plus_three", "The same button with <code>setN((c) =&gt; c + 1)</code> three times — screenshotted it adding <strong>3</strong>"],
-          ["t5_snapshot", "A button that does <code>setN(10); console.log(n)</code> and shows the <strong>old</strong> value — commented why"],
-          ["t5_when", "One comment: when is <code>setN(value)</code> enough, and when do I need the updater?"]
-        ]
-      },
-      {
-        sid: "5.4", title: "Break it",
-        checks: [
-          ["t5_b_if", "Put <code>useState</code> inside an <code>if</code> — copied the error or warning"],
-          ["t5_b_never", "Gave <code>useState([])</code> no type, tried to add a number, copied the error — then fixed it with <code>useState&lt;number[]&gt;([])</code>"]
+          ["s_pr", "All work on <code>feature/day-07</code> with clear commit messages, merged through a <strong>pull request</strong>"],
+          ["s_nm", "<code>node_modules</code> and <code>dist</code> are <strong>not</strong> committed"]
         ],
         inputs: [
-          { k:"t5_url", type:"url", label:"Screenshot link", hint:"— +1 vs +3", ph:"https://…" }
-        ]
-      }
-    ]
-  },
-  {
-    id: "t6",
-    title: "Immutable updates lab",
-    lead: "Create <code>src/ImmutableLab.tsx</code> with an array of <strong>five</strong> task-like objects in state.",
-    deliverable: "ImmutableLab.tsx + 1 screenshot",
-    sections: [
-      {
-        sid: "6.1", title: "The four patterns",
-        checks: [
-          ["t6_add", "<strong>Add</strong> — <code>[...prev, newItem]</code>"],
-          ["t6_remove", "<strong>Remove</strong> — <code>filter</code> by id"],
-          ["t6_update_item", "<strong>Update one field of one item</strong> — <code>map</code> + <code>{ ...item, field: value }</code>"],
-          ["t6_update_obj", "<strong>Update an object</strong> in state — <code>{ ...prev, field: value }</code>"]
+          { k:"t5_repo_url", type:"url", label:"Repo link", hint:"— required", ph:"https://github.com/…" },
+          { k:"pr_url", type:"url", label:"Merged pull request link", hint:"— required", ph:"https://github.com/…/pull/…" }
         ]
       },
       {
-        sid: "6.2", title: "Without mutating anything",
-        checks: [
-          ["t6_sort", "<strong>Sort</strong> by title using a copy, with buttons for A→Z and Z→A"],
-          ["t6_move", "<strong>Move an item up</strong> one position — a new array, no <code>splice</code> on the old one"],
-          ["t6_clear", "<strong>Clear all done</strong> — one <code>filter</code>"],
-          ["t6_toggle_all", "<strong>Toggle all</strong> — one <code>map</code>"]
-        ]
-      },
-      {
-        sid: "6.3", title: "Break it",
-        checks: [
-          ["t6_b_push", "Wrote <code>tasks.push(…); setTasks(tasks)</code> — screenshotted that nothing changes"],
-          ["t6_b_later", "Clicked another working button and showed the mutated value suddenly appear — commented why"],
-          ["t6_b_shallow", "Wrote <code>tasks[0].done = true; setTasks([...tasks])</code> and explained why it's still a bug even though the array is new"],
-          ["t6_b_reverse", "Used <code>n.reverse()</code> inside an updater and described what React does"]
-        ],
-        inputs: [
-          { k:"t6_url", type:"url", label:"Screenshot link", ph:"https://…" }
-        ]
-      }
-    ]
-  },
-  {
-    id: "t7",
-    title: "Controlled input + lifting state up",
-    lead: "Create <code>src/lift/</code> — a small shopping list. State lives in <code>Shopping.tsx</code>; everything below it takes props only.",
-    deliverable: "lift/ + 1 screenshot",
-    sections: [
-      {
-        sid: "7.1", title: "The pieces",
-        checks: [
-          ["t7_shopping", "<code>Shopping.tsx</code> owns <code>items</code> (with <code>id</code>, <code>name</code>, <code>qty</code>, <code>bought</code>)"],
-          ["t7_additem", "<code>AddItem.tsx</code> — a <strong>controlled</strong> <code>name</code> input and a <code>qty</code> number input; calls <code>onAdd(name, qty)</code>, then clears itself"],
-          ["t7_list", "<code>ItemList.tsx</code> + <code>ItemRow.tsx</code> — a <code>bought</code> checkbox and a remove button"],
-          ["t7_summary", "<code>Summary.tsx</code> — shows \"N items, M bought\""]
-        ]
-      },
-      {
-        sid: "7.2", title: "Rules",
-        checks: [
-          ["t7_no_setter", "<strong>No</strong> component below <code>Shopping</code> receives <code>setItems</code> — only <code>onToggle</code>, <code>onRemove</code>, <code>onAdd</code>"],
-          ["t7_derived", "The summary is <strong>derived</strong> in render — no <code>useState</code> for the counts"],
-          ["t7_validate", "An empty or whitespace-only name does nothing; <code>qty</code> is at least 1"],
-          ["t7_prevent", "<code>e.preventDefault()</code> is called — and I removed it once to screenshot the page reloading"],
-          ["t7_enter", "Submit works with the <strong>Enter</strong> key"]
-        ]
-      },
-      {
-        sid: "7.3", title: "Draw it",
-        checks: [
-          ["t7_tree", "Wrote — as a comment at the top of <code>Shopping.tsx</code> — the component tree and where each piece of state lives"]
-        ],
-        inputs: [
-          { k:"t7_url", type:"url", label:"Screenshot link", ph:"https://…" }
-        ]
-      }
-    ]
-  },
-  {
-    id: "t8",
-    title: "Build: the Task Board",
-    lead: "Plan first, then build. A <strong>new</strong> Vite project — <code>task-board/</code> (React + TypeScript).",
-    deliverable: "task-board/ folder + 2 screenshots",
-    sections: [
-      {
-        sid: "8.1", title: "Plan on paper",
-        checks: [
-          ["t8_sketch", "Sketched the layout and committed it as <code>docs/sketch.png</code>"],
-          ["t8_state_table", "Wrote <code>docs/state-table.md</code>: every piece of data, whether it's <strong>state or derived</strong>, and which component owns it"],
-          ["t8_state_right", "My table has the state from README 4.1 — tasks, filter, search, and the form's own title and priority — and <strong>no stored counters</strong>"]
-        ]
-      },
-      {
-        sid: "8.2", title: "Structure",
-        term: "task-board/\n├── docs/\n│   ├── sketch.png\n│   └── state-table.md\n└── src/\n    ├── main.tsx\n    ├── App.tsx\n    ├── types.ts\n    ├── tasks.ts\n    └── components/\n        ├── Header.tsx\n        ├── AddTaskForm.tsx\n        ├── FilterBar.tsx\n        ├── TaskList.tsx\n        ├── TaskItem.tsx\n        └── Footer.tsx",
-        checks: [
-          ["t8_types", "<code>types.ts</code> — <code>Priority</code>, <code>Filter</code>, <code>Task</code> (with <code>readonly id</code>)"],
-          ["t8_helpers", "<code>tasks.ts</code> — <code>visibleTasks</code> and <code>nextId</code> as <strong>pure functions</strong>, proved by a throwaway Node script printing <code>2 1 0 1 1 3</code>"],
-          ["t8_components", "<code>Header</code>, <code>AddTaskForm</code>, <code>FilterBar</code>, <code>TaskList</code>, <code>TaskItem</code>, <code>Footer</code> — one component per file, every one with a typed props <code>interface</code>"],
-          ["t8_app", "<code>App.tsx</code> holds all the top-level state and the handlers that <strong>replace</strong> the list"]
-        ]
-      },
-      {
-        sid: "8.3", title: "Behaviour",
-        checks: [
-          ["t8_add", "<strong>Add</strong> a task with a title and priority — Enter submits, whitespace is rejected"],
-          ["t8_toggle", "<strong>Toggle</strong> done with a checkbox and a struck-through title"],
-          ["t8_remove", "<strong>Remove</strong> a task"],
-          ["t8_priority", "<strong>Change priority</strong> from a <code>&lt;select&gt;</code> on the row"],
-          ["t8_filter", "<strong>Filter</strong> All / Open / Done, the active button marked <code>aria-pressed</code>"],
-          ["t8_search", "<strong>Search</strong> by title, case-insensitive"],
-          ["t8_clear", "<strong>Clear completed</strong> — hidden when nothing is complete"],
-          ["t8_header", "A header saying <code>N left</code> — and <code>All done 🎉</code> at zero"],
-          ["t8_empty_two", "<strong>Two different empty states</strong>: no tasks at all vs no matches"],
-          ["t8_nextid", "New ids come from <code>nextId</code> — never reused after a delete"]
-        ]
-      },
-      {
-        sid: "8.4", title: "Quality",
-        checks: [
-          ["t8_no_any", "<strong>No</strong> <code>any</code>, no <code>as</code> except the single <code>as Priority</code> on the <code>&lt;select&gt;</code>, no <code>@ts-ignore</code>"],
-          ["t8_tsc", "<code>npx tsc --noEmit -p tsconfig.app.json</code> prints <strong>no errors</strong>, and <code>npm run lint</code> prints no warnings"],
-          ["t8_build", "<code>npm run build</code> succeeds"],
-          ["t8_no_mutate", "No state is mutated anywhere — I can point to every <code>map</code>, <code>filter</code> and spread"],
-          ["t8_keys", "Every list has a stable <code>key</code> from the data"],
-          ["t8_labels", "Every input has a visible or <code>aria-label</code> label; every button has text or an <code>aria-label</code>"],
-          ["t8_console", "No console warnings or errors in the browser while using the app"],
-          ["t8_explain", "I can explain every line of <code>App.tsx</code> out loud"]
-        ]
-      },
-      {
-        sid: "8.5", title: "Screenshots",
-        checks: [
-          ["t8_shot_main", "A screenshot with <strong>several tasks</strong>, a filter selected and a search typed"],
-          ["t8_shot_empty", "A screenshot of <strong>both</strong> empty states"]
-        ],
-        inputs: [
-          { k:"t8_url", type:"url", label:"Task Board screenshot link", hint:"— required", ph:"https://…" },
-          { k:"t8_empty_url", type:"url", label:"Empty states screenshot link", ph:"https://…" }
-        ]
-      }
-    ]
-  },
-  {
-    id: "t9",
-    title: "Your feature, built into the board",
-    lead: "Pick <strong>one</strong> feature that is yours. It must add <strong>new state</strong> or <strong>a new component with props</strong> — not just CSS.",
-    deliverable: "code + FEATURE.md + 1 screenshot",
-    sections: [
-      {
-        sid: "9.1", title: "Build it",
-        checks: [
-          ["t9_doc", "Wrote <code>FEATURE.md</code>: what the feature is and <strong>why it's useful</strong>"],
-          ["t9_types", "Added the field(s) to <code>Task</code> in <code>types.ts</code> and updated the <code>INITIAL</code> data"],
-          ["t9_props", "The new or changed component has a typed props <code>interface</code>"],
-          ["t9_state_place", "State for the feature lives in the <strong>right</strong> place — and <code>FEATURE.md</code> says where and why in one sentence"],
-          ["t9_derived", "Anything I can compute is <strong>derived</strong>, not stored"],
-          ["t9_works_with", "It works with <strong>filter and search</strong> and with remove"],
-          ["t9_tsc", "<code>tsc</code> and <code>npm run build</code> still pass"],
-          ["t9_shot", "Screenshot of the feature in use"]
-        ],
-        inputs: [
-          { k:"t9_name", type:"text", label:"What's your feature?", ph:"due dates with an overdue badge", w:"half" },
-          { k:"t9_url", type:"url", label:"Screenshot link", ph:"https://…" }
-        ]
-      }
-    ]
-  },
-  {
-    id: "t10",
-    title: "Break it — four bugs, on purpose",
-    lead: "Create <code>BREAK-IT.md</code> in <code>task-board/</code>. For each bug: make the change, <strong>screenshot</strong> what goes wrong, write what you saw and <strong>why</strong>, then fix it.",
-    deliverable: "BREAK-IT.md + 4 screenshots",
-    sections: [
-      {
-        sid: "10.1", title: "Mutated state",
-        checks: [
-          ["t10_mutate", "Rewrote <code>toggleTask</code> to mutate, screenshotted the unchanged screen, fixed with <code>map</code> + spread"]
-        ]
-      },
-      {
-        sid: "10.2", title: "Index as key",
-        checks: [
-          ["t10_index_key", "Changed <code>TaskList</code> to <code>key={index}</code> with an uncontrolled input in each row, deleted a row above one I'd changed, screenshotted the wrong row holding the state, fixed with <code>task.id</code>"]
-        ]
-      },
-      {
-        sid: "10.3", title: "Stale snapshot",
-        checks: [
-          ["t10_stale", "Wrote <code>addTask</code> as <code>setTasks([...tasks, newTask])</code>, called it <strong>twice</strong> from a button, screenshotted <strong>one</strong> task appearing, fixed with the updater form"]
-        ]
-      },
-      {
-        sid: "10.4", title: "Stored derived state",
-        checks: [
-          ["t10_derived", "Added <code>useState</code> for <code>remaining</code>, updated it in <code>addTask</code> but not <code>removeTask</code>, screenshotted the counter disagreeing with the list, fixed by deleting the state and computing it"]
-        ]
-      },
-      {
-        sid: "10.5", title: "After",
-        checks: [
-          ["t10_clean", "After all four fixes the app is <code>tsc</code>-clean and the browser console is empty"],
-          ["t10_slowest", "<code>BREAK-IT.md</code> ends with a paragraph: which of the four bugs would I have been slowest to find in a big app, and why?"]
-        ],
-        inputs: [
-          { k:"t10_url", type:"url", label:"BREAK-IT.md link", hint:"— on GitHub", ph:"https://github.com/…" },
-          { k:"t10_slowest_text", type:"textarea", label:"The bug I'd be slowest to find, and why", ph:"…" }
-        ]
-      }
-    ]
-  },
-  {
-    id: "t11",
-    title: "Notes, branch and pull request",
-    lead: "Leave the repo in a state you'd show an employer. All work happens on <code>feature/day-07</code>.",
-    deliverable: "NOTES.md + repo link + merged PR link",
-    sections: [
-      {
-        sid: "11.1", title: "Repo structure",
-        checks: [
-          ["t11_structure", "<code>day-07/</code> holds <code>day-07-react/</code> (Tasks 2–7) and <code>task-board/</code> (Tasks 8–10) alongside <code>day-05/</code> and <code>day-06/</code>"],
-          ["t11_gitignore", "Every project has its own <code>package.json</code> and a <code>.gitignore</code> containing <code>node_modules</code> and <code>dist</code>"],
-          ["t11_no_nm", "<strong><code>node_modules</code> and <code>dist</code> are not committed</strong> — screenshotted <code>git ls-files</code> showing none"],
-          ["t11_run", "Each project says how to run it: <code>npm install</code> then <code>npm run dev</code>"]
-        ]
-      },
-      {
-        sid: "11.2", title: "day-07/NOTES.md",
+        sid: "5.2", title: "day-07/NOTES.md",
         quote: "If a sentence could have been copied from the README, rewrite it.",
         checks: [
-          ["t11_n_ui", "<strong>UI = f(state)</strong> — what it means, with one example from my own board"],
-          ["t11_n_props", "<strong>Props vs state</strong> — one difference and one similarity"],
-          ["t11_n_var", "<strong>Why a plain variable doesn't work</strong> as state (two reasons)"],
-          ["t11_n_mutate", "<strong>Why you never mutate state</strong>, with my own bug as the example"],
-          ["t11_n_key", "<strong>What <code>key</code> does</strong> and what I saw when it was wrong"],
-          ["t11_n_derived", "<strong>Derived vs stored state</strong> — one value from my board that I compute"],
-          ["t11_n_where", "<strong>Where each piece of state lives</strong> and why — a short table"],
-          ["t11_n_bug", "<strong>A real bug</strong> that wasn't in the README: the exact error, how I found it, the fix"]
+          ["s_notes", "Answered all four in my own words: props vs state · why never mutate · derived vs stored · <strong>one real bug</strong> I hit and how I fixed it"]
         ],
         inputs: [
-          { k:"t11_bug_text", type:"textarea", label:"The bug you hit — the error message and the fix", ph:"…" }
+          { k:"s_bug_text", type:"textarea", label:"The bug you hit — the symptom and the fix", ph:"…" }
         ]
       },
       {
-        sid: "11.3", title: "Branch, commits and PR",
+        sid: "5.3", title: "LinkedIn",
         checks: [
-          ["t11_branch", "All work was done on <code>feature/day-07</code>"],
-          ["t11_msgs", "Every commit has an imperative, specific message — no <code>update</code>, no <code>stuff</code>"],
-          ["t11_five", "At least <strong>five</strong> commits (labs, then the board, then the feature)"],
-          ["t11_pr", "Opened a pull request, wrote a description, and <strong>merged</strong> it"],
-          ["t11_log", "Ran <code>git log --oneline --graph -15</code> and screenshotted it"]
+          ["s_post", "Posted about Day 7 with a screenshot, my repo link, and <strong>one concrete thing that clicked</strong>"]
         ],
         inputs: [
-          { k:"t11_repo_url", type:"url", label:"Repo link", hint:"— required", ph:"https://github.com/…" },
-          { k:"pr_url", type:"url", label:"Merged pull request link", hint:"— required", ph:"https://github.com/…/pull/…" },
-          { k:"t11_log_url", type:"url", label:"git log screenshot link", ph:"https://…" }
-        ]
-      }
-    ]
-  },
-  {
-    id: "t12",
-    title: "Share it",
-    lead: "Say something real. Not \"excited to continue my journey\".",
-    deliverable: "LinkedIn post link",
-    sections: [
-      {
-        sid: "12.1", title: "Post it",
-        checks: [
-          ["t12_posted", "Posted on LinkedIn about completing Day 7 — my first React app"],
-          ["t12_shot", "Included the screenshot of my Task Board"],
-          ["t12_repo_pr", "Included the link to my repo <strong>and</strong> my merged pull request"],
-          ["t12_before_after", "Showed one before-and-after — my Day 06 <code>render()</code> next to the matching React component"],
-          ["t12_learned", "Said one concrete thing I understood — the snapshot, why <code>key</code> exists, why <code>setX(x + 1)</code> three times adds one"]
-        ],
-        inputs: [
-          { k:"t12_post_url", type:"url", label:"LinkedIn post link", hint:"— required", ph:"https://linkedin.com/posts/…" },
-          { k:"t12_learned_text", type:"text", label:"The one thing that clicked", ph:"…" }
+          { k:"t5_post_url", type:"url", label:"LinkedIn post link", hint:"— required", ph:"https://linkedin.com/posts/…" }
         ]
       },
       {
-        sid: "Bonus", title: "Optional — for anyone going further",
-        note: "Not required. Ticking these is how a submission moves from ✅ Done to 🔥 10%.",
+        sid: "Bonus", title: "Challenge problems — optional",
+        note: "Not required. Statements are in <code>ASSIGNMENT.md</code>. Ticking these is how a submission moves from ✅ Done to 🔥 10%.",
         optional: true,
         checks: [
-          ["b_usecounter", "Wrote a custom hook <code>useCounter(initial)</code> returning <code>{ count, increment, decrement, reset }</code>, used it in two components, and said what <code>use…</code> means for the rules of hooks"],
-          ["b_reducer", "Replaced the task handlers with <code>useReducer</code> and a typed action union"],
-          ["b_generic", "Added a typed generic <code>&lt;Select&lt;T&gt;&gt;</code> component whose <code>onChange</code> returns <code>T</code>"],
-          ["b_shortcuts", "Added keyboard shortcuts (<code>/</code> focuses search, <code>Esc</code> clears it)"],
-          ["b_a11y", "Made the board fully usable with a keyboard and a screen-reader pass — correct focus after add and delete"],
-          ["b_memo", "Added <code>React.memo</code> to <code>TaskItem</code>, logged renders, and read about the React Compiler to say why I might not need <code>memo</code> at all"],
-          ["b_tests", "Wrote three unit tests for <code>visibleTasks</code> with <code>node:test</code>"],
-          ["b_fetch", "Replaced <code>INITIAL</code> with the Day 06 API using <code>fetch</code> in a click handler, and noted what's awkward about it"],
-          ["b_deploy", "Deployed the board to GitHub Pages, Netlify or Vercel and added the live link to my repo"],
-          ["b_thinking", "Read <strong>react.dev → Thinking in React</strong> and added a comment to <code>state-table.md</code> where I'd now do it differently"]
+          ["b_undo", "<strong>Undo Counter</strong> — one piece of state, every example passes"],
+          ["b_reducer", "<strong><code>useReducer</code> board</strong> — typed action union, Problem 4 examples still pass"],
+          ["b_tests", "<strong>Tests</strong> for <code>sortTasks</code> and <code>visibleTasks</code> with <code>node:test</code>"],
+          ["b_deploy", "<strong>Deployed</strong> the Task Board and put the live link in my README"]
         ]
       },
       {
         sid: "Grading", title: "How this is graded",
         grade: [
-          ["❌ Incomplete", "Copy-pasted README code, predictions written after running, any state mutated, key={index} on a list that changes, a stored value that could be derived, any or @ts-ignore, a component that receives setTasks, node_modules committed, everything done on main, no merged PR, or code you can’t explain line by line"],
-          ["✅ Done", "All twelve tasks, a board where every list has a data key and every update replaces state, typed props on every component, state placed on purpose and documented in state-table.md, two empty states, your own feature, four bugs broken and fixed with screenshots, NOTES.md in your own words, a real bug documented, a merged PR"],
-          ["🔥 10%", "Done + the bonus + a feature that is genuinely yours + notes someone else could actually learn from"]
+          ["❌ Incomplete", "An example that doesn't match its expected output, approach written after the code, copy-pasted code, state mutated, key={index}, a stored value that could be derived, any or @ts-ignore, node_modules committed, no merged PR, or code you can’t explain line by line"],
+          ["✅ Done", "Warm-up done honestly · Problems 1–4 pass every example · APPROACH.md written before each problem · notes in your own words · a merged PR"],
+          ["🔥 10%", "Done + the challenge problems + notes someone else could learn from"]
         ]
       }
     ]
   }
 ];
 
-const REQUIRED_INPUTS = ["t8_url", "t11_repo_url", "pr_url", "t12_post_url"];
+const REQUIRED_INPUTS = ["p4_url", "t5_repo_url", "pr_url", "t5_post_url"];
 
 /* Which assignment this is — picks the sheet column (Day 7 -> J). */
 const DAY = 7;
@@ -919,7 +577,7 @@ const ROSTER = [["saadmmustafa99@gmail.com","سعد محمد مصطفى"],["ahme
    is the realistic threat here.
    ===================================================================== */
 
-const SALT = "js-everywhere-day07-v1";
+const SALT = "js-everywhere-day07-v2";
 
 /* Crockford base32, minus the letters that get misread when retyped. */
 const B32 = "0123456789ABCDEFGHJKMNPQRSTVWXYZ";
@@ -1115,12 +773,10 @@ function renderProgress(){
     const missing = [];
     if (p.done < p.total) missing.push((p.total - p.done) + " checks left");
     const FIELD_NAMES = {
-      pj_check_url: "npm run check screenshot",
-      api_a_url: "Task Manager screenshot",
-      pr2_url: "second pull request link",
-      pr_url: "pull request link",
-      t7_repo_url: "repo link",
-      t8_post_url: "LinkedIn link"
+      p4_url: "Task Board link",
+      t5_repo_url: "Repo link",
+      pr_url: "Merged pull request link",
+      t5_post_url: "LinkedIn post link"
     };
     REQUIRED_INPUTS.forEach(k => {
       if (!(state.inputs[k] || "").trim()){

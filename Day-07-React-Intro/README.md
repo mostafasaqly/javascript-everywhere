@@ -690,7 +690,7 @@ Rules:
 | Use your data's **id** | `task.id` — that's what ids are for |
 | **Not the array index** if the list can be re-ordered, filtered or have items removed | the index points at a *position*, not an *item* |
 
-What goes wrong with `key={index}`? Imagine rows with a checkbox the user ticked. Delete the first row, and every later row shifts up one index — React sees "index 0 still exists" and **keeps the old row's state for the new item.** The wrong checkbox appears ticked. You'll reproduce this on purpose in Assignment Task 6.
+What goes wrong with `key={index}`? Imagine rows with a checkbox the user ticked. Delete the first row, and every later row shifts up one index — React sees "index 0 still exists" and **keeps the old row's state for the new item.** The wrong checkbox appears ticked. Try it yourself: a three-row list with a checkbox in each row, `key={index}`, tick row 1, delete row 1 — and watch the tick land on the wrong row.
 
 > `key` isn't a prop your component can read — it's consumed by React. If a child needs the id, pass it as a separate prop.
 
