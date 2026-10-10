@@ -1876,3 +1876,5 @@ First, though, Session 12: **forms done properly** (controlled components with s
 - [ASSIGNMENT.md](ASSIGNMENT.md) — Day 07 assignment
 
 ← Back to [Day 06 — TypeScript, APIs, Web Basics + Project: Task Manager](../Day-06-TypeScript-APIs-Task-Manager/README.md)
+
+Next: [Day 08 — Forms in React + Routing with React Router](../Day-08-Forms-Routing/README.md) →

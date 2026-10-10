@@ -20,7 +20,7 @@ resubmission.
 `DAY` near the top of each tracker picks the column: Day 1 → C, Day 2 → D,
 Day 3 → E, and so on. `app/day01-tracker.html` sets `DAY = 1`,
 `app/day02-tracker.html` sets `DAY = 2`, `app/day03-tracker.html` sets
-`DAY = 3`, and so on through `app/day07-tracker.html` with `DAY = 7`. The Apps Script needs no edit.
+`DAY = 3`, and so on through `app/day08-tracker.html` with `DAY = 8`. The Apps Script needs no edit.
 
 ### One tracker per day
 
@@ -29,19 +29,19 @@ prefix, `localStorage` key and check list — so a student can have Day 01
 and Day 02 open at once without one overwriting the other, and a Day 01
 code will not decode as Day 02.
 
-| | Day 01 | Day 02 | Day 03 | Day 04 | Day 05 | Day 06 | Day 07 |
-|---|---|---|---|---|---|---|---|
-| Page | `app/day01-tracker.html` | `app/day02-tracker.html` | `app/day03-tracker.html` | `app/day04-tracker.html` | `app/day05-tracker.html` | `app/day06-tracker.html` | `app/day07-tracker.html` |
-| Tasks | 5 | 8 | 8 | 10 | 12 | 24 | 12 |
-| Checks | 61 required + 6 bonus | 95 required + 7 bonus | 113 required + 8 bonus | 190 required + 10 bonus | 194 required + 10 bonus | 379 required + 20 bonus | 140 required + 10 bonus |
-| Code prefix | `D1.` | `D2.` | `D3.` | `D4.` | `D5.` | `D6.` | `D7.` |
-| Salt | `js-everywhere-day01-v1` | `js-everywhere-day02-v1` | `js-everywhere-day03-v1` | `js-everywhere-day04-v3` | `js-everywhere-day05-v1` | `js-everywhere-day06-v2` | `js-everywhere-day07-v1` |
-| Storage key | `js-everywhere-day01` | `js-everywhere-day02` | `js-everywhere-day03` | `js-everywhere-day04` | `js-everywhere-day05` | `js-everywhere-day06` | `js-everywhere-day07` |
-| Codec | `codec.js` | `codec-day02.js` | `codec-day03.js` | `codec-day04.js` | `codec-day05.js` | `codec-day06.js` | `codec-day07.js` |
-| Labels | `checks.json` | `checks-day02.json` | `checks-day03.json` | `checks-day04.json` | `checks-day05.json` | `checks-day06.json` | `checks-day07.json` |
-| Decoder | `decode-day01.js` | `decode-day02.js` | `decode-day03.js` | `decode-day04.js` | `decode-day05.js` | `decode-day06.js` | `decode-day07.js` |
+| | Day 01 | Day 02 | Day 03 | Day 04 | Day 05 | Day 06 | Day 07 | Day 08 |
+|---|---|---|---|---|---|---|---|---|
+| Page | `app/day01-tracker.html` | `app/day02-tracker.html` | `app/day03-tracker.html` | `app/day04-tracker.html` | `app/day05-tracker.html` | `app/day06-tracker.html` | `app/day07-tracker.html` | `app/day08-tracker.html` |
+| Tasks | 5 | 8 | 8 | 10 | 12 | 24 | 12 | 12 |
+| Checks | 61 required + 6 bonus | 95 required + 7 bonus | 113 required + 8 bonus | 190 required + 10 bonus | 194 required + 10 bonus | 379 required + 20 bonus | 140 required + 10 bonus | 157 required + 10 bonus |
+| Code prefix | `D1.` | `D2.` | `D3.` | `D4.` | `D5.` | `D6.` | `D7.` | `D8.` |
+| Salt | `js-everywhere-day01-v1` | `js-everywhere-day02-v1` | `js-everywhere-day03-v1` | `js-everywhere-day04-v3` | `js-everywhere-day05-v1` | `js-everywhere-day06-v2` | `js-everywhere-day07-v1` | `js-everywhere-day08-v1` |
+| Storage key | `js-everywhere-day01` | `js-everywhere-day02` | `js-everywhere-day03` | `js-everywhere-day04` | `js-everywhere-day05` | `js-everywhere-day06` | `js-everywhere-day07` | `js-everywhere-day08` |
+| Codec | `codec.js` | `codec-day02.js` | `codec-day03.js` | `codec-day04.js` | `codec-day05.js` | `codec-day06.js` | `codec-day07.js` | `codec-day08.js` |
+| Labels | `checks.json` | `checks-day02.json` | `checks-day03.json` | `checks-day04.json` | `checks-day05.json` | `checks-day06.json` | `checks-day07.json` | `checks-day08.json` |
+| Decoder | `decode-day01.js` | `decode-day02.js` | `decode-day03.js` | `decode-day04.js` | `decode-day05.js` | `decode-day06.js` | `decode-day07.js` | `decode-day08.js` |
 
-All seven pages share `roster.json` and the same Apps Script endpoint.
+All eight pages share `roster.json` and the same Apps Script endpoint.
 
 Day 06 covers TypeScript **and** the APIs + Task Manager material (24 tasks), so its salt is `v2`: codes from the earlier TypeScript-only Day 06 page are rejected instead of being decoded against the wrong check list.
 
@@ -104,6 +104,9 @@ node tools/decode-day06.js day06-codes.txt --csv
 node tools/decode-day07.js day07-codes.txt          # same, for Day 07
 node tools/decode-day07.js day07-codes.txt --csv
 
+node tools/decode-day08.js day08-codes.txt          # same, for Day 08
+node tools/decode-day08.js day08-codes.txt --csv
+
 
 ```
 
@@ -141,6 +144,7 @@ have students paste them alongside the code.
 | `checks-day05.json` | Day 05 labels — 194 required + 10 bonus, in bit order. |
 | `checks-day06.json` | Day 06 labels — 379 required + 20 bonus, in bit order. |
 | `checks-day07.json` | Day 07 labels — 140 required + 10 bonus, in bit order. |
+| `checks-day08.json` | Day 08 labels — 157 required + 10 bonus, in bit order. |
 | `codec.js` | Day 01 encode/decode, shared with the page. Change it and old codes stop decoding. |
 | `codec-day02.js` | Day 02 encode/decode. Same code, different salt and prefix. |
 | `codec-day03.js` | Day 03 encode/decode. Same code, different salt and prefix. |
@@ -148,6 +152,7 @@ have students paste them alongside the code.
 | `codec-day05.js` | Day 05 encode/decode. Same code, different salt and prefix. |
 | `codec-day06.js` | Day 06 encode/decode. Same code, different salt and prefix. |
 | `codec-day07.js` | Day 07 encode/decode. Same code, different salt and prefix. |
+| `codec-day08.js` | Day 08 encode/decode. Same code, different salt and prefix. |
 | `decode-day01.js` | The Day 01 script you run. |
 | `decode-day02.js` | The Day 02 script you run. |
 | `decode-day03.js` | The Day 03 script you run. |
@@ -155,6 +160,7 @@ have students paste them alongside the code.
 | `decode-day05.js` | The Day 05 script you run. |
 | `decode-day06.js` | The Day 06 script you run. |
 | `decode-day07.js` | The Day 07 script you run. |
+| `decode-day08.js` | The Day 08 script you run. |
 
 ## Updating the roster
 
