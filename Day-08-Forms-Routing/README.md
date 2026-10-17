@@ -1949,3 +1949,5 @@ Right now your tasks vanish on refresh, and the "server" is a function that slee
 - [ASSIGNMENT.md](ASSIGNMENT.md) — Day 08 assignment
 
 ← Back to [Day 07 — React Intro: Components, Props, State & JSX](../Day-07-React-Intro/README.md)
+
+Next: [Day 09 — State Management: useState, useEffect & the Context API](../Day-09-State-Management/README.md) →
