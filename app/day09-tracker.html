@@ -437,7 +437,7 @@ const TASKS = [
           ["p2_approach", "Wrote my approach in <code>APPROACH.md</code> <strong>before</strong> writing code"],
           ["p2_examples", "<code>formatTime</code> matches all <strong>8 values</strong>, and all <strong>8 steps</strong> behave as expected — pause, time's up, reset, preset change, unmount"],
           ["p2_once", "With Strict Mode on there is <strong>at most one</strong> interval at a time, and unmounting stops it and restores the tab title"],
-          ["p2_rules", "No stale closure, no silenced <code>react-hooks</code> warning, and the label, title and <em>Time's up!</em> are derived — not state"]
+          ["p2_rules", "No stale closure, no silenced <code>exhaustive-deps</code> warning, and the label, title and <em>Time's up!</em> are derived — not state"]
         ],
         inputs: [
           { k:"p2_url", type:"url", label:"Screenshots link", hint:"— the console for steps 2–4, and the tab title", ph:"https://…" }
@@ -457,7 +457,7 @@ const TASKS = [
           ["p3_approach", "Wrote my approach in <code>APPROACH.md</code> <strong>before</strong> writing code"],
           ["p3_parse", "<code>parse.test-run.ts</code> prints <code>PASS</code> for all <strong>12 parse examples</strong> — including the string <code>\"null\"</code>"],
           ["p3_examples", "All <strong>7 behaviour steps</strong> pass — Arabic flips to RTL, settings survive a refresh, a corrupt value doesn't crash, outside the provider throws a clear error"],
-          ["p3_rules", "No component in between passes settings as a prop, loading uses a lazy initializer (not an effect), and no <code>react-refresh</code> lint warnings"]
+          ["p3_rules", "No component in between passes settings as a prop, loading uses a lazy initializer (not an effect), and no <code>only-export-components</code> lint warnings"]
         ],
         inputs: [
           { k:"p3_url", type:"url", label:"Screenshots link", hint:"— Arabic with &lt;html&gt; visible, and step 17", ph:"https://…" }
@@ -538,7 +538,7 @@ const TASKS = [
       {
         sid: "Grading", title: "How this is graded",
         grade: [
-          ["❌ Incomplete", "An example that doesn't match its expected output, approach written after the code, copy-pasted code, a timer or listener without cleanup, a silenced react-hooks warning, derived values stored in state, localStorage data used without parsing, a mutated reducer state, any or @ts-ignore, node_modules committed, no merged PR, or code you can’t explain line by line"],
+          ["❌ Incomplete", "An example that doesn't match its expected output, approach written after the code, copy-pasted code, a timer or listener without cleanup, a silenced hooks lint warning, derived values stored in state, localStorage data used without parsing, a mutated reducer state, any or @ts-ignore, node_modules committed, no merged PR, or code you can’t explain line by line"],
           ["✅ Done", "Warm-up done honestly · Problems 1–4 pass every example · APPROACH.md written before each problem · notes in your own words · a merged PR"],
           ["🔥 10%", "Done + the challenge problems + notes someone else could learn from"]
         ]

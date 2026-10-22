@@ -35,7 +35,7 @@ Same five steps as before:
 
 > **Versions:** React 19.3, React Router 8, Vite 8, TypeScript 6, **Node 22.22+**. Keep `<StrictMode>` on — several examples depend on it.
 
-> **Rules for every problem:** typed everything · no `any`, no `@ts-ignore` · no `eslint-disable` for `react-hooks/*` rules · every effect that starts something cleans it up · nothing read from `localStorage` is trusted without parsing it.
+> **Rules for every problem:** typed everything · no `any`, no `@ts-ignore` · `react/exhaustive-deps` switched on (README Step 1), and no lint-disable comments for the hooks rules · every effect that starts something cleans it up · nothing read from `localStorage` is trusted without parsing it.
 
 ---
 
@@ -402,7 +402,7 @@ export function SettingsProvider({ children }: { children: ReactNode })
 - `parseSettings` is pure — test all 12 parse examples with `node` (`parse.test-run.ts`, `PASS`/`FAIL` each).
 - Loading uses a **lazy initializer** — not an effect. Saving and the `<html>` sync are effects.
 - No component between the provider and `FontBadge` mentions settings at all.
-- The context object and `useSettings` live in `settings-context.ts`; the provider component in `SettingsProvider.tsx` (no `react-refresh` lint warnings).
+- The context object and `useSettings` live in `settings-context.ts`; the provider component in `SettingsProvider.tsx` (no `only-export-components` lint warnings).
 
 <details>
 <summary>💡 Hint 1</summary>
@@ -579,7 +579,7 @@ In Task Board v3, keep the last **five** deletions. The toast shows `Undo (3)`; 
 
 | Level | What it looks like |
 |---|---|
-| ❌ **Incomplete** | An example that doesn't match its expected output, approach written after the code, copy-pasted code, a timer or listener without cleanup, a silenced `react-hooks` warning, derived values stored in state, data from `localStorage` used without parsing, a mutated reducer state, `any` or `@ts-ignore`, `node_modules` committed, no merged PR, or code you can't explain line by line |
+| ❌ **Incomplete** | An example that doesn't match its expected output, approach written after the code, copy-pasted code, a timer or listener without cleanup, a silenced hooks lint warning, derived values stored in state, data from `localStorage` used without parsing, a mutated reducer state, `any` or `@ts-ignore`, `node_modules` committed, no merged PR, or code you can't explain line by line |
 | ✅ **Done** | Warm-up done honestly · Problems 1–4 pass **every** example · `APPROACH.md` written before each problem · notes in your own words · a merged PR |
 | 🔥 **10%** | Done + the challenge problems + notes someone else could learn from |
 

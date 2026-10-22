@@ -247,7 +247,7 @@ That isn't a bug — it's a **test**. If your effect is correct, mount → clean
 
 ### 1.6 Dependencies Aren't a Choice — Stale Closures
 
-The dependency array isn't where you *decide* when the effect runs. It's a list of **every value from the component that setup reads** — props, state, and anything computed from them. The linter rule `react-hooks/exhaustive-deps` (already on in your Vite project) checks it for you. Treat its warnings as errors.
+The dependency array isn't where you *decide* when the effect runs. It's a list of **every value from the component that setup reads** — props, state, and anything computed from them. The lint rule `react/exhaustive-deps` checks it for you — Step 1 switches it on (Vite’s template lints with **oxlint**, which only enables `rules-of-hooks` by default). Treat its warnings as errors.
 
 What happens if you lie:
 
@@ -346,7 +346,7 @@ useEffect(() => {
 
 #### Loading without a synchronous `setState`
 
-The obvious next line is `setLoading(true)` at the top of the effect. Recent versions of the React lint rules flag that (`react-hooks/set-state-in-effect`): setting state **synchronously** inside an effect causes an extra render every time. The cleaner pattern is to **remember which input a result belongs to**, and derive "loading":
+The obvious next line is `setLoading(true)` at the top of the effect. The React docs discourage it (and the ESLint React plugin has a rule for it, `set-state-in-effect`): setting state **synchronously** inside an effect causes an extra render every time. The cleaner pattern is to **remember which input a result belongs to**, and derive "loading":
 
 ```tsx
 type Result =
@@ -428,7 +428,7 @@ function TaskDetail({ task }: { task: Task | undefined }) {
 }
 ```
 
-The linter (`react-hooks/rules-of-hooks`) catches these. The `use` prefix is how it knows a function is a hook.
+The linter (`react/rules-of-hooks`, on by default) catches these. The `use` prefix is how it knows a function is a hook.
 
 ---
 
@@ -443,6 +443,18 @@ cd day-09-labs
 npm install
 npm run dev
 ```
+
+Turn on the dependency check. Open `.oxlintrc.json` and add one rule:
+
+```json
+"rules": {
+  "react/rules-of-hooks": "error",
+  "react/exhaustive-deps": "warn",
+  "react/only-export-components": ["warn", { "allowConstantExport": true }]
+}
+```
+
+Do the same in `task-board-v3/` in Step 7. From now on, `npm run lint` must show **zero** warnings.
 
 Replace `src/App.tsx` with a simple lab switcher so each step gets its own screen:
 
@@ -845,7 +857,7 @@ Why it's worth five lines:
 - Forget the provider, and you get a **clear error naming the problem** instead of `Cannot read properties of null (reading 'tasks')` three files away.
 - Components don't import `useContext` or the context object at all — if you later swap the implementation, they don't change.
 
-> **Vite's lint rule `react-refresh/only-export-components`** warns when one file exports both a component and something else (like a hook), because hot reload can't handle it. So the convention is: the context object and its hook in `board-context.ts`, the provider **component** in `BoardProvider.tsx`.
+> **Vite's lint rule `react/only-export-components`** warns when one file exports both a component and something else (like a hook), because hot reload can't handle it. So the convention is: the context object and its hook in `board-context.ts`, the provider **component** in `BoardProvider.tsx`.
 
 ---
 
@@ -1370,7 +1382,7 @@ console.log(parseTasks(null));                                              // n
 console.log(parseTasks("{oops"));                                           // null
 console.log(parseTasks('{"id":1}'));                                        // null — not an array
 console.log(parseTasks("[]"));                                              // []
-console.log(parseTasks(JSON.stringify([INITIAL[0], { id: "2" }, null])).length);  // 1 — bad entries dropped
+console.log(parseTasks(JSON.stringify([INITIAL[0], { id: "2" }, null]))?.length); // 1 — bad entries dropped
 ```
 
 Every line should match its comment. If one doesn't, fix it now — it's much harder to find once it's behind a component.
@@ -1579,3 +1591,5 @@ Your board now remembers — but only in **this** browser. The "server" is still
 - [ASSIGNMENT.md](ASSIGNMENT.md) — Day 09 assignment
 
 ← Back to [Day 08 — Forms in React + Routing with React Router](../Day-08-Forms-Routing/README.md)
+
+Next: [Day 10 — API Integration in React + Project: Course Management Dashboard](../Day-10-API-Integration-Dashboard/README.md) →
